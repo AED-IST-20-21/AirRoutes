@@ -1,11 +1,11 @@
 
-#include "fileop.h"
+#include "FileOp.h"
 
 /********************************
  * function to open a file when given a filename
  * @param filename
  * @return Pointer to FILE
- */
+ *******************************/
  
 FILE *FileOpen (char *filename) {
 	
@@ -25,7 +25,7 @@ FILE *FileOpen (char *filename) {
  * Function to exit when an error occurs
  * @param err
  * @return void
- */
+ ************************/
  
 void FileExit (int err) {
 	
@@ -50,7 +50,7 @@ void FileExit (int err) {
  * Function to read problem arguments from file
  * @param fp
  * @return struct with 4 or 5 arguments
- */
+ **********************************/
  
 struct PBArg ArgumentRead (FILE *fp){
 

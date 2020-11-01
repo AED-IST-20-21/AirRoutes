@@ -1,6 +1,3 @@
-//
-// Created by António Vidais on 11/1/2020.
-//
 
 #include "fileop.h"
 

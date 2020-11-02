@@ -83,7 +83,7 @@ struct PBArg ArgumentRead (FILE *fp){
  * @return struct containing the new edge
  *******************************/
 
-struct edge EdgeRead (FILE *fp){
+struct edge ReadEdge (FILE *fp){
 	
 	struct edge NewEdge;
 	

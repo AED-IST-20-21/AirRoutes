@@ -32,5 +32,5 @@ typedef struct edge {
 FILE *FileOpen (char *filename);    /* Function to Open a File */
 void FileExit (int err);    /* Function to exit when an error occurs */
 struct PBArg ArgumentRead (FILE *fp);   /*Function to Read problem Arguments */
-struct edge EdgeRead (FILE *fp); /* Function to read a new edge */
+struct edge ReadEdge (FILE *fp); /* Function to read a new edge */
 struct edge CreateEdge(); /* Function to allocate memory for a new edge struct */

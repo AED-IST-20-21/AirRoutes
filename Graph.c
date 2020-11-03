@@ -1,10 +1,11 @@
 #include <stdlib.h>
 
-#include “GRAPH.h”
+#include "Graph.h"
 
 typedef struct node link;
 struct node {int v; link *next;};
 struct graph{int V; int E; link **adj;};
+
 link *NEW(int v, link *next)
 {
 link *x = (link *) malloc(sizeof(struct node));

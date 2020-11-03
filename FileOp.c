@@ -1,5 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "FileOp.h"
+
+
+int FileCheck(char* FileName){
+return 0;
+}//TODO
 
 /********************************
  * function to open a file when given a filename
@@ -7,17 +15,18 @@
  * @return Pointer to FILE
  *******************************/
  
-FILE *FileOpen (char *filename) {
+FILE *FileOpen (char *FileName) {
 	
-	FILE *fp;
+	FILE *fp = NULL;
 	
-	if (FileCheck(filename) == 0) {
-		if ((fp = fopen(filename, 'r')) == NULL)
+	if (FileCheck(FileName) == 0) {
+		if ((fp = fopen(FileName, "r")) == NULL)
 			FileExit(0);
 			
 		return fp;
 		
 	} else FileExit(1);
+return fp;
 }
 
 /*************************
@@ -51,12 +60,13 @@ void FileExit (int err) {
 	
 }
 
+
 /************************************
  * Function to read problem arguments from file
  * @param entry file
  * @return struct with 4 or 5 arguments
  **********************************/
- 
+ /*
 struct PBArg ArgumentRead (FILE *fp){
 
 	struct PBArg pb;
@@ -76,13 +86,13 @@ struct PBArg ArgumentRead (FILE *fp){
 	
 	return pb;
 }
-
+*/
 /*******************************
  * Function to read a new edge from the entry file
  * @param entry file
  * @return struct containing the new edge
  *******************************/
-
+/*
 struct edge ReadEdge (FILE *fp){
 	
 	struct edge NewEdge;
@@ -95,12 +105,12 @@ struct edge ReadEdge (FILE *fp){
 	return NewEdge;
 	
 }
-
+*/
 /************************
  * Function to allocate memory for a new edge
  * @return struct containing new empty edge
  ************************/
- 
+ /*
 struct edge CreateEdge(){
 	
 	struct edge NewEdge;
@@ -111,3 +121,5 @@ struct edge CreateEdge(){
 	return NewEdge;
 	
 }
+*/
+

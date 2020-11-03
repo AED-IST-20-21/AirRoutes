@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "main.h"
+
 #include "FileOp.h"
 
 /********************************
@@ -12,13 +12,14 @@
  * @return
  ********************************/
  
-int main(int argv, char **argc) {
+int main(int argv, char **argc)
+{
 	
-	char *EntryFileName;
-	FILE *EntryFile;
+	char *EntryFileName = "\0";
+	//FILE *EntryFile;
 	
 	strcpy(EntryFileName,argc[2]);
 	
-	EntryFile=FileOpen(EntryFileName); //Adicionar uma função que controle a abretura e leitura de tudo ? Tipo main do FileOp?
-	
+//EntryFile = FileOpen(EntryFileName); //Adicionar uma função que controle a abretura e leitura de tudo ? Tipo main do FileOp?
+return 0;	
 }

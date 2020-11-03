@@ -24,5 +24,16 @@ interface.o: interface.c interface.h
 clean:
 	rm -f *.o backbone
 
+VALG = valgrind --leak-check=full
 
-FILES = $()
+t:
+	for F in ${FILES}; do  ./backbone $${F} ; done;
+
+
+tv:
+	for F in ${FILES}; do ${VALG} ./backbone $${F} ; done;
+
+
+tt:
+	for F in ${FILES}; do  time ./backbone $${F} ; done;
+

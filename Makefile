@@ -10,16 +10,16 @@ CC = gcc
 CFLAGS = -g -Wall -std=c99
 
 #	Sources
-SOURCES = main.c interface.c
+SOURCES = main.c FilOp.c
 
 #	Objects
-OBJECTS = main.o interface.o
+OBJECTS = main.o FileOp.o
 
 backbone: $(OBJECTS) $(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
-main.o: main.c interface.h
+main.o: main.c FileOp.h
 
-interface.o: interface.c interface.h
+FileOp.o: FileOp.c FileOp.h
 
 clean:
 	rm -f *.o backbone

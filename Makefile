@@ -26,6 +26,8 @@ clean:
 
 VALG = valgrind --leak-check=full
 
+FILES = $(shell ls ../test/*.txt)
+
 t:
 	for F in ${FILES}; do  ./backbone $${F} ; done;
 

@@ -10,16 +10,18 @@ CC = gcc
 CFLAGS = -g -Wall -std=c99
 
 #	Sources
-SOURCES = main.c FilOp.c
+SOURCES = main.c FilOp.c Graph.c
 
 #	Objects
-OBJECTS = main.o FileOp.o
+OBJECTS = main.o FileOp.o Graph.o
 
 backbone: $(OBJECTS) $(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
 main.o: main.c FileOp.h
 
 FileOp.o: FileOp.c FileOp.h
+
+Graph.o: Graph.c Graph.h
 
 clean:
 	rm -f *.o backbone

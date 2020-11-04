@@ -1,7 +1,7 @@
 #ifndef AIRROUTES_FILEOP_H
 #define AIRROUTES_FILEOP_H
 
-typedef struct {
+struct {
 	
 	int V;
 	int E;
@@ -11,7 +11,7 @@ typedef struct {
 	
 } PBArg ;  /* Struct storing the current problem arguments */
 
-typedef struct edge {
+struct edge {
 	
 	int vi;
 	int vj;
@@ -20,10 +20,10 @@ typedef struct edge {
 	
 }; /* Struct storing an edge */
 
-typedef struct graph {
+struct graph {
 	
-	struct PBArg;
-	struct *edge;
+	struct PBArg *Arg;
+	struct edge *Edge;
 	
 };
 
@@ -32,6 +32,7 @@ void FileExit (int err);    /* Function to exit when an error occurs */
 struct PBArg ArgumentRead (FILE *fp);   /*Function to Read problem Arguments */
 struct edge ReadEdge (FILE *fp); /* Function to read a new edge */
 struct edge CreateEdge(); /* Function to allocate memory for a new edge struct */
-
+struct graph GraphRead(FILE *fp);
+struct graph CreateGraph();
 
 #endif //AIRROUTES_FILEOP_H

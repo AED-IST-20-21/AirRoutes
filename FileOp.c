@@ -143,13 +143,13 @@ struct graph GraphRead(FILE *fp){
 	struct graph NewGraph;
 	
 	NewGraph=CreateGraph();
-	NewGraph->PBArg=ArgumentRead(fp);
+	NewGraph->Arg=ArgumentRead(fp);
 	
 	do {
 		
-		NewGraph.edge.next = ReadEdge(fp);
+		NewGraph->Edge->next = ReadEdge(fp);
 	
-	} while (NewGraph.edge.next!=NULL);
+	} while (NewGraph.Edge.next!=NULL);
 	
 	return NewGraph;
 }

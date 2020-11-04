@@ -4,7 +4,19 @@
 typedef struct edge Edge;
 Edge *EDGE(int, int);
 
-typedef struct graph Graph;
+typedef struct graph {
+	
+	int Grau;
+	struct adj *adj;
+	
+}Graph;
+
+typedef struct adj{
+	
+	int V;
+	adj *next;
+	
+};
 
 Graph *GRAPHinit(int);
 void GRAPHinsertE(Graph *, Edge *);

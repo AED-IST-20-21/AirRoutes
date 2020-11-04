@@ -16,10 +16,20 @@ int main(int argv, char **argc)
 {
 	
 	char *EntryFileName = "\0";
-	//FILE *EntryFile;
+	FILE *EntryFile;
+	struct graph Current;
 	
-	strcpy(EntryFileName,argc[2]);
+	EntryFile = FileOpen(EntryFileName);
 	
-//EntryFile = FileOpen(EntryFileName); //Adicionar uma função que controle a abretura e leitura de tudo ? Tipo main do FileOp?
-return 0;	
+	do{
+	
+	Current=GraphRead(EntryFile);
+			
+			/*Trabalhar no grafo*/
+		
+	}while (!feof(EntryFile));
+	
+	fclose(EntryFile);
+
+	return 0;
 }

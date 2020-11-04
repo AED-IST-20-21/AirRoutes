@@ -38,22 +38,25 @@ return fp;
 void FileExit (int err) {
 	
 	switch (err) {
-		case 0: printf("Error Opening File\n");
+		case 0: fprintf(stderr,"Error Opening File\n");
 				exit(0);
 			break;
-		case 1: printf("Error Checking File Extension\n");
+		case 1: fprintf(stderr,"Error Checking File Extension\n");
 				exit(0);
 			break;
-		case 2: printf("Error allocating argument struct\n");
+		case 2: fprintf(stderr,"Error allocating argument struct\n");
 				exit(0);
 			break;
-		case 3: printf("Error Reading Problem Arguments\n");
+		case 3: fprintf(stderr,"Error Reading Problem Arguments\n");
 				exit(0);
 			break;
-		case 4: printf("Error Reading Edge Argument\n");
+		case 4: fprintf(stderr,"Error Reading Edge Argument\n");
 				exit(0);
 			break;
-		case 5: printf("Error Allocating New Edge Memory\n");
+		case 5: fprintf(stderr,"Error Allocating New Edge Memory\n");
+				exit(0);
+			break;
+		case 6: fprintf(stderr,"Error Allocating New Graph Memory\n");
 				exit(0);
 			break;
 	}
@@ -66,7 +69,7 @@ void FileExit (int err) {
  * @param entry file
  * @return struct with 4 or 5 arguments
  **********************************/
- /*
+ 
 struct PBArg ArgumentRead (FILE *fp){
 
 	struct PBArg pb;
@@ -86,32 +89,39 @@ struct PBArg ArgumentRead (FILE *fp){
 	
 	return pb;
 }
-*/
+
 /*******************************
  * Function to read a new edge from the entry file
  * @param entry file
  * @return struct containing the new edge
  *******************************/
-/*
+
 struct edge ReadEdge (FILE *fp){
 	
+	int i;
 	struct edge NewEdge;
 	
 	NewEdge=CreateEdge();
 	
-	if ((fscanf(fp,"%d %d %f", NewEdge.vi, NewEdge.vj, NewEdge.cost))!=3)
-		FileExit(4);
-	
-	return NewEdge;
+	if ((i=(fscanf(fp,"%d %d %f", NewEdge.vi, NewEdge.vj, NewEdge.cost)))!=3)
+		if (i!=0){
+			
+			FileExit(4);
+			
+		}else {
+			FreeEdge(NewEdge);
+			return NULL;
+		}
+		return NewEdge;
 	
 }
-*/
+
 /************************
  * Function to allocate memory for a new edge
  * @return struct containing new empty edge
  ************************/
- /*
-struct edge CreateEdge(){
+
+struct edge CreateEdge(){ //TODO Mudar função de ficheiro
 	
 	struct edge NewEdge;
 	
@@ -121,5 +131,41 @@ struct edge CreateEdge(){
 	return NewEdge;
 	
 }
-*/
 
+/**********************************
+ * Function to Read one graph from file
+ * @param fp
+ * @return graph containing problem arguments and edges
+ *********************************/
+ 
+struct graph GraphRead(FILE *fp){
+	
+	struct graph NewGraph;
+	
+	NewGraph=CreateGraph();
+	NewGraph->PBArg=ArgumentRead(fp);
+	
+	do {
+		
+		NewGraph.edge.next = ReadEdge(fp);
+	
+	} while (NewGraph.edge.next!=NULL);
+	
+	return NewGraph;
+}
+
+/**************************
+ * Function to allocate memory for one graph
+ * @return The new graph
+ **************************/
+ 
+struct graph CreateGraph(){ //TODO Mudar função de ficheiro
+	
+	struct graph NewGraph;
+	
+	if ((NewGraph=malloc(sizeof(struct graph)))==NULL)
+		FileExit(6);
+	
+	return NewGraph;
+	
+}

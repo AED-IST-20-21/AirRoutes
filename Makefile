@@ -6,16 +6,10 @@
 # --------------------------------------------------------------
 #  	Compiler, Compiler Flags
 
-CC = gcc
-CFLAGS = -g -Wall -std=c99
 
-#	Sources
-SOURCES = main.c FilOp.c Graph.c
 
-#	Objects
-OBJECTS = main.o FileOp.o Graph.o
-
-backbone: $(OBJECTS) $(CC) $(CFLAGS) -o $@ $(OBJECTS)
+backbone: main.o FileOp.o Graph.o
+	gcc -g -Wall -std=c99
 
 main.o: main.c FileOp.h
 

@@ -1,7 +1,7 @@
 #ifndef AIRROUTES_FILEOP_H
 #define AIRROUTES_FILEOP_H
 
-struct {
+struct PBArg{
 	
 	int V;
 	int E;
@@ -9,7 +9,7 @@ struct {
 	int Vj;
 	char *Var;
 	
-} PBArg ;  /* Struct storing the current problem arguments */
+} ;  /* Struct storing the current problem arguments */
 
 struct edge {
 	

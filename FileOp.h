@@ -16,7 +16,6 @@ struct edge {
 	int vi;
 	int vj;
 	double cost;
-	struct edge *next;
 	
 }; /* Struct storing an edge */
 
@@ -29,10 +28,5 @@ struct graph {
 
 FILE *FileOpen (char *FileName);    /* Function to Open a File */
 void FileExit (int err);    /* Function to exit when an error occurs */
-struct PBArg ArgumentRead (FILE *fp);   /*Function to Read problem Arguments */
-struct edge ReadEdge (FILE *fp); /* Function to read a new edge */
-struct edge CreateEdge(); /* Function to allocate memory for a new edge struct */
-struct graph GraphRead(FILE *fp);
-struct graph CreateGraph();
 
 #endif

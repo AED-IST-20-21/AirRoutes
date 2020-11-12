@@ -51,5 +51,3 @@ if (v < t->v )
 a[E++] = EDGE(v, t->v);
 return E;
 }
-
-int LControl()

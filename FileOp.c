@@ -46,7 +46,10 @@ void ErrExit (int err) {
 			Dfprintf(stderr, "Error Checking File Extension\n");
 			exit(0);
 			break;
-			case
+		case 2:
+			Dfprintf(stderr, "Invalid Mode in Mode fetch\n");
+			exit(0);
+			break;
 	}
 }
 /***********************************

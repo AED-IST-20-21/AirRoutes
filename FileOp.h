@@ -27,6 +27,6 @@ struct graph {
 };
 
 FILE *FileOpen (char *FileName);    /* Function to Open a File */
-void FileExit (int err);    /* Function to exit when an error occurs */
+void ErrExit (int err);    /* Function to exit when an error occurs */
 
 #endif

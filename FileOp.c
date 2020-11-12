@@ -35,16 +35,36 @@ return fp;
  * @return void
  ************************/
  
-void FileExit (int err) {
+void ErrExit (int err) {
 	
 	switch (err) {
 		case 0:
-			fprintf(stderr, "Error Opening File\n");
+			Dfprintf(stderr, "Error Opening File\n");
 			exit(0);
 			break;
 		case 1:
-			fprintf(stderr, "Error Checking File Extension\n");
+			Dfprintf(stderr, "Error Checking File Extension\n");
 			exit(0);
 			break;
+			case
 	}
+}
+/***********************************
+ * Function to print errors only when debugging
+ * @param fp File to print
+ * @param str Str to print
+ */
+void Dfprintf(FILE *fp, char *str){
+	
+	if (D==1){
+		
+		fprintf(fp,str);
+		return;
+		
+	}else {
+		
+		else fprintf("\n");
+		return;
+	}
+	
 }

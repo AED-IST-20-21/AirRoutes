@@ -17,15 +17,25 @@ int main(int argv, char **argc)
 	
 	char *EntryFileName = "\0";
 	FILE *EntryFile;
-	struct graph Current;
+	struct PBArg ->CurrentArg;
 	
 	EntryFile = FileOpen(EntryFileName);
 	
 	do{
-	
-	Current=GraphRead(EntryFile);
+		CurrentArg=ArgRead(EntryFile);
+		
+		if ((strcmp(CurrentArg->Var[1],'0'))==0){
 			
-			/*Trabalhar no grafo*/
+			LControl(EntryFile);
+			
+		}else if ((strcmp(CurrentArg->Var[1],'1'))==0){
+			
+			VControl(EntryFile);
+		} else {
+			
+			ErrExit(2);
+			
+		}
 		
 	}while (!feof(EntryFile));
 	

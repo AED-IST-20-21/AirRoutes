@@ -52,3 +52,4 @@ a[E++] = EDGE(v, t->v);
 return E;
 }
 
+int LControl()

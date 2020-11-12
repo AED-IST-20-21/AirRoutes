@@ -31,4 +31,4 @@ void GRAPHinsertE(Graph *G, Edge *e);
 void GRAPHremove(Graph *G, Edge *e);
 int GRAPHedges(Edge **a, Graph *G);
 
-#endif // GRAPH_H_INCLUDED
+#endif

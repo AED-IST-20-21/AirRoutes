@@ -5,17 +5,20 @@
 #
 # --------------------------------------------------------------
 #  	Compiler, Compiler Flags
-
+CC = gcc -g -Wall -std=c99
 
 
 backbone: main.o FileOp.o Graph.o
-	gcc -g -Wall -std=c99
+	$(CC)
 
 main.o: main.c FileOp.h
+	$(CC)
 
 FileOp.o: FileOp.c FileOp.h
+	$(CC)
 
 Graph.o: Graph.c Graph.h
+	$(CC)
 
 clean:
 	rm -f *.o backbone

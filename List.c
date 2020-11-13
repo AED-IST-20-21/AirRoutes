@@ -57,7 +57,7 @@ void AZero(FILE *fp,struct PBArg *Arg){
 		aux=EdgeRead(fp,aux);
 		k++;
 		
-		if (aux->vi==Arg->vi)
+		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
 		
 	}while (k<V)

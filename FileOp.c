@@ -12,9 +12,10 @@ int FileCheck(char* FileName)
 	int i;
 	int FileSize = strlen(FileName);
 
-	for (i = FileSize; i > (FileSize-strlen(OldExt)); i--)
+	for (i = FileSize-1; i > (FileSize-strlen(OldExt)); i--)
 	{
-		if ( FileName[i] != OldExt[(i-FileSize)])
+		/*printf("%c-%c\n", FileName[i], OldExt[FileSize - i]);*/
+		if ( FileName[i] != OldExt[ (i-FileSize) + strlen(OldExt)])
 		{
 			return -1;
 		}
@@ -28,10 +29,12 @@ char* ExitFileName(char* FileName)
 	int FileSize;
 
 	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
-	ExitFile = (char*) malloc((FileSize) * sizeof(char));
+	ExitFile = (char*) malloc( ((FileSize) + 1) * sizeof(char));
 
-	ExitFile[strlen(FileName)]='\0';
-	strcat(FileName, NewExt);
+	strcpy(ExitFile, FileName);
+	ExitFile[strlen(FileName) - strlen(OldExt)]='\0';
+	strcat(ExitFile, NewExt);
+	ExitFile[FileSize] = '\0';
 
 	return ExitFile;
 }

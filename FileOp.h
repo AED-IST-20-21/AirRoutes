@@ -1,6 +1,8 @@
 #ifndef AIRROUTES_FILEOP_H
 #define AIRROUTES_FILEOP_H
 
+#include <stdio.h>
+
 struct PBArg{
 	
 	int v;

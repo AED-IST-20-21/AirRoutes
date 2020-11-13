@@ -12,9 +12,9 @@
  * @return
  ********************************/
  
-int main(int argv, char **argc)
+int main(int argc, char *argv[])
 {
-	
+/*	
 	char *EntryFileName = "\0";
 	FILE *EntryFile;
 	struct PBArg ->CurrentArg;
@@ -40,6 +40,8 @@ int main(int argv, char **argc)
 	}while (!feof(EntryFile));
 	
 	fclose(EntryFile);
+*/
+
 
 	return 0;
 }

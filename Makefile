@@ -5,27 +5,48 @@
 #
 # --------------------------------------------------------------
 #  	Compiler, Compiler Flags
-CC = gcc -g -Wall -std=c99
+CC = gcc 
+DB = gdb
+CFLAGS = -g -Wall -std=c99
 
+OBJECTS = main.o FileOp.o Graph.o List.o
 
-backbone: main.o FileOp.o Graph.o
-	$(CC)
+EXE = backbone
+
+#Test file
+TEST = .routes0
+
+#Temporary Object Files
+TMPOBJECTS = main.c FileOp.c FileOp.h
+
+backbone: main.o FileOp.o Graph.o List.o
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
 main.o: main.c FileOp.h
-	$(CC)
 
 FileOp.o: FileOp.c FileOp.h
-	$(CC)
 
 Graph.o: Graph.c Graph.h
-	$(CC)
+
+List.o: List.c List.h
 
 clean:
-	rm -f *.o backbone
+	rm -f *.o backbone temp
 
 VALG = valgrind --leak-check=full
 
 FILES = $(shell ls ../test/*.txt)
+
+#
+valgrind: $(EXE)
+	$(CC) $(VALG) ./$(EXE) $(TEST)
+#
+debug: $(EXE)
+	$(DB) ./$(EXE)
+#
+temp: $(TMPOBJECTS)
+	$(CC) $(CFLAGS) -o $@ $(TMPOBJECTS)
+
 
 t:
 	for F in ${FILES}; do  ./backbone $${F} ; done;

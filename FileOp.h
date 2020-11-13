@@ -31,4 +31,5 @@ void ErrExit (int err);    /* Function to exit when an error occurs */
 struct edge *EdgeRead(FILE *fp,struct edge *aux);
 struct PBArg *ArgRead(FILE *fp,struct PBArg *aux);
 int ArgCheck (struct PBArg *aux);
+struct PBArg *PBInit();
 #endif

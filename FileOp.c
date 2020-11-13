@@ -149,3 +149,25 @@ int ArgCheck (struct PBArg *aux){
 	
 	} else return -1;
 }
+
+/**********************
+ * Memory allocation and Initialization of PBArg
+ * @return clean PBArg
+ */
+struct PBArg *PBInit(struct PBArg *aux){
+	
+	if (aux==NULL){
+		if (aux=malloc(sizeof(struct PBArg)))==NULL{
+		
+			ErrExit(3);
+		}
+	}
+	
+	aux->v=0;
+	aux->e=0;
+	aux->vi=0;
+	aux->vj=0;
+	aux->var='\0';
+	
+	return aux;
+}

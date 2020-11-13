@@ -1,10 +1,40 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "FileOp.h"
 
+#define OldExt ".routes0"
+#define NewExt ".queries"
 
-int FileCheck(char* FileName){
-return 0;
+int FileCheck(char* FileName)
+{
+	int i;
+	int FileSize = strlen(FileName);
+
+	for (i = FileSize; i > (FileSize-strlen(OldExt)); i--)
+	{
+		if ( FileName[i] != OldExt[(i-FileSize)])
+		{
+			return -1;
+		}
+	}
+	return 0;
 }//TODO
+
+char* ExitFileName(char* FileName)
+{
+	char* ExitFile;
+	int FileSize;
+
+	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
+	ExitFile = (char*) malloc((FileSize) * sizeof(char));
+
+	ExitFile[strlen(FileName)]='\0';
+	strcat(FileName, NewExt);
+
+	return ExitFile;
+}
 
 /********************************
  * function to open a file when given a filename
@@ -18,12 +48,23 @@ FILE *FileOpen (char *FileName) {
 	
 	if (FileCheck(FileName) == 0) {
 		if ((fp = fopen(FileName, "r")) == NULL)
-			FileExit(0);
+			ErrExit(0);
 			
 		return fp;
 		
-	} else FileExit(1);
+	} else ErrExit(1);
 return fp;
+}
+
+/********************************
+ * function to close a file when given a filename
+ * @param filename
+ * @return Pointer to FILE
+ *******************************/
+ 
+void FileClose(FILE* fp)
+{
+	fclose(fp);
 }
 
 /*************************
@@ -36,23 +77,23 @@ void ErrExit (int err) {
 	
 	switch (err) {
 		case 0:
-			Dfprintf(stderr, "Error Opening File\n");
+			fprintf(stderr, "Error Opening File\n");
 			exit(0);
 			break;
 		case 1:
-			Dfprintf(stderr, "Error Checking File Extension\n");
+			fprintf(stderr, "Error Checking File Extension\n");
 			exit(0);
 			break;
 		case 2:
-			Dfprintf(stderr, "Invalid Mode\n");
+			fprintf(stderr, "Invalid Mode\n");
 			exit(0);
 			break;
 		case 3:
-			Dfprintf(stderr,"Error Allocating Memory for an edge\n");
+			fprintf(stderr,"Error Allocating Memory for an edge\n");
 			exit(0);
 			break;
 		case 4:
-			Dfprintf(stderr,"Invalid Arguments\n");
+			fprintf(stderr,"Invalid Arguments\n");
 			exit(0);
 			break;
 	}
@@ -63,21 +104,23 @@ void ErrExit (int err) {
  * @param fp File to print
  * @param str Str to print
  */
- 
+
+/*
 void Dfprintf(FILE *fp, char *str){
 	
-	if (D==1){
+	if (1){
 		
-		fprintf(fp,str);
+		fprintf(fp, str);
 		return;
 		
-	}else {
+	} else {
 		
-		else fprintf("\n");
+		fprintf(fp, "\n");
 		return;
 	}
 	
 }
+*/
 
 /*******************************
  * Function to read an edge from file and store it in aux, dinamicaly allocated
@@ -87,7 +130,7 @@ void Dfprintf(FILE *fp, char *str){
  
 struct edge *EdgeRead(FILE *fp,struct edge *aux){
 			
-	if ((fscanf(fp, "%d %d %f", aux->vi, aux->vj, aux->cost) != 3)) {
+	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) {
 		
 		return NULL;
 		
@@ -102,18 +145,18 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
  */
 struct PBArg *ArgRead(FILE *fp,struct PBArg *aux){
 	
-	if ((fscanf(fp, "%d %d %s", aux->v, aux->e, aux->var) != 3)) {
+	if ((fscanf(fp, "%d %d %s", &aux->v, &aux->e, aux->var) != 3)) {
 		
 		ErrExit(4);
 		
 	} else if ((strcmp(aux->var,"A0"))!=0){
 		
-		if ((fscanf(fp, "%d %d", aux->vi, aux->vj) != 2))
+		if ((fscanf(fp, "%d %d", &aux->vi, &aux->vj) != 2))
 			ErrExit(4);
 		
 	}else {
 		
-		if ((fscanf(fp, "%d", aux->vi) != 1))
+		if ((fscanf(fp, "%d", &aux->vi) != 1))
 			ErrExit(4);
 	
 	}
@@ -133,16 +176,16 @@ struct PBArg *ArgRead(FILE *fp,struct PBArg *aux){
 int ArgCheck (struct PBArg *aux){
 	if ((aux->v>0)&&(aux->e>0)){
 	
-	if ((strcmp(aux->var,"A0"))!=0) && (aux->vi>0))
+	if ( (strcmp(aux->var,"A0")!=0) && (aux->vi>0) )
 		return 0;
 
-	else if((strcmp(aux->var,"B0"))&&(aux->vi>0)&&(aux->vj>0))
+	else if( (strcmp(aux->var,"B0")!=0) && (aux->vi>0) && (aux->vj>0) )
 		return 0;
 	
-	else if((strcmp(aux->var,"C0"))&&(aux->vi>0)&&(aux->vj>0))
+	else if( (strcmp(aux->var,"C0")!=0) && (aux->vi>0) && (aux->vj>0) )
 		return 0;
 	
-	else if((strcmp(aux->var,"D0"))&&(aux->vi>0)&&(aux->vj>0))
+	else if( (strcmp(aux->var,"D0")!=0) && (aux->vi>0) && (aux->vj>0) )
 		return 0;
 	
 	else return -1;
@@ -153,11 +196,11 @@ int ArgCheck (struct PBArg *aux){
 /**********************
  * Memory allocation and Initialization of PBArg
  * @return clean PBArg
- */
-struct PBArg *PBInit(struct PBArg *aux){
+ *********************/
+struct PBArg * PBInit(struct PBArg * aux){
 	
 	if (aux==NULL){
-		if (aux=malloc(sizeof(struct PBArg)))==NULL{
+		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL){
 		
 			ErrExit(3);
 		}

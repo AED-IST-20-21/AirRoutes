@@ -2,6 +2,12 @@
 // Created by anton on 11/12/2020.
 //
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <float.h>
+#include <stdlib.h>
+
 #include "List.h"
 
 void LControl (FILE *fp, struct PBArg *Arg){
@@ -43,9 +49,12 @@ void AZero(FILE *fp,struct PBArg *Arg){
 	int i=0,j=0,k=0,g=0;
 	struct edge *aux;
 	
+	if((aux=malloc(sizeof(struct edge)))==NULL)
+		ErrExit(3);
+	
 	do{
 		
-		aux=EdgeRead(fp);
+		aux=EdgeRead(fp,aux);
 		k++;
 		
 		if (aux->vi==Arg->vi)
@@ -69,19 +78,24 @@ void BZero(FILE *fp,struct PBArg *Arg){
 	float auxcost;
 	bool Flag;
 	
+	if((aux=malloc(sizeof(struct edge)))==NULL)
+		ErrExit(3);
+	
 	do{
 	
-	aux=EdgeRead(fp);
+	aux=EdgeRead(fp,aux);
 		
 		if ((aux->vi==Arg->vi)&&(aux->vj==Arg->vj)&&(Flag==F)){
 			Flag=T;
-			auxcost=aux->cost;
-			/*Print Edge */
+			
+			/*Print Edge using aux */
 		}
 		
 	}while (k<V)
 	
-	/* Print doesn´t exist TODO */
+	free(aux);
+	
+	/* Print doesn't exist TODO */
 	return;
 }
 

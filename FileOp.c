@@ -81,12 +81,7 @@ void Dfprintf(FILE *fp, char *str){
  * @return edge read from file
  */
  
-struct edge *EdgeRead(FILE *fp){
-	
-	struct edge *aux;
-	
-	if((aux=malloc(sizeof(struct edge)))==NULL)
-			ErrExit(3)
+struct edge *EdgeRead(FILE *fp,struct edge *aux){
 			
 	if (!(fscanf(fp, "%d %d %f", aux->vi, aux->vj, aux->cost) == 3)) {
 		

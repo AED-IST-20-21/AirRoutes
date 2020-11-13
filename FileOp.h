@@ -28,5 +28,5 @@ struct graph {
 
 FILE *FileOpen (char *FileName);    /* Function to Open a File */
 void ErrExit (int err);    /* Function to exit when an error occurs */
-struct edge *EdgeRead(FILE *fp);
+struct edge *EdgeRead(FILE *fp,struct edge *aux);
 #endif

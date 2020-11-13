@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "FileOp.h"
 
@@ -50,13 +47,19 @@ void ErrExit (int err) {
 			Dfprintf(stderr, "Invalid Mode in Mode fetch\n");
 			exit(0);
 			break;
+		case 3:
+			Dfprintf(stderr,"Error Allocating Memory for an edge\n");
+			exit(0);
+			break;
 	}
 }
+
 /***********************************
  * Function to print errors only when debugging
  * @param fp File to print
  * @param str Str to print
  */
+ 
 void Dfprintf(FILE *fp, char *str){
 	
 	if (D==1){
@@ -70,4 +73,24 @@ void Dfprintf(FILE *fp, char *str){
 		return;
 	}
 	
+}
+
+/*******************************
+ * Function to read an edge from file and store it in aux, dinamicaly allocated
+ * @param fp File Pointer
+ * @return edge read from file
+ */
+ 
+struct edge *EdgeRead(FILE *fp){
+	
+	struct edge *aux;
+	
+	if((aux=malloc(sizeof(struct edge)))==NULL)
+			ErrExit(3)
+			
+	if (!(fscanf(fp, "%d %d %f", aux->vi, aux->vj, aux->cost) == 3)) {
+		
+		return NULL;
+		
+	} else return aux;
 }

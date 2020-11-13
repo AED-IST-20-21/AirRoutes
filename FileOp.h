@@ -3,11 +3,11 @@
 
 struct PBArg{
 	
-	int V;
-	int E;
-	int Vi;
-	int Vj;
-	char *Var;
+	int v;
+	int e;
+	int vi;
+	int vj;
+	char *var;
 	
 } ;  /* Struct storing the current problem arguments */
 
@@ -28,5 +28,5 @@ struct graph {
 
 FILE *FileOpen (char *FileName);    /* Function to Open a File */
 void ErrExit (int err);    /* Function to exit when an error occurs */
-
+struct edge *EdgeRead(FILE *fp);
 #endif

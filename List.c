@@ -5,26 +5,32 @@
 #include "List.h"
 
 void LControl (FILE *fp, struct PBArg *Arg){
-
-	int mode=ModeFetch(Arg);
 	
-	switch (mode){
-		case 0:
-			AZero(fp,Arg);
-			break;
-		case 1:
-			BZero(fp,Arg);
-			break;
-		case 2:
-			CZero(fp);
-			break;
-		case 3:
-			DZero(fp);
-			break;
+	if ((strcmp(Arg->var,"A0"))==0){
+		
+		AZero(fp,Arg);
+		return;
+		
+	} else if ((strcmp(Arg->var,"B0"))==0) {
+		
+		BZero(fp,Arg);
+		return;
+		
+	}else if ((strcmp(Arg->var,"C0"))==0) {
+		
+		CZero(fp,Arg);
+		return;
+		
+	}else if ((strcmp(Arg->var,"D0"))==0) {
+		
+		DZero(fp,Arg);
+		return;
+		
+	} else {
+		
+		ErrExit(2);
+		return;
 	}
-	
-	return;
-	
 }
 
 /**************************************
@@ -35,13 +41,14 @@ void LControl (FILE *fp, struct PBArg *Arg){
 void AZero(FILE *fp,struct PBArg *Arg){
 	
 	int i=0,j=0,k=0,g=0;
+	struct edge *aux;
 	
 	do{
 		
-		fscanf("%d %d %f",&i,&j) /* Posso dizer o formato e não guardar? question*/
+		aux=EdgeRead(fp);
 		k++;
 		
-		if (i==Arg->Vi)
+		if (aux->vi==Arg->vi)
 			g++;
 		
 	}while (k<V)
@@ -58,15 +65,18 @@ void AZero(FILE *fp,struct PBArg *Arg){
  
 void BZero(FILE *fp,struct PBArg *Arg){
 	
-	bool Flag=F;
+	struct edge *aux;
+	float auxcost;
+	bool Flag;
+	
 	do{
-		/* São precisas verificações de fscanf? Quais question*/
-		fscanf("%d %d %f",&i,&j) /* Posso dizer o formato do float e não guardar? question*/
-		k++;
+	
+	aux=EdgeRead(fp);
 		
-		if (i!=Arg->Vi)&&(j!=Arg->Vj){
-		/* Print Edge TODO */
-			return;
+		if ((aux->vi==Arg->vi)&&(aux->vj==Arg->vj)&&(Flag==F)){
+			Flag=T;
+			auxcost=aux->cost;
+			/*Print Edge */
 		}
 		
 	}while (k<V)
@@ -75,34 +85,3 @@ void BZero(FILE *fp,struct PBArg *Arg){
 	return;
 }
 
-/*******************************
- * Function to fetch the mode as an integer from the string in the arguments
- * @param Arg Problem Arguments
- * @return Mode
- */
- 
-int ModeFetch(struct PBArg Arg){
-	
-	if ((strcmp(Arg.Var,"A0"))==0){
-		
-		return 0;
-		
-	} else if ((strcmp(Arg.Var,"B0"))==0) {
-		
-		return 1;
-		
-	}else if ((strcmp(Arg.Var,"C0"))==0) {
-		
-		return 2;
-		
-	}else if ((strcmp(Arg.Var,"D0"))==0) {
-		
-		return 3;
-		
-	} else {
-		
-		ErrExit(2);
-		return -1;
-		
-	}
-}

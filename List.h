@@ -7,8 +7,12 @@
 
 #include "FileOp.h"
 #include "Graph.h"
-#include <stdbool.h>
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <float.h>
+#include <stdlib.h>
 
 
 void LControl (FILE *fp, struct PBArg *Arg);

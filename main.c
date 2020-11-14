@@ -4,6 +4,8 @@
 
 
 #include "FileOp.h"
+#include "List.c"
+#include "Graph.h"
 
 /********************************
  * Main Function of the program
@@ -14,23 +16,28 @@
  
 int main(int argc, char *argv[])
 {
-/*	
+	
 	char *EntryFileName = "\0";
 	FILE *EntryFile;
-	struct PBArg ->CurrentArg;
+	Graph* G;
+	/*struct PBArg ->CurrentArg;*/
 	
 	EntryFile = FileOpen(EntryFileName);
 	
+	G = GRAPHinit();
+
 	do{
-		CurrentArg=ArgRead(EntryFile);
+
+		G->Arg=ArgRead(EntryFile, G->Arg);
 		
-		if ((strcmp(CurrentArg->Var[1],'0'))==0){
+		if (G->Arg->var[1]=='0'){
 			
-			LControl(EntryFile);
+			LControl(EntryFile, G->Arg);
 			
-		}else if ((strcmp(CurrentArg->Var[1],'1'))==0){
+		}else if (G->Arg->var[1]=='1'){
 			
-			VControl(EntryFile);
+			/*VControl(EntryFile);*/
+
 		} else {
 			
 			ErrExit(2);
@@ -40,8 +47,6 @@ int main(int argc, char *argv[])
 	}while (!feof(EntryFile));
 	
 	fclose(EntryFile);
-*/
-
 
 	return 0;
 }

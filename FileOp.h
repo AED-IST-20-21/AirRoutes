@@ -3,6 +3,9 @@
 
 #include <stdio.h>
 
+#include "Graph.h"
+
+/*
 struct PBArg{
 	
 	int v;
@@ -11,31 +14,40 @@ struct PBArg{
 	int vj;
 	char *var;
 	
-} ;  /* Struct storing the current problem arguments */
-
+} ;*/  /* Struct storing the current problem arguments */
+/*
 struct edge {
 	
 	int vi;
 	int vj;
 	double cost;
 	
-}; /* Struct storing an edge */
+}; */ /* Struct storing an edge */
 
+/*
 struct graph {
 	
 	struct PBArg *Arg;
-	struct edge *Edge;
+	void * DataBase;
 	
 };
+*/
 
 int FileCheck(char* ); /* Checks if FileName is valid */
 char* ExitFileName(char* ); /* Creates Exit FileName */
 FILE *FileOpen (char *FileName);    /* Function to Open a File */
+void FileClose(FILE* );
 void ErrExit (int err);    /* Function to exit when an error occurs */
 void Dprintf(FILE* , char* ); /* TODO */
-struct edge *EdgeRead(FILE *fp,struct edge *aux);
+
+/* PBArg */
 struct PBArg *ArgRead(FILE *fp,struct PBArg *aux);
 int ArgCheck (struct PBArg *aux);
-struct PBArg *PBInit();
+
+/* Lista de Adjacências */
+/*struct list *ListRead() TODO */
+
+/* Vetor de Arestas */
+struct edge *EdgeRead(FILE *fp,struct edge *aux);
 
 #endif

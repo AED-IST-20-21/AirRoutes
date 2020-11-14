@@ -10,32 +10,37 @@
 
 #include "List.h"
 
-void LControl (FILE *fp, struct PBArg *Arg){
-	
-	if ((strcmp(Arg->var,"A0"))==0){
+void LControl (FILE *fp, struct PBArg *Arg)
+{	
+	switch(ArgCheck(Arg))
+	{
+		case 1:
+		{
+			AZero(fp,Arg);
+			break;
+		}
+		case 2:
+		{
+			BZero(fp, Arg);
+			break;
+		}
+		case 3:
+		{		
+			CZero(fp, Arg);
+			break;
+		}
+		case 4:
+		{
+			DZero(fp,Arg);
+			break;
 		
-		AZero(fp,Arg);
-		return;
+		}
+		default:
+		{
 		
-	} else if ((strcmp(Arg->var,"B0"))==0) {
-		
-		BZero(fp,Arg);
-		return;
-		
-	}else if ((strcmp(Arg->var,"C0"))==0) {
-		
-		CZero(fp,Arg);
-		return;
-		
-	}else if ((strcmp(Arg->var,"D0"))==0) {
-		
-		DZero(fp,Arg);
-		return;
-		
-	} else {
-		
-		ErrExit(2);
-		return;
+			ErrExit(2);
+			return;
+		}
 	}
 }
 
@@ -44,9 +49,9 @@ void LControl (FILE *fp, struct PBArg *Arg){
  * @param fp File Pointer
  * @param Arg Problem Arguments
  */
-void AZero(FILE *fp,struct PBArg *Arg){
+void AZero(FILE *fp, struct PBArg *Arg){
 	
-	int i=0,j=0,k=0,g=0;
+	int i=0,j=0,k=0,g=0, V=0;
 	struct edge *aux;
 	
 	if((aux=malloc(sizeof(struct edge)))==NULL)
@@ -60,7 +65,7 @@ void AZero(FILE *fp,struct PBArg *Arg){
 		if (aux->vi==Arg->vi)
 			g++;
 		
-	}while (k<V)
+	} while (k<V);
 	
 		/* Print g TODO */
 	return;
@@ -72,11 +77,12 @@ void AZero(FILE *fp,struct PBArg *Arg){
  * @param Arg Problem Arguments
  */
  
-void BZero(FILE *fp,struct PBArg *Arg){
-	
+void BZero(FILE *fp, struct PBArg *Arg)
+{	
 	struct edge *aux;
 	float auxcost;
-	bool Flag;
+	bool Flag, T, F;
+	int k, V;
 	
 	if((aux=malloc(sizeof(struct edge)))==NULL)
 		ErrExit(3);
@@ -91,11 +97,21 @@ void BZero(FILE *fp,struct PBArg *Arg){
 			/*Print Edge using aux */
 		}
 		
-	}while (k<V)
+	}while (k<V);
 	
 	free(aux);
 	
 	/* Print doesn't exist TODO */
+	return;
+}
+
+void CZero(FILE *fp, struct PBArg *Arg)
+{
+	return;
+}
+
+void DZero(FILE *fp, struct PBArg *Arg)
+{
 	return;
 }
 

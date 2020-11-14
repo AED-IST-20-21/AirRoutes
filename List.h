@@ -18,5 +18,7 @@
 void LControl (FILE *fp, struct PBArg *Arg);
 void AZero(FILE *fp,struct PBArg *Arg);
 void BZero(FILE *fp,struct PBArg *Arg);
+void CZero(FILE *fp,struct PBArg *Arg);
+void DZero(FILE *fp,struct PBArg *Arg);
 
 #endif //AIRROUTES_LIST_H

@@ -124,29 +124,13 @@ void Dfprintf(FILE *fp, char *str){
 	
 }
 */
-
-/*******************************
- * Function to read an edge from file and store it in aux, dinamicaly allocated
- * @param fp File Pointer
- * @return edge read from file
- */
- 
-struct edge *EdgeRead(FILE *fp,struct edge *aux){
-			
-	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) {
-		
-		return NULL;
-		
-	} else return aux;
-}
-
 /*************************************************
  * Function to read one graph problem arguments and store them in the designated struct
  * @param fp File Pointer
  * @param aux empty struct
  * @return aux struct containing all arguments
  */
-struct PBArg *ArgRead(FILE *fp,struct PBArg *aux){
+struct PBArg *ArgRead(FILE *fp, struct PBArg *aux){
 	
 	if ((fscanf(fp, "%d %d %s", &aux->v, &aux->e, aux->var) != 3)) {
 		
@@ -157,7 +141,7 @@ struct PBArg *ArgRead(FILE *fp,struct PBArg *aux){
 		if ((fscanf(fp, "%d %d", &aux->vi, &aux->vj) != 2))
 			ErrExit(4);
 		
-	}else {
+	} else {
 		
 		if ((fscanf(fp, "%d", &aux->vi) != 1))
 			ErrExit(4);
@@ -180,40 +164,36 @@ int ArgCheck (struct PBArg *aux){
 	if ((aux->v>0)&&(aux->e>0)){
 	
 	if ( (strcmp(aux->var,"A0")!=0) && (aux->vi>0) )
-		return 0;
+		return 1;
 
 	else if( (strcmp(aux->var,"B0")!=0) && (aux->vi>0) && (aux->vj>0) )
-		return 0;
+		return 2;
 	
 	else if( (strcmp(aux->var,"C0")!=0) && (aux->vi>0) && (aux->vj>0) )
-		return 0;
+		return 3;
 	
 	else if( (strcmp(aux->var,"D0")!=0) && (aux->vi>0) && (aux->vj>0) )
-		return 0;
+		return 4;
 	
 	else return -1;
 	
 	} else return -1;
 }
 
-/**********************
- * Memory allocation and Initialization of PBArg
- * @return clean PBArg
- *********************/
-struct PBArg * PBInit(struct PBArg * aux){
-	
-	if (aux==NULL){
-		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL){
+
+/*******************************
+ * Function to read an edge from file and store it in aux, dinamicaly allocated
+ * @param fp File Pointer
+ * @return edge read from file
+ */
+ 
+struct edge *EdgeRead(FILE *fp,struct edge *aux){
+			
+	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) {
 		
-			ErrExit(3);
-		}
-	}
-	
-	aux->v=0;
-	aux->e=0;
-	aux->vi=0;
-	aux->vj=0;
-	aux->var='\0';
-	
-	return aux;
+		return NULL;
+		
+	} else return aux;
 }
+
+

@@ -3,8 +3,8 @@
 #include <string.h>
 
 
-#include "FileOp.h"
-#include "List.c"
+/*#include "FileOp.h"*/
+#include "List.h"
 #include "Graph.h"
 
 /********************************

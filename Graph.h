@@ -29,7 +29,7 @@ struct list{
 	
 	int V;
 	double cost;
-	struct list *next;
+	struct list *adj;
 	
 };
 

@@ -110,7 +110,8 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 
 void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
-	return;
+	struct Graph *G;
+
 }
 
 void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
@@ -118,4 +119,9 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	return;
 }
 
+struct Graph *LGRead(FILE *entryfp){
+
+
+
+}
 

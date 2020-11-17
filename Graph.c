@@ -2,47 +2,20 @@
 
 #include "Graph.h"
 
-/*typedef struct node link;
-struct node {int v; link *next;};*/
 
-List *NEW(int v, List *next)
-{
-	List *x = (List *) malloc(sizeof(struct list));
-	/*x->v = v;
-	x->next = next;*/
-	return x;
-}
 
-Graph* GRAPHinit()
+Graph* GraphInit(struct PBArg *Arg)
 {
-	Graph *G = (Graph*) malloc(sizeof(struct graph));
-	G->Arg = PBinit(G->Arg);
+	Graph *G;
+	
+	if (G = (Graph*) malloc(sizeof(struct graph))==NULL)
+		ErrExit(3)
+	
+	G->Arg = Arg;
+	
 	return G;
 }
 
-/********* PBArg ********/
-
-/**********************
- * Memory allocation and Initialization of PBArg
- * @return clean PBArg
- *********************/
-struct PBArg * PBinit(struct PBArg * aux){
-	
-	if (aux==NULL){
-		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL){
-		
-			/*ErrExit(3); TODO */
-		}
-	}
-	
-	aux->v = 0;
-	aux->e = 0;
-	aux->vi = 0;
-	aux->vj = 0;
-	aux->var = "\0";
-	
-	return aux;
-}
 
 /* Lista de Adjacências */
 void GRAPHinsertL(Graph *G, List **list)

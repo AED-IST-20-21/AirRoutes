@@ -17,7 +17,7 @@
 int main(int argc, char *argv[])
 {
 	
-	char *EntryFileName = "\0",*OutputFileName = "\0";
+	char *EntryFileName = argv[1],*OutputFileName = "\0";
 	FILE *EntryFile,*OutputFile;
 	struct PBArg *Arg;
 	

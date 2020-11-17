@@ -20,7 +20,7 @@ int FileCheck(char* FileName)
 
 	for (i = FileSize-1; i > (FileSize-strlen(OldExt)); i--)
 	{
-		/*printf("%c-%c\n", FileName[i], OldExt[FileSize - i]);*/
+		printf("%c-%c\n", FileName[i], OldExt[FileSize - i]);
 		if ( FileName[i] != OldExt[ (i-FileSize) + strlen(OldExt)])
 		{
 			return -1;

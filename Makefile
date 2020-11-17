@@ -22,13 +22,13 @@ TMPOBJECTS = main.c FileOp.c FileOp.h
 backbone: main.o FileOp.o Graph.o List.o
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
-main.o: main.c Graph.h List.h
+main.o: main.c ListGraph.h Zero.h
 
-FileOp.o: FileOp.c FileOp.h Graph.h
+FileOp.o: FileOp.c FileOp.h ListGraph.h
 
-Graph.o: Graph.c Graph.h
+Graph.o: ListGraph.c ListGraph.h
 
-List.o: List.c List.h FileOp.h Graph.h
+List.o: Zero.c Zero.h FileOp.h ListGraph.h
 
 clean:
 	rm -f *.o backbone temp

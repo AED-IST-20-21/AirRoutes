@@ -6,7 +6,7 @@
 #define AIRROUTES_LIST_H
 
 #include "FileOp.h"
-#include "Graph.h"
+#include "ListGraph.h"
 
 #include <stdbool.h>
 #include <stdio.h>

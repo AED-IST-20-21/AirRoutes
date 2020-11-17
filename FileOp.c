@@ -94,11 +94,15 @@ void ErrExit (int err) {
 			exit(0);
 			break;
 		case 3:
-			fprintf(stderr,"Error Allocating Memory for an edge\n");
+			fprintf(stderr,"Error Allocating Memory\n");
 			exit(0);
 			break;
 		case 4:
 			fprintf(stderr,"Invalid Arguments\n");
+			exit(0);
+			break;
+		case 5:
+			fprintf(stderr,"Error Reading Graph\n");
 			exit(0);
 			break;
 	}

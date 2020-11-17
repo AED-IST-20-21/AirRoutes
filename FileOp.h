@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "Graph.h"
+#include "ListGraph.h"
 
 /*
 struct PBArg{

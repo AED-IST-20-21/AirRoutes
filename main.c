@@ -4,8 +4,8 @@
 
 
 /*#include "FileOp.h"*/
-#include "List.h"
-#include "Graph.h"
+#include "Zero.h"
+#include "ListGraph.h"
 
 /********************************
  * Main Function of the program

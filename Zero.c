@@ -8,9 +8,9 @@
 #include <float.h>
 #include <stdlib.h>
 
-#include "List.h"
+#include "Zero.h"
 #include "FileOp.h"
-#include "Graph.h"
+#include "ListGraph.h"
 
 void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
@@ -93,7 +93,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 	aux=EdgeRead(entryfp,aux);
 		
-		if ((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj||(Arg->vj)))&&(Flag==0)){
+		if ((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj)||(Arg->vj)))&&(Flag==0)){
 			
 			Flag=1;
 			fprintf(outputfp,"%d %d %s %d %f",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
@@ -111,7 +111,10 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct Graph *G;
-
+	struct edge *click[3];
+	
+	G=LGRead(entryfp,Arg->v);
+	ClickFind()
 }
 
 void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
@@ -119,9 +122,31 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	return;
 }
 
-struct Graph *LGRead(FILE *entryfp){
-
-
-
+/**
+ * Function to read entire graph from file 
+ * @param entryfp File from which to read
+ * @param v Number
+ * @param Arg 
+ * @return 
+ */
+struct graph *LGRead(FILE *entryfp,struct PBArg *Arg) {
+	
+	struct graph *G;
+	struct edge *temp;
+	
+	G = GraphInit(Arg);
+	
+	for (i = 0; i < Arg->v; i++) {
+		
+		if (fscanf(entryfp, "%d %d %f", temp->vi, temp->vj, temp->cost) != 3)
+			ErrExit(5);
+		
+		AddList(G->vertice, temp);
+	}
+	
+	return G;
 }
+
+
+
 

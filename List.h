@@ -15,9 +15,9 @@
 #include <stdlib.h>
 
 
-void LControl (FILE *fp, struct PBArg *Arg);
-void AZero(FILE *fp,struct PBArg *Arg);
-void BZero(FILE *fp,struct PBArg *Arg);
-void CZero(FILE *fp,struct PBArg *Arg);
-void DZero(FILE *fp,struct PBArg *Arg);
+void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg);
+void AZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
+void BZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
+void CZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
+void DZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 #endif //AIRROUTES_LIST_H

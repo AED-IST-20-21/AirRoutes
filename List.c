@@ -12,28 +12,28 @@
 #include "FileOp.h"
 #include "Graph.h"
 
-void LControl (FILE *fp, struct PBArg *Arg)
+void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	switch(ArgCheck(Arg))
 	{
 		case 1:
 		{
-			AZero(fp,Arg);
+			AZero(entryfp,outputfp,Arg);
 			break;
 		}
 		case 2:
 		{
-			BZero(fp, Arg);
+			BZero(entryfp,outputfp,Arg);
 			break;
 		}
 		case 3:
 		{
-			CZero(fp, Arg);
+			CZero(entryfp,outputfp,Arg);
 			break;
 		}
 		case 4:
 		{
-			DZero(fp,Arg);
+			DZero(entryfp,outputfp,Arg);
 			break;
 		
 		}
@@ -51,7 +51,7 @@ void LControl (FILE *fp, struct PBArg *Arg)
  * @param fp File Pointer
  * @param Arg Problem Arguments
  */
-void AZero(FILE *fp, struct PBArg *Arg){
+void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 	
 	int i=0,j=0,k=0,g=0, V=0;
 	struct edge *aux;
@@ -61,15 +61,16 @@ void AZero(FILE *fp, struct PBArg *Arg){
 	
 	do{
 		
-		aux=EdgeRead(fp,aux);
+		aux=EdgeRead(entryfp,aux);
 		k++;
 		
-		if (aux->vi==Arg->vi)
+		if ((aux->vi==Arg->vi)&&(aux->vj==Arg->vi))
 			g++;
 		
 	} while (k<V);
 	
-		/* Print g TODO */
+	fprintf(outputfp,"%d %d %s %d %d",Arg->v,Arg->e,Arg->var,Arg->vi,g);
+	
 	return;
 }
 
@@ -79,11 +80,11 @@ void AZero(FILE *fp, struct PBArg *Arg){
  * @param Arg Problem Arguments
  */
  
-void BZero(FILE *fp, struct PBArg *Arg)
+void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct edge *aux;
 	float auxcost;
-	bool Flag, T, F;
+	short int Flag;
 	int k, V;
 	
 	if((aux=malloc(sizeof(struct edge)))==NULL)
@@ -91,10 +92,10 @@ void BZero(FILE *fp, struct PBArg *Arg)
 	
 	do{
 	
-	aux=EdgeRead(fp,aux);
+	aux=EdgeRead(entryfp,aux);
 		
-		if ((aux->vi==Arg->vi)&&(aux->vj==Arg->vj)&&(Flag==F)){
-			Flag=T;
+		if ((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj||(Arg->vj)))&&(Flag==0)){
+			Flag=1;
 			
 			/*Print Edge using aux */
 		}
@@ -107,12 +108,12 @@ void BZero(FILE *fp, struct PBArg *Arg)
 	return;
 }
 
-void CZero(FILE *fp, struct PBArg *Arg)
+void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	return;
 }
 
-void DZero(FILE *fp, struct PBArg *Arg)
+void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	return;
 }

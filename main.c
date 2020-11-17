@@ -17,12 +17,13 @@
 int main(int argc, char *argv[])
 {
 	
-	char *EntryFileName = "\0";
-	FILE *EntryFile;
+	char *EntryFileName = "\0",*EntryFileName = "\0";
+	FILE *EntryFile,OutputFile;
 	Graph* G;
-	/*struct PBArg ->CurrentArg;*/
+	
 	
 	EntryFile = FileOpen(EntryFileName);
+	OutputFile = FileOpen(OutputFileName);
 	
 	G = GRAPHinit();
 
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 		
 		if (G->Arg->var[1]=='0'){
 			
-			LControl(EntryFile, G->Arg);
+			LControl(EntryFile,OutputFile,G->Arg);
 			
 		}else if (G->Arg->var[1]=='1'){
 			

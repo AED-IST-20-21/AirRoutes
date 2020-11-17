@@ -7,6 +7,12 @@
 #define OldExt ".routes0"
 #define NewExt ".queries"
 
+/***************************
+ * Function to check entry file extension
+ * @param FileName Name of the entry file
+ * @return 0 if OK, -1 else
+ */
+ 
 int FileCheck(char* FileName)
 {
 	int i;
@@ -21,22 +27,28 @@ int FileCheck(char* FileName)
 		}
 	}
 	return 0;
-}//TODO
+}
+
+/********************************
+ * Function to add the exit file extension, given the file name with the old extension
+ * @param FileName Entry file name
+ * @return String with name and extension
+ */
 
 char* ExitFileName(char* FileName)
 {
-	char* ExitFile;
+	char* ExitFileName;
 	int FileSize;
 
 	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
-	ExitFile = (char*) malloc( ((FileSize) + 1) * sizeof(char));
+	ExitFileName = (char*) malloc( ((FileSize) + 1) * sizeof(char));
 
-	strcpy(ExitFile, FileName);
-	ExitFile[strlen(FileName) - strlen(OldExt)]='\0';
-	strcat(ExitFile, NewExt);
-	ExitFile[FileSize] = '\0';
+	strcpy(ExitFileName, FileName);
+	ExitFileName[strlen(FileName) - strlen(OldExt)]='\0';
+	strcat(ExitFileName, NewExt);
+	ExitFileName[FileSize] = '\0';
 
-	return ExitFile;
+	return ExitFileName;
 }
 
 /********************************
@@ -45,29 +57,19 @@ char* ExitFileName(char* FileName)
  * @return Pointer to FILE
  *******************************/
  
-FILE *FileOpen (char *FileName) {
+FILE *FileOpen (char *FileName,char *mode) {
 	
 	FILE *fp = NULL;
 	
 	if (FileCheck(FileName) == 0) {
-		if ((fp = fopen(FileName, "r")) == NULL)
+		if ((fp = fopen(FileName, mode)) == NULL)
 			ErrExit(0);
 			
 		return fp;
 		
 	} else ErrExit(1);
-return fp;
-}
-
-/********************************
- * function to close a file when given a filename
- * @param filename
- * @return Pointer to FILE
- *******************************/
- 
-void FileClose(FILE* fp)
-{
-	fclose(fp);
+	
+	return fp;
 }
 
 /*************************
@@ -102,34 +104,13 @@ void ErrExit (int err) {
 	}
 }
 
-/***********************************
- * Function to print errors only when debugging
- * @param fp File to print
- * @param str Str to print
- */
-
-/*
-void Dfprintf(FILE *fp, char *str){
-	
-	if (1){
-		
-		fprintf(fp, str);
-		return;
-		
-	} else {
-		
-		fprintf(fp, "\n");
-		return;
-	}
-	
-}
-*/
 /*************************************************
  * Function to read one graph problem arguments and store them in the designated struct
  * @param fp File Pointer
  * @param aux empty struct
  * @return aux struct containing all arguments
  */
+ 
 struct PBArg *ArgRead(FILE *fp, struct PBArg *aux){
 	
 	if ((fscanf(fp, "%d %d %s", &aux->v, &aux->e, aux->var) != 3)) {
@@ -196,4 +177,21 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
 	} else return aux;
 }
 
+/**************************************************
+ * Function to close files and free the graph
+ * @param EntryFile Entry File Pointer to close
+ * @param OutputFile Output File Pointer to close
+ * @param G Graph dinamically allocated to be freed
+ */
+ 
+void End(FILE *EntryFile,FILE *OutputFile,Graph G,struct PBArg *Arg){
+	
+	fclose(EntryFile);
+	fclose(OutputFile);
+	/*GraphFree(G);*/
+	free(Arg);
+	
+	return;
+	
+}
 

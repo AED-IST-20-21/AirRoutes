@@ -17,37 +17,31 @@
 int main(int argc, char *argv[])
 {
 	
-	char *EntryFileName = "\0",*EntryFileName = "\0";
-	FILE *EntryFile,OutputFile;
-	Graph* G;
+	char *EntryFileName = "\0",*OutputFileName = "\0";
+	FILE *EntryFile,*OutputFile;
+	struct PBArg *Arg;
 	
 	
-	EntryFile = FileOpen(EntryFileName);
-	OutputFile = FileOpen(OutputFileName);
-	
-	G = GRAPHinit();
+	EntryFile = FileOpen(EntryFileName,'r');
+	OutputFile = FileOpen(OutputFileName,'w');
 
 	do{
 
-		G->Arg=ArgRead(EntryFile, G->Arg);
+		Arg=ArgRead(EntryFile,Arg);
 		
-		if (G->Arg->var[1]=='0'){
+		if (Arg->var[1]=='0'){
 			
-			LControl(EntryFile,OutputFile,G->Arg);
+			LControl(EntryFile,OutputFile,Arg);
 			
-		}else if (G->Arg->var[1]=='1'){
+		}else /*if (Arg->var[1]=='1'){
 			
-			/*VControl(EntryFile);*/
+			VControl(EntryFile);
 
-		} else {
-			
-			ErrExit(2);
-			
-		}
+		} else*/ ErrExit(2);
 		
 	}while (!feof(EntryFile));
 	
-	fclose(EntryFile);
+	
 
 	return 0;
 }

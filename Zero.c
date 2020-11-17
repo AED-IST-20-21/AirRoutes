@@ -1,16 +1,6 @@
-//
-// Created by anton on 11/12/2020.
-//
-
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <float.h>
-#include <stdlib.h>
 
 #include "Zero.h"
-#include "FileOp.h"
-#include "ListGraph.h"
+
 
 void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
@@ -110,11 +100,22 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 
 void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
-	struct Graph *G;
+	struct graph *G;
 	struct edge *click[3];
+	struct list *aux[2];
 	
 	G=LGRead(entryfp,Arg->v);
-	ClickFind()
+	
+	aux[0]=G->vertice[Arg->vi];
+	
+	
+	while ((aux[0]!=NULL)||(ClickFind(aux[1],aux[0]->v)){
+		
+		aux[1]=G->vertice[];
+		aux[0]=aux[0]->next;
+		/*Avançar I*/
+	}
+	
 }
 
 void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
@@ -122,31 +123,15 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	return;
 }
 
-/**
- * Function to read entire graph from file 
- * @param entryfp File from which to read
- * @param v Number
- * @param Arg 
- * @return 
- */
-struct graph *LGRead(FILE *entryfp,struct PBArg *Arg) {
+int ClickFind(struct list *J,int vi){
 	
-	struct graph *G;
-	struct edge *temp;
+	int c++;
 	
-	G = GraphInit(Arg);
 	
-	for (i = 0; i < Arg->v; i++) {
-		
-		if (fscanf(entryfp, "%d %d %f", temp->vi, temp->vj, temp->cost) != 3)
-			ErrExit(5);
-		
-		AddList(G->vertice, temp);
-	}
+/*Encontrar vertice igual entre um dos j e o i*/
 	
-	return G;
+	
 }
-
 
 
 

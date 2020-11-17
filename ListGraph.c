@@ -4,7 +4,7 @@
 
 
 
-Graph* GraphInit(struct PBArg *Arg)
+struct graph* GraphInit(struct PBArg *Arg)
 {
 	Graph *G;
 	
@@ -12,6 +12,31 @@ Graph* GraphInit(struct PBArg *Arg)
 		ErrExit(3);
 	
 	G->Arg = Arg;
+	
+	return G;
+}
+
+/**
+ * Function to read entire graph from file
+ * @param entryfp File from which to read
+ * @param v Number
+ * @param Arg
+ * @return
+ */
+struct graph *LGRead(FILE *entryfp,struct PBArg *Arg) {
+	
+	struct graph *G;
+	struct edge *temp;
+	
+	G = GraphInit(Arg);
+	
+	for (i = 0; i < Arg->v; i++) {
+		
+		if (fscanf(entryfp, "%d %d %f", temp->vi, temp->vj, temp->cost) != 3)
+			ErrExit(5);
+		
+		AddList(G->vertice, temp);
+	}
 	
 	return G;
 }

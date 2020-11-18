@@ -83,7 +83,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 	aux=EdgeRead(entryfp,aux);
 		
-		if ((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj)||(Arg->vj)))&&(Flag==0)){
+		if (((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj)||(Arg->vj)))&&(Flag==0)){
 			
 			Flag=1;
 			fprintf(outputfp,"%d %d %s %d %f",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
@@ -101,17 +101,17 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct graph *G;
-	struct edge *click[3];
+	/*struct edge *click[3];*/
 	struct list *aux[2];
 	
-	LGRead(entryfp,Arg);
+	G = LGRead(entryfp, Arg);
 	
 	aux[0]=G->vertice[Arg->vi];
 	aux[1]=G->vertice[Arg->vj];
 	
-	while ((aux[0]!=NULL)||(ClickFind(aux[1],aux[0]->v)){
+	while ( (aux[0]!=NULL) || (ClickFind(aux[1],aux[0]->v)!=0) ){
 		
-		aux[1]=G->vertice[];
+		aux[1]=G->vertice[0]; /*TODO*/
 		aux[0]=aux[0]->next;
 		/*Avançar I*/
 	}
@@ -124,15 +124,15 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 }
 
 int ClickFind(struct list *J,int vi){
+	int c=0;
+	c++;
 	
-	int c++;
-	
-	while (J->next!=NULL)||(J->v=){
+	while ((J->next!=NULL)||(J->v = 0)){ /*TODO*/
 	
 	
 	}
 	
-	
+	return c;	
 }
 
 

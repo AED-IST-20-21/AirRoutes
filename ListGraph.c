@@ -46,26 +46,34 @@ struct PBArg *PBinit(struct PBArg * aux){
 struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	struct graph *G;
-	struct edge *temp;
+	struct edge *temp = NULL;
 
 	int i;
 	
 	G = GraphInit();
+
 	G->Arg = PBinit(Arg);
 	G->Arg = Arg;
+
 	G->vertice = CreateListV(Arg->v);
-	
+
+	temp = (struct edge*) malloc(sizeof(struct edge));/*TODO*/
+	temp->vi = 0;
+	temp->cost = 0;
+
 	for (i = 0; i < Arg->v; i++) {
 		
 		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3)
 			ErrExit(5);
 		
-		/*AddList(G->vertice[temp->vi],temp);
-		PutList(G->vertice[temp->vi],temp);*/
-		
+		AddList(G->vertice[temp->vi]);
+		PutList(G->vertice[temp->vi], temp->vj, temp->cost);
+
+		AddList(G->vertice[temp->vj]);
+		PutList(G->vertice[temp->vj], temp->vi, temp->cost);
 		
 	}
-	
+	free(temp);	
 	return G;
 }
 
@@ -127,10 +135,10 @@ struct list * AddList(struct list* next){
     return new;
 }
 
-void PutList(struct list *L,struct edge *new){
+void PutList(struct list *L, int V, double cost){
 	
-	L->v=new->vj;
-	L->cost=new->cost;
+	L->v = V;
+	L->cost = cost;
 	
 	return;
 }
@@ -141,7 +149,13 @@ void PutList(struct list *L,struct edge *new){
  * @return
  */
 struct list** CreateListV(int V){
+	int i;
+
 	struct list** LV = (struct list**) malloc(V * sizeof(struct list*));	
-	
+	for (i=0; i<V; i++)
+	{
+		/*LV[i]=() malloc(sizeof());*/
+		LV[i]=NULL;
+	}
 	return LV;
 }

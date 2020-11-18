@@ -20,4 +20,5 @@ void AZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 void BZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 void CZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 void DZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
+int ClickFind(struct list *, int );
 #endif //AIRROUTES_LIST_H

@@ -47,7 +47,7 @@ void FreeListV(struct list **,int );
 void FreeList(struct list* );
 struct list* CreateListNode();
 struct list* AddList(struct list* );
-void PutList(struct list* , struct edge* );
+void PutList(struct list* ,int ,double );
 struct list** CreateListV(int );
 
 #endif

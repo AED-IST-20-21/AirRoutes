@@ -71,7 +71,7 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 
 		AddList(G->vertice[temp->vj]);
 		PutList(G->vertice[temp->vj], temp->vi, temp->cost);
-		
+	
 	}
 	free(temp);	
 	return G;

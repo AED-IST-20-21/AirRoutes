@@ -10,6 +10,8 @@
 #include <float.h>
 #include <stdlib.h>
 
+enum lampstates{OFF,ON,Visited};
+
 struct graph {
 	struct PBArg* Arg;
 	struct list** vertice;
@@ -27,6 +29,7 @@ struct PBArg {
 struct list{
 	int v;
 	double cost;
+	int lamp;
 	struct list *next;
 };
 

@@ -14,6 +14,10 @@
 #include <float.h>
 #include <stdlib.h>
 
+#define ON 1
+#define OFF 0
+#define CZ 0
+#define DZ 1
 
 void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg);
 void AZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);

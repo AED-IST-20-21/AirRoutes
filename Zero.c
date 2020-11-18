@@ -1,6 +1,7 @@
 
 #include "Zero.h"
 
+#include <stdbool.h>
 
 void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
@@ -101,90 +102,113 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct graph *G;
-	/*struct edge *click[3];*/
-	struct list *aux[3];
-
-	int TestMe;
+	struct list *aux[2];
 	
 	G = LGRead(entryfp, Arg);
 	
+	ListTurn(G->vertice[Arg->vi],ON);
+	
 	aux[0]=G->vertice[Arg->vi]; /* Lista de todos os adjacentes a vi */
-
-
 	
 	while (aux[0]!=NULL)
 	{
-		aux[1] = G->vertice[ aux[0]->v ];
-
-		if (ClickFind(aux[1],aux[0])!=0)
+		
+		aux[1]=G->vertice[aux[0]->v];
+		
+		if (LampFind(aux[1],CZ)!=0)
 		{
 			fprintf(outputfp ,"%d %d %s %d 1\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+			ListTurn(G->vertice[Arg->vi],OFF);
 			return;
-		} 
-
+		}
+		
 		aux[0]=aux[0]->next;
 	}
 
 	fprintf(outputfp ,"%d %d %s %d 0\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	ListTurn(G->vertice[Arg->vi],OFF);
 	return;
 }
 
 void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct graph *G;
-	struct list* aux[2];
-
-	G = LGRead(entryfp, Arg);
-
-	aux[0]=G->vertice[Arg->vi];
-
-	aux[1]=G->vertice[Arg->vi];
+	struct list *aux[2];
+	int cnt=0;
 	
-	while ( (aux[0]!=NULL) || (ClickFind(aux[1],aux[0])!=0) ){
-		
-		aux[1]=G->vertice[0]; /*TODO*/
+	G = LGRead(entryfp, Arg);
+	
+	ListTurn(G->vertice[Arg->vi],ON);
+	
+	aux[0]=G->vertice[Arg->vi]; /* Lista de todos os adjacentes a vi */
+	
+	while (aux[0]!=NULL)
+	{
+		aux[1]=G->vertice[aux[0]->v];
+		cnt += LampFind(aux[1],CZ);
 		aux[0]=aux[0]->next;
-		/*Avançar I*/
 	}
-
+	
+	fprintf(outputfp ,"%d %d %s %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi,cnt);
+	ListTurn(G->vertice[Arg->vi],OFF);
 	return;
 }
 
-int FindList(struct list *L, int vi){ /* Procura o vértice vi na lista J */
-	
-	struct list* aux = L;
+/**
+ * Function to turn all the lights on or off
+ * @param L List to switch the lights
+ * @param mode Switch on or off
+ */
+int ListTurn(struct list *L,enum mode){
 
-	while (aux!=NULL)
-	{
-		if (aux->v == vi)
-		{
-			return 1;
-		}
-		aux = aux->next;
-	}
+	struct list *aux=L;
+	int g=0;
 	
-	return 0;	
+	while (aux!=NULL){
+		
+		aux->lamp=mode;
+		aux=aux->next;
+		g++;
+	}
+	return g;
 }
 
-int ClickFind(struct list* List1, struct list* List2)
-{
-	int vi, vj;
-	struct list *i, *j;
-
-	i=List1;
-	j=List2;
+/**
+ * Function to find On Lamps in a list
+ * @param L List
+ * @param mode Find 1 lamp or count the number of lamps on
+ * @return Lamps found
+ */
+int LampFind(struct list *L,enum mode,int g){
 	
-	while (j!=NULL)
-	{
-
-		if (FindList(i, j->v)==1)
-		{
-			return 1;
+	struct list *aux=L;
+	int c=0;
+	
+	
+	
+	if (mode==CZ){
+			while (aux!=NULL){
+		
+			if (aux->lamp==ON)
+				return 1;
+			
+			aux=aux->next;
+		
 		}
-
-		j=j->next;
-
+		return 0;
+	}else {
+		
+		while (aux!=NULL){
+			
+			if (aux->lamp==ON)
+				c++;
+				aux->lamp=Visited;
+			
+			aux=aux->next;
+			
+		}
+		return c;
+		
+		
 	}
-	return 0;
 }
-

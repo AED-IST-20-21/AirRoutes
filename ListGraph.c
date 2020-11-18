@@ -4,16 +4,37 @@
 
 
 
-struct graph* GraphInit(struct PBArg *Arg){
-	Graph *G;
+struct graph* GraphInit(){
+	struct graph *G;
 	
-	if (G = (struct graph *) malloc(sizeof(struct graph))==NULL)
+	if ((G = (struct graph *) malloc(sizeof(struct graph)))==NULL)
 		ErrExit(3);
-	
-	G->Arg = Arg;
 	
 	return G;
 }
+
+/**********************
+ * Memory allocation and Initialization of PBArg
+ * @return clean PBArg
+ *********************/
+struct PBArg *PBinit(struct PBArg * aux){
+	
+	if (aux==NULL){
+		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL)
+			ErrExit(3);
+	}
+	
+	aux->v = 0;
+	aux->e = 0;
+	aux->vi = 0;
+	aux->vj = 0;
+	aux->var = "\0";
+	
+	return aux;
+}
+
+
+
 
 /**
  * Function to read entire graph from file
@@ -22,21 +43,25 @@ struct graph* GraphInit(struct PBArg *Arg){
  * @param Arg
  * @return
  */
-struct graph *LGRead(FILE *entryfp,struct PBArg *Arg) {
+struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	struct graph *G;
 	struct edge *temp;
+
+	int i;
 	
-	G = GraphInit(Arg);
-	G=CreateListV(Arg->v);
+	G = GraphInit();
+	G->Arg = PBinit(Arg);
+	G->Arg = Arg;
+	G->vertice = CreateListV(Arg->v);
 	
 	for (i = 0; i < Arg->v; i++) {
 		
-		if (fscanf(entryfp, "%d %d %f", temp->vi, temp->vj, temp->cost) != 3)
+		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3)
 			ErrExit(5);
 		
-		AddList(G->vertice[temp->vi],temp);
-		PutList(G->vertice[temp->vi],temp);
+		/*AddList(G->vertice[temp->vi],temp);
+		PutList(G->vertice[temp->vi],temp);*/
 		
 		
 	}
@@ -55,7 +80,7 @@ void FreeListV(struct list **LV,int V){
 	
 	for (i=0;i<V;i++){
 		
-		FreeList(LV[i])
+		FreeList(LV[i]);
 		
 	}
 	
@@ -81,33 +106,25 @@ void FreeList(struct list* L){
 }
 
 /**
- * Function to allocated memory for a new element
- * @return the space for the new element
- */
-struct list* CreateListNode(){
-	
-	struct list *new;
-	
-	if(new=(struct list *) malloc(sizeof(list)))==NULL)
-		ErrExit(3);
-
-	new->cost=0;
-	new->v=0;
-	new->next=NULL;
-	
-	return new;
-}
-
-/**
  * Adds a new element to the tail of the list
  * @param L List
  */
-void AddList(struct list* L){
+struct list * AddList(struct list* next){
 	
-	L->next = (struct list *) CreateListNode();
-	L=L->next;
+	struct list * new;
 
-	return;
+    /* Memory allocation */
+    new = (struct list *) malloc(sizeof(struct list));
+
+    /* Check memory allocation errors */
+    ErrExit(3); 
+
+    /* Initialize new node */
+    new->v = 0;
+	new->cost = 0;
+    new->next = next;
+
+    return new;
 }
 
 void PutList(struct list *L,struct edge *new){
@@ -124,13 +141,7 @@ void PutList(struct list *L,struct edge *new){
  * @return
  */
 struct list** CreateListV(int V){
-	struct list** LV = (struct list**) malloc(V * sizeof(struct list*));
-	
-	for (i=0;i<V;i++){
-		
-		LV[i]=CreateListNode();
-		
-	}
+	struct list** LV = (struct list**) malloc(V * sizeof(struct list*));	
 	
 	return LV;
 }

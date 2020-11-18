@@ -117,9 +117,9 @@ void ErrExit (int err) {
  
 struct PBArg *ArgRead(FILE *fp){
 	
-	struct PBArg *aux;
+	struct PBArg *aux=NULL;
 	
-	aux=PBinit(aux);
+	aux = PBinit(aux);
 	
 	if ((fscanf(fp, "%d %d %s", &aux->v, &aux->e, aux->var) != 3)) {
 		
@@ -143,27 +143,6 @@ struct PBArg *ArgRead(FILE *fp){
 	return aux;
 	
 }
-
-/**********************
- * Memory allocation and Initialization of PBArg
- * @return clean PBArg
- *********************/
-struct PBArg *PBinit(struct PBArg * aux){
-	
-	if (aux==NULL){
-		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL)
-			ErrExit(3);
-	}
-	
-	aux->v = 0;
-	aux->e = 0;
-	aux->vi = 0;
-	aux->vj = 0;
-	aux->var = "\0";
-	
-	return aux;
-}
-
 
 /********************************
  * Function to check if the problem arguments are valid
@@ -214,12 +193,12 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
  */
  
 void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg){
-	
+/*	
 	fclose(EntryFile);
 	fclose(OutputFile);
-	/*GraphFree(G);*/
+	GraphFree(G);
 	free(Arg);
-	
+	*/
 	return;
 	
 }

@@ -9,7 +9,7 @@ CC = gcc
 DB = gdb
 CFLAGS = -g -Wall -std=c99
 
-OBJECTS = main.o FileOp.o Graph.o List.o
+OBJECTS = main.o FileOp.o ListGraph.o Zero.o
 
 EXE = backbone
 
@@ -19,16 +19,16 @@ TEST = .routes0
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h
 
-backbone: main.o FileOp.o Graph.o List.o
+backbone: $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
 main.o: main.c ListGraph.h Zero.h
 
 FileOp.o: FileOp.c FileOp.h ListGraph.h
 
-Graph.o: ListGraph.c ListGraph.h
+ListGraph.o: ListGraph.c ListGraph.h
 
-List.o: Zero.c Zero.h FileOp.h ListGraph.h
+Zero.o: Zero.c Zero.h FileOp.h ListGraph.h
 
 clean:
 	rm -f *.o backbone temp

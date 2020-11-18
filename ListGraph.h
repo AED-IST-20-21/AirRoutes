@@ -37,15 +37,18 @@ struct edge{
 	double cost;
 };
 
-struct graph *GraphInit();
-struct graph* GraphInit(struct PBArg *Arg);
-struct graph *LGRead(FILE *entryfp,struct PBArg *Arg);
+struct graph* GraphInit();
+struct graph *LGRead(FILE *entryfp, struct PBArg *);
+
+struct PBArg* PBinit(struct PBArg* );
+
 struct list *NewListElement();
-void FreeListV(struct list **LV,int V);
-void FreeList(struct list* L);
+void FreeListV(struct list **,int );
+void FreeList(struct list* );
 struct list* CreateListNode();
-void AddList(struct list* L);
-struct list** CreateListV(int V);
+struct list* AddList(struct list* );
+void PutList(struct list* , struct edge* );
+struct list** CreateListV(int );
 
 #endif
 

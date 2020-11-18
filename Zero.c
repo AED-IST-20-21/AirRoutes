@@ -104,7 +104,7 @@ void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	struct edge *click[3];
 	struct list *aux[2];
 	
-	G=LGRead(entryfp,Arg);
+	LGRead(entryfp,Arg);
 	
 	aux[0]=G->vertice[Arg->vi];
 	aux[1]=G->vertice[Arg->vj];

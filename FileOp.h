@@ -43,6 +43,7 @@ void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg);
 /* PBArg */
 struct PBArg *ArgRead(FILE *fp);
 int ArgCheck (struct PBArg *aux);
+struct PBArg *PBinit(struct PBArg * aux);
 
 /* Lista de Adjacências */
 /*struct list *ListRead() TODO */

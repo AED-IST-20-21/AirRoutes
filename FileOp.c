@@ -213,7 +213,7 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
  * @param G Graph dinamically allocated to be freed
  */
  
-void End(FILE *EntryFile,FILE *OutputFile,Graph G,struct PBArg *Arg){
+void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg){
 	
 	fclose(EntryFile);
 	fclose(OutputFile);

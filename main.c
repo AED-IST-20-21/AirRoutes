@@ -21,7 +21,6 @@ int main(int argc, char *argv[])
 	FILE *EntryFile,*OutputFile;
 	struct PBArg *Arg;
 	
-	
 	EntryFile = FileOpen(EntryFileName,"r");
 	OutputFile = FileOpen(OutputFileName,"w");
 

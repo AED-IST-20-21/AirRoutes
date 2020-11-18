@@ -7,7 +7,7 @@
 struct graph* GraphInit(struct PBArg *Arg){
 	Graph *G;
 	
-	if (G = (Graph *) malloc(sizeof(struct graph))==NULL)
+	if (G = (struct graph *) malloc(sizeof(struct graph))==NULL)
 		ErrExit(3);
 	
 	G->Arg = Arg;
@@ -28,30 +28,20 @@ struct graph *LGRead(FILE *entryfp,struct PBArg *Arg) {
 	struct edge *temp;
 	
 	G = GraphInit(Arg);
+	G=CreateListV(Arg->v);
 	
 	for (i = 0; i < Arg->v; i++) {
 		
 		if (fscanf(entryfp, "%d %d %f", temp->vi, temp->vj, temp->cost) != 3)
 			ErrExit(5);
 		
-		AddList(G->vertice, temp);
+		AddList(G->vertice[temp->vi],temp);
+		PutList(G->vertice[temp->vi],temp);
+		
+		
 	}
 	
 	return G;
-}
-
-/**
- * Function to allocate memory for a new adjancency element
- * @return Pointer to new element
- */
-struct list *NewListElement(){
-	
-	struct list *aux;
-	
-	if(aux=(struct list *) malloc(sizeof(list)))==NULL)
-			ErrExit(3);
-	return aux;
-	
 }
 
 /**
@@ -95,7 +85,16 @@ void FreeList(struct list* L){
  * @return the space for the new element
  */
 struct list* CreateListNode(){
-	struct list* new = (struct list*) malloc(sizeof(struct list));
+	
+	struct list *new;
+	
+	if(new=(struct list *) malloc(sizeof(list)))==NULL)
+		ErrExit(3);
+
+	new->cost=0;
+	new->v=0;
+	new->next=NULL;
+	
 	return new;
 }
 
@@ -105,7 +104,17 @@ struct list* CreateListNode(){
  */
 void AddList(struct list* L){
 	
-	L->next = (struct list*) CreateListNode();
+	L->next = (struct list *) CreateListNode();
+	L=L->next;
+
+	return;
+}
+
+void PutList(struct list *L,struct edge *new){
+	
+	L->v=new->vj;
+	L->cost=new->cost;
+	
 	return;
 }
 
@@ -116,5 +125,12 @@ void AddList(struct list* L){
  */
 struct list** CreateListV(int V){
 	struct list** LV = (struct list**) malloc(V * sizeof(struct list*));
+	
+	for (i=0;i<V;i++){
+		
+		LV[i]=CreateListNode();
+		
+	}
+	
 	return LV;
 }

@@ -22,12 +22,12 @@ int main(int argc, char *argv[])
 	struct PBArg *Arg;
 	
 	
-	EntryFile = FileOpen(EntryFileName,'r');
-	OutputFile = FileOpen(OutputFileName,'w');
+	EntryFile = FileOpen(EntryFileName,"r");
+	OutputFile = FileOpen(OutputFileName,"w");
 
 	do{
 
-		Arg=ArgRead(EntryFile,Arg);
+		Arg=ArgRead(EntryFile);
 		
 		if (Arg->var[1]=='0'){
 			

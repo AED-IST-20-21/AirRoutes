@@ -41,20 +41,6 @@ struct graph *LGRead(FILE *entryfp,struct PBArg *Arg) {
 }
 
 /**
- * Function to add new edge into vector of adjancency list
- * @param vertice Vector containing the lists of adjancency
- * @param new edge to add
- */
-void AddList(struct list *vertice,struct edge *new){
-	
-	vertice->v=new->vj;
-	vertice->cost=new->cost;
-	vertice->next=NewListElement();
-
-	return;
-}
-
-/**
  * Function to allocate memory for a new adjancency element
  * @return Pointer to new element
  */
@@ -118,6 +104,7 @@ struct list* CreateListNode(){
  * @param L List
  */
 void AddList(struct list* L){
+	
 	L->next = (struct list*) CreateListNode();
 	return;
 }

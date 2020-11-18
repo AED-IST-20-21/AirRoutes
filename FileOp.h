@@ -38,10 +38,10 @@ char* ExitFileName(char* ); /* Creates Exit FileName */
 FILE *FileOpen (char *FileName,char *mode);    /* Function to Open a File */
 void FileClose(FILE* );
 void ErrExit (int err);    /* Function to exit when an error occurs */
-void End(FILE *EntryFile,FILE *OutputFile,Graph G,struct PBArg *Arg);
+void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg);
 
 /* PBArg */
-struct PBArg *ArgRead(FILE *fp,struct PBArg *aux);
+struct PBArg *ArgRead(FILE *fp);
 int ArgCheck (struct PBArg *aux);
 
 /* Lista de Adjacências */

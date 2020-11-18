@@ -18,12 +18,12 @@ int main(int argc, char *argv[])
 {
 	
 	char *EntryFileName = argv[1], *OutputFileName;
-	FILE *EntryFile, *OutputFile, *fp;
+	FILE *EntryFile, *OutputFile;
 	struct PBArg *Arg;
 	
 	OutputFileName = ExitFileName(EntryFileName);
 
-	/*EntryFile = FileOpen(EntryFileName,"r");*/
+	EntryFile = FileOpen(EntryFileName,"r");
 	OutputFile = fopen(OutputFileName,"w");
 
 	/*
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
 	do{
 
-		Arg = ArgRead(EntryFileName);
+		Arg = ArgRead(EntryFile);
 		
 		if (Arg->var[1]=='0'){
 

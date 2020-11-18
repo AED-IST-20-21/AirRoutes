@@ -116,33 +116,34 @@ void ErrExit (int err) {
  * @return aux struct containing all arguments
  */
  
-struct PBArg *ArgRead(char *FileName){
+struct PBArg *ArgRead(FILE *EntryFile){
 	
 	struct PBArg *aux=NULL;
+	char temp[3];
+
+	aux = PBinit();
 	
-	FILE* fp;
-	int temp1, temp2, i;
-	char temp3[3];
-
-	aux = PBinit(aux);
-
-	fp = fopen( FileName, "r");
-
-	fscanf(fp, " %d %d %s", &aux->v, &aux->e, temp3);
-
-	for (i=0; i<2; i++)
-	{
-		aux->var[i]=temp3[i];
-	}
+	fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp);
+	
+	strncpy(aux->var,temp,2);
 	aux->var[2]='\0';
-
-	printf( "-Arg: %d %d %s\n", aux->v, aux->e, aux->var);
+	
+	switch (ArgCheck(aux)) {
 		
-	aux->var[2] = '\0';
-
-		
-	if(ArgCheck(aux)!=-1)
-		ErrExit(4);
+		case 1:fscanf(EntryFile, " %d", &aux->vi);
+			break;
+			
+		case 2:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
+			break;
+			
+		case 3:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
+			break;
+			
+		case 4:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
+			break;
+			
+		default:ErrExit(2);
+	}
 	
 	return aux;
 	
@@ -151,21 +152,21 @@ struct PBArg *ArgRead(char *FileName){
 /********************************
  * Function to check if the problem arguments are valid
  * @param aux Struct containing the problem arguments
- * @return 0 if OK -1 else
+ * @return mode if OK -1 else
  */
 int ArgCheck (struct PBArg *aux){
 	if ((aux->v>0)&&(aux->e>0)){
 	
-	if ( (strcmp(aux->var,"A0")!=0) && (aux->vi>0) )
+	if (strcmp(aux->var,"A0")==0)
 		return 1;
 
-	else if( (strcmp(aux->var,"B0")!=0) && (aux->vi>0) && (aux->vj>0) )
+	else if (strcmp(aux->var,"B0")==0)
 		return 2;
 	
-	else if( (strcmp(aux->var,"C0")!=0) && (aux->vi>0) && (aux->vj>0) )
+	else if (strcmp(aux->var,"C0")==0)
 		return 3;
 	
-	else if( (strcmp(aux->var,"D0")!=0) && (aux->vi>0) && (aux->vj>0) )
+	else if (strcmp(aux->var,"D0")==0)
 		return 4;
 	
 	else return -1;

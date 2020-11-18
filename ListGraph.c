@@ -17,13 +17,13 @@ struct graph* GraphInit(){
  * Memory allocation and Initialization of PBArg
  * @return clean PBArg
  *********************/
-struct PBArg *PBinit(struct PBArg * aux){
+struct PBArg *PBinit(){
 	
-	if (aux==NULL){
+	struct PBArg *aux;
+	
 		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL)
 			ErrExit(3);
-	}
-	
+		
 	aux->v = 0;
 	aux->e = 0;
 	aux->vi = 0;

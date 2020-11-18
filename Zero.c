@@ -5,6 +5,7 @@
 
 void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
+
 	switch(ArgCheck(Arg))
 	{
 		case 1:
@@ -55,7 +56,7 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 		aux=EdgeRead(entryfp,aux);
 		k++;
 		
-		if ((aux->vi==Arg->vi)&&(aux->vj==Arg->vi))
+		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
 		
 	} while (k<Arg->v);

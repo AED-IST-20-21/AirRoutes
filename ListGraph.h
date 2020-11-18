@@ -41,7 +41,7 @@ struct edge{
 struct graph* GraphInit();
 struct graph *LGRead(FILE *entryfp, struct PBArg *);
 
-struct PBArg* PBinit(struct PBArg* );
+struct PBArg *PBinit();
 
 struct list *NewListElement();
 void FreeListV(struct list **,int );

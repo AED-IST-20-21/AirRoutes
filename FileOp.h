@@ -41,7 +41,7 @@ void ErrExit (int err);    /* Function to exit when an error occurs */
 /*void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg);*/
 
 /* PBArg */
-struct PBArg *ArgRead(FILE *fp);
+struct PBArg *ArgRead(char*);
 int ArgCheck (struct PBArg *aux);
 /*struct PBArg *PBinit(struct PBArg * aux);*/
 

@@ -28,7 +28,7 @@ struct PBArg *PBinit(struct PBArg * aux){
 	aux->e = 0;
 	aux->vi = 0;
 	aux->vj = 0;
-	aux->var = "\0";
+	aux->var[0] = '\0';
 	
 	return aux;
 }

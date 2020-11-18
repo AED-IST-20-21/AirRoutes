@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "FileOp.h"
+#include "ListGraph.h"
 
 #define OldExt ".routes0"
 #define NewExt ".queries"
@@ -20,7 +21,7 @@ int FileCheck(char* FileName)
 
 	for (i = FileSize-1; i > (FileSize-strlen(OldExt)); i--)
 	{
-		printf("%c-%c\n", FileName[i], OldExt[FileSize - i]);
+		printf("%c-%c\n", FileName[i], OldExt[ (i-FileSize) + strlen(OldExt)]);
 		if ( FileName[i] != OldExt[ (i-FileSize) + strlen(OldExt)])
 		{
 			return -1;
@@ -115,29 +116,32 @@ void ErrExit (int err) {
  * @return aux struct containing all arguments
  */
  
-struct PBArg *ArgRead(FILE *fp){
+struct PBArg *ArgRead(char *FileName){
 	
 	struct PBArg *aux=NULL;
 	
+	FILE* fp;
+	int temp1, temp2, i;
+	char temp3[3];
+
 	aux = PBinit(aux);
-	
-	if ((fscanf(fp, "%d %d %s", &aux->v, &aux->e, aux->var) != 3)) {
-		
-		ErrExit(4);
-		
-	} else if ((strcmp(aux->var,"A0"))!=0){
-		
-		if ((fscanf(fp, "%d %d", &aux->vi, &aux->vj) != 2))
-			ErrExit(4);
-		
-	} else {
-		
-		if ((fscanf(fp, "%d", &aux->vi) != 1))
-			ErrExit(4);
-	
+
+	fp = fopen( FileName, "r");
+
+	fscanf(fp, " %d %d %s", &aux->v, &aux->e, temp3);
+
+	for (i=0; i<2; i++)
+	{
+		aux->var[i]=temp3[i];
 	}
-	
-	if(ArgCheck(aux)!=0)
+	aux->var[2]='\0';
+
+	printf( "-Arg: %d %d %s\n", aux->v, aux->e, aux->var);
+		
+	aux->var[2] = '\0';
+
+		
+	if(ArgCheck(aux)!=-1)
 		ErrExit(4);
 	
 	return aux;

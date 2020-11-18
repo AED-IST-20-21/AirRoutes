@@ -14,7 +14,7 @@ OBJECTS = main.o FileOp.o ListGraph.o Zero.o
 EXE = backbone
 
 #Test file
-TEST = .routes0
+TEST = test1.routes0
 
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h
@@ -39,7 +39,7 @@ FILES = $(shell ls ../test/*.txt)
 
 #
 valgrind: $(EXE)
-	$(CC) $(VALG) ./$(EXE) $(TEST)
+	$(VALG) ./$(EXE) $(TEST)
 #
 debug: $(EXE)
 	$(DB) ./$(EXE)

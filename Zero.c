@@ -104,6 +104,8 @@ void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	struct graph *G;
 	struct list *aux[2];
 	
+	int Find=0;
+
 	G = LGRead(entryfp, Arg);
 	
 	ListTurn(G->vertice[Arg->vi],ON);
@@ -117,16 +119,21 @@ void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 		
 		if (LampFind(aux[1],CZ)!=0)
 		{
-			fprintf(outputfp ,"%d %d %s %d 1\n", Arg->v, Arg->e, Arg->var, Arg->vi);
 			ListTurn(G->vertice[Arg->vi],OFF);
-			return;
+			Find = 1;
+			break;
 		}
 		
 		aux[0]=aux[0]->next;
 	}
-
-	fprintf(outputfp ,"%d %d %s %d 0\n", Arg->v, Arg->e, Arg->var, Arg->vi);
 	ListTurn(G->vertice[Arg->vi],OFF);
+	if (Find==0){
+		fprintf(outputfp ,"%d %d %s %d 0\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	} else if (Find==1){
+		fprintf(outputfp ,"%d %d %s %d 1\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	} else {
+		ErrExit(1);
+	}
 	return;
 }
 
@@ -159,7 +166,7 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
  * @param L List to switch the lights
  * @param mode Switch on or off
  */
-int ListTurn(struct list *L,enum mode){
+int ListTurn(struct list *L, int mode){
 
 	struct list *aux=L;
 	int g=0;
@@ -179,13 +186,11 @@ int ListTurn(struct list *L,enum mode){
  * @param mode Find 1 lamp or count the number of lamps on
  * @return Lamps found
  */
-int LampFind(struct list *L,enum mode,int g){
+int LampFind(struct list *L, int mode){
 	
 	struct list *aux=L;
 	int c=0;
-	
-	
-	
+		
 	if (mode==CZ){
 			while (aux!=NULL){
 		
@@ -196,19 +201,16 @@ int LampFind(struct list *L,enum mode,int g){
 		
 		}
 		return 0;
-	}else {
-		
-		while (aux!=NULL){
-			
-			if (aux->lamp==ON)
+	} else {	
+		while (aux!=NULL)
+		{	
+			if (aux->lamp==ON){
 				c++;
 				aux->lamp=Visited;
-			
-			aux=aux->next;
-			
+			}
+			aux=aux->next;	
 		}
-		return c;
-		
-		
+		return c;		
 	}
 }
+

@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-/*#include "FileOp.h"*/
+#include "FileOp.h"
 #include "Zero.h"
 #include "ListGraph.h"
 
@@ -17,19 +17,28 @@
 int main(int argc, char *argv[])
 {
 	
-	char *EntryFileName = argv[1],*OutputFileName = "\0";
-	FILE *EntryFile,*OutputFile;
+	char *EntryFileName = argv[1], *OutputFileName;
+	FILE *EntryFile, *OutputFile, *fp;
 	struct PBArg *Arg;
 	
-	EntryFile = FileOpen(EntryFileName,"r");
-	OutputFile = FileOpen(OutputFileName,"w");
+	OutputFileName = ExitFileName(EntryFileName);
+
+	/*EntryFile = FileOpen(EntryFileName,"r");*/
+	OutputFile = fopen(OutputFileName,"w");
+
+	/*
+	fp = fopen(EntryFileName, "r");
+	fscanf(fp, "%d", &i);
+	printf("VERIFICATION - %d\n", i);
+	fclose(fp);*/
 
 	do{
 
-		Arg=ArgRead(EntryFile);
+		Arg = ArgRead(EntryFileName);
 		
 		if (Arg->var[1]=='0'){
-			
+
+			printf("Entering LControl...\n");
 			LControl(EntryFile,OutputFile,Arg);
 			
 		}else /*if (Arg->var[1]=='1'){

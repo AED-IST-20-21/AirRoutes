@@ -38,7 +38,15 @@ struct edge{
 };
 
 Graph *GraphInit();
-
+struct graph* GraphInit(struct PBArg *Arg);
+struct graph *LGRead(FILE *entryfp,struct PBArg *Arg);
+void AddList(struct list *vertice,struct edge *new);
+struct list *NewListElement();
+void FreeListV(struct list **LV,int V);
+void FreeList(struct list* L);
+struct list* CreateListNode();
+void AddList(struct list* L);
+struct list** CreateListV(int V);
 
 #endif
 

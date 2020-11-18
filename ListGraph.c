@@ -4,8 +4,7 @@
 
 
 
-struct graph* GraphInit(struct PBArg *Arg)
-{
+struct graph* GraphInit(struct PBArg *Arg){
 	Graph *G;
 	
 	if (G = (Graph *) malloc(sizeof(struct graph))==NULL)
@@ -67,4 +66,68 @@ struct list *NewListElement(){
 			ErrExit(3);
 	return aux;
 	
+}
+
+/**
+ * Function to free a dinamically allocated vector of adjancency lists
+ * @param LV Vector of adjancecncy lists
+ * @param V Number of vertices
+ */
+void FreeListV(struct list **LV,int V){
+	
+	int i;
+	
+	for (i=0;i<V;i++){
+		
+		FreeList(LV[i])
+		
+	}
+	
+	free(LV);
+	return;
+}
+
+/**
+ * Function to free a dinamically allocated adjancency list
+ * @param L List to be freed
+ */
+void FreeList(struct list* L){
+	struct list *aux, *Prev;
+	aux = L;
+	while (aux->next != NULL)
+	{
+		Prev = aux;
+		aux = aux->next;
+		free(Prev);
+	}
+	free(aux);
+	return;
+}
+
+/**
+ * Function to allocated memory for a new element
+ * @return the space for the new element
+ */
+struct list* CreateListNode(){
+	struct list* new = (struct list*) malloc(sizeof(struct list));
+	return new;
+}
+
+/**
+ * Adds a new element to the tail of the list
+ * @param L List
+ */
+void AddList(struct list* L){
+	L->next = (struct list*) CreateListNode();
+	return;
+}
+
+/**
+ * Allocates memory for a vector of adjacency lists
+ * @param V
+ * @return
+ */
+struct list** CreateListV(int V){
+	struct list** LV = (struct list**) malloc(V * sizeof(struct list*));
+	return LV;
 }

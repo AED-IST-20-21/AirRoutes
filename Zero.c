@@ -107,7 +107,7 @@ void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	G=LGRead(entryfp,Arg->v);
 	
 	aux[0]=G->vertice[Arg->vi];
-	
+	aux[1]=G->vertice[Arg->vj];
 	
 	while ((aux[0]!=NULL)||(ClickFind(aux[1],aux[0]->v)){
 		
@@ -127,8 +127,10 @@ int ClickFind(struct list *J,int vi){
 	
 	int c++;
 	
+	while (J->next!=NULL)||(J->v=){
 	
-/*Encontrar vertice igual entre um dos j e o i*/
+	
+	}
 	
 	
 }

@@ -59,7 +59,7 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
 		
-	} while (k<=Arg->v);
+	} while (k<Arg->v);
 	
 	fprintf(outputfp,"%d %d %s %d %d",Arg->v,Arg->e,Arg->var,Arg->vi,g);
 	
@@ -81,7 +81,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	if((aux=malloc(sizeof(struct edge)))==NULL)
 		ErrExit(3);
 	
-	do{
+	while (k<=Arg->v){
 	
 		aux=EdgeRead(entryfp,aux);
 		
@@ -93,7 +93,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 		
 		k++;
 		
-	}while (k<Arg->v);
+	}
 	
 	if (Flag==0)
 		fprintf(outputfp,"%d %d %s %d Doesn´t Exist",Arg->v,Arg->e,Arg->var,Arg->vi);

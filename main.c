@@ -9,16 +9,8 @@
 
 struct PBArg *Arg;
 
-FILE *ExitFileOpen(char *name);
-
-/********************************
- * Main Function of the program
- * @param argv Number of arguments read
- * @param argc Pointer to strings of arguments
- * @return
- ********************************/
  
-int main( char *argv[])
+int main( int argc,char *argv[])
 {
 	
 	char *EntryFileName = argv[1], *OutputFileName;
@@ -30,12 +22,12 @@ int main( char *argv[])
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
 
-	while (feof(EntryFile)!=0) {
+	do{
 
 		Arg = ArgRead(EntryFile);
 		
 		if (Arg->var[1]=='0'){
-
+			
 			LControl(EntryFile,OutputFile,Arg);
 			
 		}else /*if (Arg->var[1]=='1'){
@@ -44,7 +36,7 @@ int main( char *argv[])
 
 		} else*/ ErrExit(2);
 		
-	}
+	}while (feof(EntryFile)==0);
 	
 	
 

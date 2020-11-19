@@ -142,13 +142,13 @@ struct PBArg *ArgRead(FILE *EntryFile){
 	}
 */
 
-	if (fscanf(EntryFile, " %s", temp)==EOF)
+	if (fscanf(EntryFile, " %d", &aux->v)==EOF)
 	{
 		printf("Makeshift (v) FEOF is Working...\n");
 		return NULL;
 	}
 
-	aux->v = atoi(temp);
+	/*aux->v = atoi(temp);*/
 	
 	if (feof(EntryFile)!=0)
 		{

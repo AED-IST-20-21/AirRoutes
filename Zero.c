@@ -53,13 +53,13 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 	
 	do{
 		
-		aux=EdgeRead(entryfp,aux);
+		aux = EdgeRead(entryfp,aux);
 		k++;
 		
 		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
 		
-	} while (k<=Arg->v);
+	} while (k < Arg->v);
 
 	printf("%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);	
 	fprintf(outputfp,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);
@@ -81,7 +81,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	short int Flag=0;
 	int k=0;
 	
-	if((aux=malloc(sizeof(struct edge)))==NULL)
+	if((aux = (struct edge*) malloc(sizeof(struct edge)))==NULL)
 		ErrExit(3);
 	
 	while (k<=Arg->v){

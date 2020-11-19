@@ -30,26 +30,27 @@ int main(int argc, char *argv[])
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
 
-	do {
-
+	while (feof(EntryFile)!=0) {
+/*
 		if (feof(EntryFile)!=0)
 		{
 			printf("Found EOF\n");
 			break;
 		}
+*/
 		Arg = ArgRead(EntryFile);
-		
+
 		if (Arg->var[1]=='0'){
 			
 			LControl(EntryFile, OutputFile, Arg);
 			
-		}else{ /*if (Arg->var[1]=='1'){
+		} else { /*if (Arg->var[1]=='1'){
 			
 			VControl(EntryFile);*/
 
 			ErrExit(2);
 		}
-	} while (1);
+	}
 	
 	
 

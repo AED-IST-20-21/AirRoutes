@@ -35,7 +35,8 @@ struct graph {
 
 int FileCheck(char* ); /* Checks if FileName is valid */
 char* ExitFileName(char* ); /* Creates Exit FileName */
-FILE *FileOpen (char *FileName,char *mode);    /* Function to Open a File */
+FILE *RFileOpen (char *);
+FILE *WFileOpen(char *);
 void FileClose(FILE* );
 void ErrExit (int err);    /* Function to exit when an error occurs */
 /*void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg);*/

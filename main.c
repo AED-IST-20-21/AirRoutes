@@ -9,6 +9,8 @@
 
 struct PBArg *Arg;
 
+FILE *ExitFileOpen(char *name);
+
 /********************************
  * Main Function of the program
  * @param argv Number of arguments read
@@ -16,7 +18,7 @@ struct PBArg *Arg;
  * @return
  ********************************/
  
-int main(int argc, char *argv[])
+int main( char *argv[])
 {
 	
 	char *EntryFileName = argv[1], *OutputFileName;
@@ -25,22 +27,15 @@ int main(int argc, char *argv[])
 	
 	OutputFileName = ExitFileName(EntryFileName);
 
-	EntryFile = FileOpen(EntryFileName,"r");
-	OutputFile = fopen(OutputFileName,"w");
+	EntryFile = RFileOpen(EntryFileName);
+	OutputFile = WFileOpen(OutputFileName);
 
-	/*
-	fp = fopen(EntryFileName, "r");
-	fscanf(fp, "%d", &i);
-	printf("VERIFICATION - %d\n", i);
-	fclose(fp);*/
-
-	do{
+	while (feof(EntryFile)!=0) {
 
 		Arg = ArgRead(EntryFile);
 		
 		if (Arg->var[1]=='0'){
 
-			printf("Entering LControl...\n");
 			LControl(EntryFile,OutputFile,Arg);
 			
 		}else /*if (Arg->var[1]=='1'){
@@ -49,9 +44,11 @@ int main(int argc, char *argv[])
 
 		} else*/ ErrExit(2);
 		
-	}while (!feof(EntryFile));
+	}
 	
 	
 
 	return 0;
 }
+
+

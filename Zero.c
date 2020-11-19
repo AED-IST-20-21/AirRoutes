@@ -83,7 +83,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 	do{
 	
-	aux=EdgeRead(entryfp,aux);
+		aux=EdgeRead(entryfp,aux);
 		
 		if (((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj)||(Arg->vj)))&&(Flag==0)){
 			
@@ -91,7 +91,10 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 			fprintf(outputfp,"%d %d %s %d %f",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
 		}
 		
+		k++;
+		
 	}while (k<Arg->v);
+	
 	if (Flag==0)
 		fprintf(outputfp,"%d %d %s %d Doesn´t Exist",Arg->v,Arg->e,Arg->var,Arg->vi);
 	

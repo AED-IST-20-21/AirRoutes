@@ -21,7 +21,6 @@ int FileCheck(char* FileName)
 
 	for (i = FileSize-1; i > (FileSize-strlen(OldExt)); i--)
 	{
-		printf("%c-%c\n", FileName[i], OldExt[ (i-FileSize) + strlen(OldExt)]);
 		if ( FileName[i] != OldExt[ (i-FileSize) + strlen(OldExt)])
 		{
 			return -1;
@@ -40,6 +39,9 @@ char* ExitFileName(char* FileName)
 {
 	char* ExitFileName;
 	int FileSize;
+	
+	if (FileCheck(FileName)!=0)
+		ErrExit(1);
 
 	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
 	ExitFileName = (char*) malloc( ((FileSize) + 1) * sizeof(char));
@@ -58,19 +60,26 @@ char* ExitFileName(char* FileName)
  * @return Pointer to FILE
  *******************************/
  
-FILE *FileOpen (char *FileName,char *mode) {
+FILE *RFileOpen (char *name) {
 	
 	FILE *fp = NULL;
 	
-	if (FileCheck(FileName) == 0) {
-		if ((fp = fopen(FileName, mode)) == NULL)
+		if ((fp = fopen(name, "r")) == NULL)
 			ErrExit(0);
-			
-		return fp;
 		
-	} else ErrExit(1);
+	return fp;
+
+}
+
+FILE *WFileOpen(char *name) {
+	
+	FILE *fp = NULL;
+	
+	if ((fp = fopen(name, "w")) == NULL)
+		ErrExit(0);
 	
 	return fp;
+
 }
 
 /*************************

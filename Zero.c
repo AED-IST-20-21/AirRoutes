@@ -84,7 +84,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	if((aux=malloc(sizeof(struct edge)))==NULL)
 		ErrExit(3);
 	
-	do{
+	while (k<=Arg->v){
 	
 		aux=EdgeRead(entryfp,aux);
 		
@@ -97,7 +97,9 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 		
 		k++;
 		
-	}while (k<=Arg->v);
+	}
+	
+	
 	
 	if (Flag==0){
 		printf("%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);

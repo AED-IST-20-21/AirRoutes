@@ -9,14 +9,6 @@
 
 struct PBArg *Arg;
 
-FILE *ExitFileOpen(char *name);
-
-/********************************
- * Main Function of the program
- * @param argv Number of arguments read
- * @param argc Pointer to strings of arguments
- * @return
- ********************************/
  
 int main(int argc, char *argv[])
 {
@@ -30,19 +22,19 @@ int main(int argc, char *argv[])
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
 
-	while (feof(EntryFile)!=0) {
-/*
+	do{
+
 		if (feof(EntryFile)!=0)
 		{
 			printf("Found EOF\n");
 			break;
 		}
-*/
-		Arg = ArgRead(EntryFile);
 
+		Arg = ArgRead(EntryFile);
+		
 		if (Arg->var[1]=='0'){
 			
-			LControl(EntryFile, OutputFile, Arg);
+			LControl(EntryFile,OutputFile,Arg);
 			
 		} else { /*if (Arg->var[1]=='1'){
 			
@@ -50,9 +42,8 @@ int main(int argc, char *argv[])
 
 			ErrExit(2);
 		}
-	}
-	
-	
+		
+	} while (1);	
 
 	return 0;
 }

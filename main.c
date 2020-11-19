@@ -7,6 +7,8 @@
 #include "Zero.h"
 #include "ListGraph.h"
 
+struct PBArg *Arg;
+
 /********************************
  * Main Function of the program
  * @param argv Number of arguments read
@@ -19,7 +21,7 @@ int main(int argc, char *argv[])
 	
 	char *EntryFileName = argv[1], *OutputFileName;
 	FILE *EntryFile, *OutputFile;
-	struct PBArg *Arg;
+
 	
 	OutputFileName = ExitFileName(EntryFileName);
 

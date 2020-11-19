@@ -59,7 +59,7 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
 		
-	} while (k<Arg->v);
+	} while (k<=Arg->v);
 	
 	fprintf(outputfp,"%d %d %s %d %d",Arg->v,Arg->e,Arg->var,Arg->vi,g);
 	

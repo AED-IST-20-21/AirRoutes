@@ -106,6 +106,10 @@ void ErrExit (int err) {
 			fprintf(stderr,"Error Reading Graph\n");
 			exit(0);
 			break;
+		case 6:
+			fprintf(stderr,"Error Reading Edge\n");
+			exit(0);
+			break;
 	}
 }
 
@@ -185,9 +189,11 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
 			
 	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) {
 		
-		return NULL;
+	ErrExit(6);
 		
-	} else return aux;
+	}
+	
+	return aux;
 }
 
 /**************************************************

@@ -18,7 +18,7 @@ FILE *ExitFileOpen(char *name);
  * @return
  ********************************/
  
-int main( char *argv[])
+int main(int argc, char *argv[])
 {
 	
 	char *EntryFileName = argv[1], *OutputFileName;
@@ -30,21 +30,26 @@ int main( char *argv[])
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
 
-	while (feof(EntryFile)!=0) {
+	do {
 
+		if (feof(EntryFile)!=0)
+		{
+			printf("Found EOF\n");
+			break;
+		}
 		Arg = ArgRead(EntryFile);
 		
 		if (Arg->var[1]=='0'){
-
-			LControl(EntryFile,OutputFile,Arg);
 			
-		}else /*if (Arg->var[1]=='1'){
+			LControl(EntryFile, OutputFile, Arg);
 			
-			VControl(EntryFile);
+		}else{ /*if (Arg->var[1]=='1'){
+			
+			VControl(EntryFile);*/
 
-		} else*/ ErrExit(2);
-		
-	}
+			ErrExit(2);
+		}
+	} while (1);
 	
 	
 

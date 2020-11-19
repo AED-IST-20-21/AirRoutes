@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
+void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 {
 
 	switch(ArgCheck(Arg))
@@ -48,7 +48,7 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 	int k=0,g=0;
 	struct edge *aux;
 	
-	if((aux=malloc(sizeof(struct edge)))==NULL)
+	if((aux = (struct edge*) malloc(sizeof(struct edge)))==NULL)
 		ErrExit(3);
 	
 	do{
@@ -60,9 +60,12 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 			g++;
 		
 	} while (k<=Arg->v);
+
+	printf("%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);	
+	fprintf(outputfp,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);
 	
-	fprintf(outputfp,"%d %d %s %d %d",Arg->v,Arg->e,Arg->var,Arg->vi,g);
-	
+	free(aux);
+
 	return;
 }
 
@@ -75,7 +78,7 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct edge *aux;
-	short int Flag;
+	short int Flag=0;
 	int k=0;
 	
 	if((aux=malloc(sizeof(struct edge)))==NULL)
@@ -85,19 +88,21 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 		aux=EdgeRead(entryfp,aux);
 		
-		if (((aux->vi==(Arg->vi)||(Arg->vj))&&(aux->vj==(Arg->vj)||(Arg->vj)))&&(Flag==0)){
+		if ( ( (aux->vi==(Arg->vi)||(Arg->vj)) && (aux->vj==(Arg->vj)||(Arg->vj)) ) && (Flag==0) ){
 			
 			Flag=1;
-			fprintf(outputfp,"%d %d %s %d %f",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
+			printf("%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
+			fprintf(outputfp,"%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
 		}
 		
 		k++;
 		
-	}while (k<Arg->v);
+	}while (k<=Arg->v);
 	
-	if (Flag==0)
-		fprintf(outputfp,"%d %d %s %d Doesn´t Exist",Arg->v,Arg->e,Arg->var,Arg->vi);
-	
+	if (Flag==0){
+		printf("%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);
+		fprintf(outputfp,"%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);
+	}
 	free(aux);
 	
 	return;

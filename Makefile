@@ -22,7 +22,7 @@ TMPOBJECTS = main.c FileOp.c FileOp.h
 backbone: $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
-main.o: main.c ListGraph.h Zero.h
+main.o: main.c ListGraph.h Zero.h FileOp.h
 
 FileOp.o: FileOp.c FileOp.h ListGraph.h
 

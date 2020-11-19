@@ -135,9 +135,48 @@ struct PBArg *ArgRead(FILE *EntryFile){
 	char temp[3];
 
 	aux = PBinit();
+/*	
+	if (fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp)==EOF){
+		printf("Makeshift FEOF is Working...\n");
+		return NULL;
+	}
+*/
+
+	if (fscanf(EntryFile, " %s", temp)==EOF)
+	{
+		printf("Makeshift (v) FEOF is Working...\n");
+		return NULL;
+	}
+
+	aux->v = atoi(temp);
 	
-	fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp);
-	
+	if (feof(EntryFile)!=0)
+		{
+			printf("Found (v) EOF\n");
+		}
+
+	if (fscanf(EntryFile, " %d", &aux->e)==EOF)
+	{
+		printf("Makeshift (e) FEOF is Working...\n");
+		return NULL;
+	}
+
+	if (feof(EntryFile)!=0)
+		{
+			printf("Found(e) EOF\n");
+		}
+
+	if (fscanf(EntryFile, " %s", temp)==EOF)
+	{
+		printf("Makeshift (var) FEOF is Working...\n");
+		return NULL;
+	}
+
+	if (feof(EntryFile)!=0)
+		{
+			printf("Found (var) EOF\n");
+		}
+
 	strncpy(aux->var,temp,2);
 	aux->var[2]='\0';
 	
@@ -170,21 +209,23 @@ struct PBArg *ArgRead(FILE *EntryFile){
 int ArgCheck (struct PBArg *aux){
 	if ((aux->v>0)&&(aux->e>0)){
 	
-	if (strcmp(aux->var,"A0")==0)
-		return 1;
+		if (strcmp(aux->var,"A0")==0){
+			return 1;
 
-	else if (strcmp(aux->var,"B0")==0)
-		return 2;
+		} else if (strcmp(aux->var,"B0")==0){
+			return 2;
 	
-	else if (strcmp(aux->var,"C0")==0)
-		return 3;
+		} else if (strcmp(aux->var,"C0")==0){
+			return 3;
 	
-	else if (strcmp(aux->var,"D0")==0)
-		return 4;
+		} else if (strcmp(aux->var,"D0")==0){
+			return 4;
 	
-	else return -1;
+		} else return -1;
 	
-	} else return -1;
+	} else {
+		return -1;
+	}
 }
 
 

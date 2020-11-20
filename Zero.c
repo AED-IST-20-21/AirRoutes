@@ -117,17 +117,25 @@ int CZero(FILE *entryfp, struct PBArg *Arg)
 
 	if((G = LGRead(entryfp, Arg))==NULL)Arg->err=1;
 	
-	lenght=LenghtList(G->vertice[Arg->vi-1]);
-	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
-	
-	
-	for (i=0;(c<1)&&(i<lenght);i++){
+	if ((Arg->vi>Arg->v)||(Arg->vi<=0)){
 		
-		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
+		Arg->err=1;
 		
+	}else{
+		
+		lenght=LenghtList(G->vertice[Arg->vi-1]);
+		lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
+		
+		
+		for (i=0;(c<1)&&(i<lenght);i++){ /*Adaptative*/
+			
+			c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
+			
+		}
+		
+		free(lamps);
 	}
 	
-	free(lamps);
 	LGFree(G);
 	if (c>0){
 		c=1;
@@ -142,18 +150,26 @@ int DZero(FILE *entryfp, struct PBArg *Arg)
 	int *lamps,i,lenght,c=0;
 	
 	if ((G = LGRead(entryfp, Arg))==NULL)Arg->err=1;
-	
-	lenght=LenghtList(G->vertice[Arg->vi-1]);
-	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
-	
-	
-	for (i=0;(i<lenght);i++){
+
+	if ((Arg->vi>Arg->v)||(Arg->vi<=0)){
 		
-		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
+		Arg->err=1;
 		
+	}else{
+		
+		lenght=LenghtList(G->vertice[Arg->vi-1]);
+		lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
+		
+		
+		for (i=0;(i<lenght);i++){
+			
+			c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
+			
+		}
+		
+		free(lamps);
 	}
 	
-	free(lamps);
 	LGFree(G);
 	 return c;
 }

@@ -103,7 +103,6 @@ void ErrExit (int err) {
 			break;
 		case 2:
 			/*fprintf(stderr, "Invalid Mode\n");*/
-			
 			exit(0);
 			break;
 		case 3:
@@ -123,6 +122,7 @@ void ErrExit (int err) {
 			exit(0);
 			break;
 	}
+	return;
 }
 
 /*************************************************
@@ -139,8 +139,11 @@ struct PBArg *ArgRead(FILE *EntryFile){
 
 	aux = PBinit();
 	
-	if (fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp)!=3)
-		ErrExit(4);
+	if (fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp)!=3){
+	
+	
+	}
+	
 	
 	strncpy(aux->var,temp,2);
 	aux->var[2]='\0';
@@ -163,12 +166,11 @@ struct PBArg *ArgRead(FILE *EntryFile){
 			break;
 			
 		case 4:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
-				ErrExit(4);
+			
 			}
 			
 		default:ErrExit(2);
 	}
-	if(!((aux->v>0)||(aux->vi>0)||(aux->e>0))) ErrExit(4);
 	
 	return aux;
 	
@@ -214,9 +216,10 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
 	
 	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) {
 		
-	ErrExit(6);
+	return NULL;
 		
 	}
+	
 	if (aux->vj<aux->vi){
 		
 		temp=aux->vj;
@@ -226,6 +229,12 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
 	}
 	
 	return aux;
+}
+
+int EdgeCheck(int size, struct edge *aux){
+	
+	if ((aux->vi<=0)||(aux->vj<=0)||(aux->vi>size)||(aux->vj>size)||(aux->cost<=0)) return -1;
+	else return 0;
 }
 
 /**************************************************

@@ -65,8 +65,10 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 
 	for (i = 0; i < Arg->e; i++) {
 		
-		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3)
-			ErrExit(5);
+		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3){
+			LGFree(G);
+			return NULL;
+		}
 		
 		G->vertice[temp->vi-1]=AddList(G->vertice[temp->vi-1]);
 		PutList(G->vertice[temp->vi-1], temp->vj, temp->cost);

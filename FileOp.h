@@ -5,33 +5,6 @@
 
 #include "ListGraph.h"
 
-/*
-struct PBArg{
-	
-	int v;
-	int e;
-	int vi;
-	int vj;
-	char *var;
-	
-} ;*/  /* Struct storing the current problem arguments */
-/*
-struct edge {
-	
-	int vi;
-	int vj;
-	double cost;
-	
-}; */ /* Struct storing an edge */
-
-/*
-struct graph {
-	
-	struct PBArg *Arg;
-	void * DataBase;
-	
-};
-*/
 
 int FileCheck(char* ); /* Checks if FileName is valid */
 char* ExitFileName(char* ); /* Creates Exit FileName */

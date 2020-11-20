@@ -27,6 +27,10 @@
       <list>
         <SerializedStickyNote>
           <option name="archived" value="true" />
+          <option name="description" value="if ((aux = EdgeRead(entryfp,aux))==NULL) return -1;" />
+        </SerializedStickyNote>
+        <SerializedStickyNote>
+          <option name="archived" value="true" />
           <option name="description" value="void End(char *OutputFileName,struct PBArg *Arg,FILE *OutputFile,FILE *EntryFile);" />
         </SerializedStickyNote>
         <SerializedStickyNote>

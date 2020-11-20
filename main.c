@@ -13,14 +13,19 @@ struct PBArg *Arg;
 int main(int argc, char *argv[])
 {
 	
-	char *EntryFileName = argv[1], *OutputFileName;
+	char *EntryFileName, *OutputFileName;
 	FILE *EntryFile, *OutputFile;
 
+	if (argc!=2) return 0;
+	
+	EntryFileName=argv[1];
 	
 	OutputFileName = ExitFileName(EntryFileName);
-
+	
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
+	
+	free(OutputFileName);
 	
 	while (!feof(EntryFile)){
 		
@@ -39,6 +44,7 @@ int main(int argc, char *argv[])
 		
 		while(fscanf(EntryFile," ")==1);
 	}
+	
 	End(OutputFileName,OutputFile,EntryFile);
 	return 0;
 }

@@ -116,8 +116,9 @@ void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 
 	G = LGRead(entryfp, Arg);
 	
-	lamps=LampsInit(G->vertice[Arg->vi-1]);
 	lenght=LenghtList(G->vertice[Arg->vi-1]);
+	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
+	
 	
 	for (i=0;(c==0)&&(i<lenght);i++){
 		
@@ -145,8 +146,9 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 	G = LGRead(entryfp, Arg);
 	
-	lamps=LampsInit(G->vertice[Arg->vi-1]);
 	lenght=LenghtList(G->vertice[Arg->vi-1]);
+	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
+	
 	
 	for (i=0;(i<lenght);i++){
 		
@@ -165,9 +167,9 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	return;
 }
 
-int *LampsInit(struct list *lvi){
+int *LampsInit(struct list *lvi,int lenght){
 	
-	int *lamps,lenght=LenghtList(lvi),i;
+	int *lamps,i;
 	struct list *laux;
 	
 	if ((lamps = (int *) calloc(lenght,sizeof(int))) == NULL)
@@ -177,31 +179,13 @@ int *LampsInit(struct list *lvi){
 	
 	for (i=0;i<lenght;i++){
 		
-		Sort(lamps,laux->v,lenght);
+		lamps[i]=laux->v;
 		
 		laux=laux->next;
 	}
 	return lamps;
 }
 
-void Sort(int *a,int v, int size)
-{
-	int i,temp;
-	
-	for (i=0;i<size-1;i++){
-
-		a[0]=v;
-		if (a[i+1]<a[i]){
-			
-			temp=a[i+1];
-			a[i+1]=a[i];
-			a[i]=temp;
-		}
-		
-	}
-	
-	return;
-}
 
 int ClickFind(struct list *adj,int *lamps,int size,int j){
 

@@ -7,14 +7,14 @@
 #  	Compiler, Compiler Flags
 CC = gcc 
 DB = gdb
-CFLAGS = -g -Wall -std=c99
+CFLAGS = -O3 -Wall -std=c99
 
 OBJECTS = main.o FileOp.o ListGraph.o Zero.o
 
 EXE = backbone
 
 #Test file
-TEST = test1.routes0
+TEST = enunciado_mix.routes0
 
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h
@@ -33,7 +33,7 @@ Zero.o: Zero.c Zero.h FileOp.h ListGraph.h
 clean:
 	rm -f *.o backbone temp
 
-VALG = valgrind --leak-check=full
+VALG = valgrind --leak-check=full --show-leak-kinds=all -s
 
 FILES = $(shell ls ../test/*.routes0)
 

@@ -78,6 +78,8 @@ FILE *WFileOpen(char *name) {
 	if ((fp = fopen(name, "w")) == NULL)
 		ErrExit(0);
 	
+	
+	
 	return fp;
 
 }
@@ -92,31 +94,32 @@ void ErrExit (int err) {
 	
 	switch (err) {
 		case 0:
-			fprintf(stderr, "Error Opening File\n");
+			/*fprintf(stderr, "Error Opening File\n");*/
 			exit(0);
 			break;
 		case 1:
-			fprintf(stderr, "Error Checking File Extension\n");
+			/*fprintf(stderr, "Error Checking File Extension\n");*/
 			exit(0);
 			break;
 		case 2:
-			fprintf(stderr, "Invalid Mode\n");
+			/*fprintf(stderr, "Invalid Mode\n");*/
+			
 			exit(0);
 			break;
 		case 3:
-			fprintf(stderr,"Error Allocating Memory\n");
+			/*fprintf(stderr,"Error Allocating Memory\n");*/
 			exit(0);
 			break;
 		case 4:
-			fprintf(stderr,"Invalid Arguments\n");
+			/*fprintf(stderr,"Invalid Arguments\n");*/
 			exit(0);
 			break;
 		case 5:
-			fprintf(stderr,"Error Reading Graph\n");
+			/*fprintf(stderr,"Error Reading Graph\n");*/
 			exit(0);
 			break;
 		case 6:
-			fprintf(stderr,"Error Reading Edge\n");
+			/*fprintf(stderr,"Error Reading Edge\n");*/
 			exit(0);
 			break;
 	}
@@ -144,20 +147,28 @@ struct PBArg *ArgRead(FILE *EntryFile){
 	
 	switch (ArgCheck(aux)) {
 		
-		case 1:fscanf(EntryFile, " %d", &aux->vi);
+		case 1:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
+			ErrExit(4);
+		}
 			break;
 			
-		case 2:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
+		case 2:if(fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj)!=2){
+			ErrExit(4);
+		}
 			break;
 			
-		case 3:fscanf(EntryFile, " %d", &aux->vi);
+		case 3:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
+				ErrExit(4);
+			}
 			break;
 			
-		case 4:fscanf(EntryFile, " %d", &aux->vi);
-			break;
+		case 4:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
+				ErrExit(4);
+			}
 			
 		default:ErrExit(2);
 	}
+	if(!((aux->v>0)||(aux->vi>0)||(aux->e>0))) ErrExit(4);
 	
 	return aux;
 	
@@ -198,10 +209,19 @@ int ArgCheck (struct PBArg *aux){
  */
  
 struct edge *EdgeRead(FILE *fp,struct edge *aux){
-			
+	
+	int temp;
+	
 	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) {
 		
 	ErrExit(6);
+		
+	}
+	if (aux->vj<aux->vi){
+		
+		temp=aux->vj;
+		aux->vj=aux->vi;
+		aux->vi=temp;
 		
 	}
 	
@@ -217,8 +237,7 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
  
 void End(char *OutputFileName,FILE *OutputFile,FILE *EntryFile){
 
-	free(OutputFileName);
-
+	
 	fclose(OutputFile);
 	fclose(EntryFile);
 	

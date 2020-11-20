@@ -22,14 +22,7 @@ int main(int argc, char *argv[])
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
 	
-	do{
-		
-		if (feof(EntryFile)!=0)
-		{
-			/*printf("Found EOF\n");*/
-			End(OutputFileName,OutputFile,EntryFile);
-			break;
-		}
+	while (!feof(EntryFile)){
 		
 		Arg = ArgRead(EntryFile);
 		
@@ -44,10 +37,9 @@ int main(int argc, char *argv[])
 			ErrExit(2);
 		}
 		
-		
-		
-	} while (1);
-	
+		while(fscanf(EntryFile," ")==1);
+	}
+	End(OutputFileName,OutputFile,EntryFile);
 	return 0;
 }
 

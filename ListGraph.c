@@ -138,7 +138,6 @@ struct list * AddList(struct list* next){
     /* Initialize new node */
     new->v = 0;
 	new->cost = 0;
-	new->lamp = 0;
     new->next = next;
 
     return new;

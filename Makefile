@@ -35,7 +35,7 @@ clean:
 
 VALG = valgrind --leak-check=full
 
-FILES = $(shell ls ../test/*.txt)
+FILES = $(shell ls ../test/*.routes0)
 
 #
 valgrind: $(EXE)

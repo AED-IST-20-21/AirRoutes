@@ -62,7 +62,9 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 			g++;
 		
 	} while (k < Arg->e);
-
+	
+	if (g<=0) g=-1;
+	
 	/*printf("%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);*/
 	fprintf(outputfp,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);
 	
@@ -90,22 +92,17 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 		aux=EdgeRead(entryfp,aux);
 		
-		if (( (aux->vi==((Arg->vi)||(Arg->vj))) || (aux->vj==((Arg->vi)||(Arg->vj)))) && (Flag==0) ){
+		if ((((aux->vi==Arg->vi)&&(aux->vj==Arg->vj))||((aux->vj==Arg->vi)&&(aux->vi==Arg->vj))) && (Flag==0)){
 			
 			Flag=1;
 			/*printf("%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);*/
-			fprintf(outputfp,"%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
+			fprintf(outputfp,"%d %d %s %d %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,aux->cost);
 		}
-		
 		k++;
-		
 	}
-	
-	
-	
 	if (Flag==0){
 		/*printf("%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);*/
-		fprintf(outputfp,"%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);
+		fprintf(outputfp,"%d %d %s %d %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj);
 	}
 	free(aux);
 	
@@ -151,7 +148,7 @@ void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	lamps=LampsInit(G->vertice[Arg->vi-1]);
 	lenght=LenghtList(G->vertice[Arg->vi-1]);
 	
-	for (i=0;(c==0)&&(i<lenght);i++){
+	for (i=0;(i<lenght);i++){
 		
 		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
 		

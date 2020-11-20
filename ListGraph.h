@@ -27,7 +27,6 @@ struct PBArg {
 struct list{
 	int v;
 	double cost;
-	int lamp;
 	struct list *next;
 };
 

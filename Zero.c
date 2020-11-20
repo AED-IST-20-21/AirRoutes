@@ -8,6 +8,7 @@ static int Err
 void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 {
 	int BG,AC;
+	double cost=0;
 	
 	if (Arg->vi<0) Err=1;
 	
@@ -20,7 +21,7 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 		}
 		case 2:
 		{
-			BG=BZero(entryfp,outputfp,Arg);
+			BG=BZero(entryfp,outputfp,Arg,cost);
 			break;
 		}
 		case 3:
@@ -43,9 +44,8 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 		}
 	}
 	
-	 if (BG<0){
-		BadGraph(entryfp,Arg,AC);
-	}
+	LPrint(Arg,BG,cost);
+	
 	free(Arg);
 	return;
 }
@@ -65,11 +65,6 @@ void BadGraph(FILE *fp,struct PBArg *Arg,int AC){
 	return;
 }
 
-/**************************************
- * Function to determine the degree while reading an edge vector
- * @param fp File Pointer
- * @param Arg Problem Arguments
- */
 int AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 	
 	int k=0,g=0;
@@ -94,22 +89,13 @@ int AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 	} while (k < Arg->e);
 	
 	if (g<=0) g=-1;
-	
-	/*printf("%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);*/
-	fprintf(outputfp,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);
-	
+
 	free(aux);
 
-	return 0;
+	return g;
 }
 
-/**************************************
- * Function to determine if there is an edge between 2 vertices while reading from an edge vector
- * @param fp File Pointer
- * @param Arg Problem Arguments
- */
- 
-int BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
+int BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg,double cost)
 {
 	struct edge *aux;
 	short int Flag=0;
@@ -130,18 +116,14 @@ int BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 		if ((((aux->vi==Arg->vi)&&(aux->vj==Arg->vj))||((aux->vj==Arg->vi)&&(aux->vi==Arg->vj))) && (Flag==0)){
 			
 			Flag=1;
-			/*printf("%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);*/
-			
+			cost=aux->cost;
 		}
 		k++;
 	}
-	if (Flag==0){
-		/*printf("%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);*/
-		fprintf(outputfp,"%d %d %s %d %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj);
-	}
+
 	free(aux);
 	
-	return 0;
+	return (int) Flag;
 }
 
 int CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
@@ -165,8 +147,9 @@ int CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 	free(lamps);
 	LGFree(G);
-	
-	return 0;
+	if (c>0){
+		return 1;
+	} else return -1;
 }
 
 int DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
@@ -236,10 +219,11 @@ int ClickFind(struct list *adj,int *lamps,int size,int j){
 }
 
 void LPrint(struct PBArg *Arg,int h,float cost,int mode){
+	
 	if (mode==2){
-		if cost!=(0){
+		if (cost!=(0)){
 		fprintf(outputfp,"%d %d %s %d %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,cost);
-		} else fprintf(outputfp,"%d %d %s %d %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj);
+		} else fprintf(outputfp,"%d %d %s %d %d %d\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,h);
 		
 	}else fprintf(outputfp ,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi,h);
 	return;

@@ -116,7 +116,7 @@ void LGFree(struct graph *g){
 void FreeList(struct list* L){
 	struct list *aux, *Prev;
 	aux = L;
-	while (aux->next != NULL)
+	while (aux != NULL)
 	{
 		Prev = aux;
 		aux = aux->next;

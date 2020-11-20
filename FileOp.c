@@ -41,7 +41,7 @@ char* ExitFileName(char* FileName)
 	int FileSize;
 	
 	if (FileCheck(FileName)!=0)
-		ErrExit(1);
+		exit(0);
 
 	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
 	ExitFileName = (char*) malloc( ((FileSize) + 1) * sizeof(char));
@@ -151,24 +151,24 @@ struct PBArg *ArgRead(FILE *EntryFile){
 	switch (ArgCheck(aux)) {
 		
 		case 1:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
-			ErrExit(4);
+			aux->err=1;
 		}
 				break;
 			
 		case 2:if(fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj)!=2){
-			ErrExit(4);
+				aux->err=1;
 		}
 				break;
 			
 		case 3:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
-				ErrExit(4);
+				aux->err=1;
 			}
 			break;
 		case 4:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
-				ErrExit(4);
+				aux->err=1;
 			}
 			break;
-		default:ErrExit(2);
+		default:aux->err=1;
 	}
 	
 	return aux;
@@ -236,20 +236,5 @@ int EdgeCheck(int size, struct edge *aux){
 	else return 0;
 }
 
-/**************************************************
- * Function to close files and free the graph
- * @param EntryFile Entry File Pointer to close
- * @param OutputFile Output File Pointer to close
- * @param G Graph dinamically allocated to be freed
- */
- 
-void End(char *OutputFileName,FILE *OutputFile,FILE *EntryFile){
 
-	
-	fclose(OutputFile);
-	fclose(EntryFile);
-	
-	return;
-	
-}
 

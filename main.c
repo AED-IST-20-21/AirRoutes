@@ -37,17 +37,19 @@ int main(int argc, char *argv[])
 			
 			LControl(EntryFile,OutputFile,Arg);
 			
-		} else { /*if (Arg->var[1]=='1'){
+		} /*else { if (Arg->var[1]=='1'){
 			
-			VControl(EntryFile);*/
+			VControl(EntryFile);
 			
 			ErrExit(2);
-		}
+		}*/
 		
 		while(fscanf(EntryFile," ")==1);
 	}
+
+	fclose(OutputFile);
+	fclose(EntryFile);
 	
-	End(OutputFileName,OutputFile,EntryFile);
 	return 0;
 }
 

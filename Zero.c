@@ -5,7 +5,7 @@
 
 void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 {
-	int BG,AC;
+	int BG=0,AC=0;
 	double cost=0;
 	
 	switch(AC=ArgCheck(Arg))
@@ -17,7 +17,7 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 		}
 		case 2:
 		{
-			BG=BZero(entryfp,Arg,cost);
+			BG=BZero(entryfp,Arg,&cost);
 			break;
 		}
 		case 3:
@@ -31,12 +31,10 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 			break;
 		
 		}
-		case 5:
 		default:
 		{
-		
-			ErrExit(2);
-			return;
+			Arg->err=1;
+			break;
 		}
 	}
 	
@@ -83,7 +81,7 @@ int AZero(FILE *entryfp, struct PBArg *Arg){
 	return g;
 }
 
-int BZero(FILE *entryfp, struct PBArg *Arg,double cost)
+int BZero(FILE *entryfp, struct PBArg *Arg,double* cost)
 {
 	struct edge *aux;
 	short int Flag=0;
@@ -100,7 +98,7 @@ int BZero(FILE *entryfp, struct PBArg *Arg,double cost)
 		if ((((aux->vi==Arg->vi)&&(aux->vj==Arg->vj))||((aux->vj==Arg->vi)&&(aux->vi==Arg->vj))) && (Flag==0)){
 			
 			Flag=1;
-			cost=aux->cost;
+			*cost=aux->cost;
 		}
 		k++;
 	}
@@ -201,12 +199,12 @@ int ClickFind(struct list *adj,int *lamps,int size,int j){
 	
 }
 
-void LPrint(FILE *outputfp,struct PBArg *Arg,int h,float cost,int mode){
+void LPrint(FILE *outputfp,struct PBArg *Arg,int h,double cost,int mode){
 	
 	
 	if (mode==2){
 		if (Arg->err==0){
-			fprintf(outputfp,"%d %d %s %d %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,cost);
+			fprintf(outputfp,"%d %d %s %d %d %.2lf\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,cost);
 		} else fprintf(outputfp,"%d %d %s %d %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj);
 		
 	}else if (Arg->err==0){

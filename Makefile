@@ -7,7 +7,7 @@
 #  	Compiler, Compiler Flags
 CC = gcc 
 DB = gdb
-CFLAGS = -g -Wall -std=c99
+CFLAGS = -O3 -Wall -std=c99
 
 OBJECTS = main.o FileOp.o ListGraph.o Zero.o
 
@@ -36,6 +36,11 @@ clean:
 VALG = valgrind --leak-check=full --show-leak-kinds=all -s
 
 FILES = $(shell ls ../test/*.routes0)
+
+ZIP = $(zip AirRoutes main.c FileOp.c ListGraph.c Zero.c FileOp.h ListGraph.h Zero.h Makefile)
+#
+zip: $(EXE)
+	$(ZIP)
 
 #
 valgrind: $(EXE)

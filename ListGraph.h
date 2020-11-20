@@ -22,6 +22,7 @@ struct PBArg {
 		int vi;
 		int vj;
 		char var[3];
+		bool err;
 };
 
 struct list{

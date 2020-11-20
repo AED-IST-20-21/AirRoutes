@@ -3,35 +3,31 @@
 
 #include <stdbool.h>
 
-static int Err
-
 void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 {
 	int BG,AC;
 	double cost=0;
 	
-	if (Arg->vi<0) Err=1;
-	
 	switch(AC=ArgCheck(Arg))
 	{
 		case 1:
 		{
-			BG=AZero(entryfp,outputfp,Arg);
+			BG=AZero(entryfp,Arg);
 			break;
 		}
 		case 2:
 		{
-			BG=BZero(entryfp,outputfp,Arg,cost);
+			BG=BZero(entryfp,Arg,cost);
 			break;
 		}
 		case 3:
 		{
-			BG=CZero(entryfp,outputfp,Arg);
+			BG=CZero(entryfp,Arg);
 			break;
 		}
 		case 4:
 		{
-			BG=DZero(entryfp,outputfp,Arg);
+			BG=DZero(entryfp,Arg);
 			break;
 		
 		}
@@ -44,13 +40,13 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 		}
 	}
 	
-	LPrint(Arg,BG,cost);
+	LPrint(outputfp,Arg,BG,cost,AC);
 	
 	free(Arg);
 	return;
 }
 
-void BadGraph(FILE *fp,struct PBArg *Arg,int AC){
+void BadGraph(FILE *fp){
 	
 	int temp1,temp2;
 	double temp3;
@@ -58,14 +54,10 @@ void BadGraph(FILE *fp,struct PBArg *Arg,int AC){
 	while (fscanf(fp," %d %d %lf",&temp1, &temp2, &temp3)==3){
 	
 	}
-	if (AC==2){
-	fprintf(outputfp,"%d %d %s %d %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj);
-	} else
-	fprintf(outputfp,"%d %d %s %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);
 	return;
 }
 
-int AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
+int AZero(FILE *entryfp, struct PBArg *Arg){
 	
 	int k=0,g=0;
 	struct edge *aux;
@@ -75,12 +67,8 @@ int AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 	
 	do{
 		
-		if ((aux = EdgeRead(entryfp,aux))==NULL) return -1;
-		if ((EdgeCheck(Arg->v,aux))<0){
-			
-			free(aux);
-			return -1;
-		}
+		if ((aux = EdgeRead(entryfp,aux))==NULL) Arg->err=1;
+		if ((EdgeCheck(Arg->v,aux))<0) Arg->err=1;
 		
 		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
@@ -88,14 +76,12 @@ int AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 		k++;
 	} while (k < Arg->e);
 	
-	if (g<=0) g=-1;
-
 	free(aux);
 
 	return g;
 }
 
-int BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg,double cost)
+int BZero(FILE *entryfp, struct PBArg *Arg,double cost)
 {
 	struct edge *aux;
 	short int Flag=0;
@@ -106,12 +92,8 @@ int BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg,double cost)
 	
 	while (k<Arg->e){
 		
-		if ((aux = EdgeRead(entryfp,aux))==NULL) return -1;
-		if ((EdgeCheck(Arg->v,aux))<0){
-			
-			free(aux);
-			return -1;
-		}
+		if ((aux = EdgeRead(entryfp,aux))==NULL) Arg->err=1;
+		if ((EdgeCheck(Arg->v,aux))<0) Arg->err=1;
 		
 		if ((((aux->vi==Arg->vi)&&(aux->vj==Arg->vj))||((aux->vj==Arg->vi)&&(aux->vi==Arg->vj))) && (Flag==0)){
 			
@@ -126,14 +108,12 @@ int BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg,double cost)
 	return (int) Flag;
 }
 
-int CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
+int CZero(FILE *entryfp, struct PBArg *Arg)
 {
 	struct graph *G;
 	int *lamps,i,lenght,c=0;
 
-	if(G = LGRead(entryfp, Arg))==NULL){
-		return -1;
-	}
+	if((G = LGRead(entryfp, Arg))==NULL)Arg->err=1;
 	
 	lenght=LenghtList(G->vertice[Arg->vi-1]);
 	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
@@ -148,18 +128,16 @@ int CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	free(lamps);
 	LGFree(G);
 	if (c>0){
-		return 1;
-	} else return -1;
+		c=1;
+	} return c;
 }
 
-int DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
+int DZero(FILE *entryfp, struct PBArg *Arg)
 {
 	struct graph *G;
 	int *lamps,i,lenght,c=0;
 	
-	if(G = LGRead(entryfp, Arg))==NULL){
-		return -1;
-	}
+	if ((G = LGRead(entryfp, Arg))==NULL)Arg->err=1;
 	
 	lenght=LenghtList(G->vertice[Arg->vi-1]);
 	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
@@ -170,10 +148,10 @@ int DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
 		
 	}
-
+	
 	free(lamps);
 	LGFree(G);
-	return c;
+	 return c;
 }
 
 int *LampsInit(struct list *lvi,int lenght){
@@ -194,7 +172,6 @@ int *LampsInit(struct list *lvi,int lenght){
 	}
 	return lamps;
 }
-
 
 int ClickFind(struct list *adj,int *lamps,int size,int j){
 
@@ -218,14 +195,18 @@ int ClickFind(struct list *adj,int *lamps,int size,int j){
 	
 }
 
-void LPrint(struct PBArg *Arg,int h,float cost,int mode){
+void LPrint(FILE *outputfp,struct PBArg *Arg,int h,float cost,int mode){
+	
 	
 	if (mode==2){
-		if (cost!=(0)){
-		fprintf(outputfp,"%d %d %s %d %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,cost);
-		} else fprintf(outputfp,"%d %d %s %d %d %d\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,h);
+		if (Arg->err==0){
+			fprintf(outputfp,"%d %d %s %d %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj,cost);
+		} else fprintf(outputfp,"%d %d %s %d %d -1\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,Arg->vj);
 		
-	}else fprintf(outputfp ,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi,h);
+	}else if (Arg->err==0){
+		fprintf(outputfp ,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi,h);
+	} else  fprintf(outputfp ,"%d %d %s %d -1\n\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	
 	return;
 	
 }

@@ -153,20 +153,20 @@ struct PBArg *ArgRead(FILE *EntryFile){
 		case 1:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
 			ErrExit(4);
 		}
-			break;
+				break;
 			
 		case 2:if(fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj)!=2){
 			ErrExit(4);
 		}
-			break;
+				break;
 			
 		case 3:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
 				ErrExit(4);
+			
+				break;
 			}
-			break;
-			
 		case 4:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
-			
+				break;
 			}
 			
 		default:ErrExit(2);

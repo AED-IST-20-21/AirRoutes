@@ -29,6 +29,7 @@ struct PBArg *PBinit(){
 	aux->vi = 0;
 	aux->vj = 0;
 	aux->var[0] = '\0';
+	aux->err =0;
 	
 	return aux;
 }

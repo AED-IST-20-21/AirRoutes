@@ -7,7 +7,7 @@
 #  	Compiler, Compiler Flags
 CC = gcc 
 DB = gdb
-CFLAGS = -O3 -Wall -std=c99
+CFLAGS = -g -Wall -std=c99
 
 OBJECTS = main.o FileOp.o ListGraph.o Zero.o
 

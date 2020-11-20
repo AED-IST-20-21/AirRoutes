@@ -29,7 +29,9 @@ int main(int argc, char *argv[])
 	
 	while (!feof(EntryFile)){
 		
-		if (Arg = ArgRead(EntryFile))==NULL)
+		if ((Arg = ArgRead(EntryFile))==NULL){
+		
+		}
 		
 		if (Arg->var[1]=='0'){
 			

@@ -96,31 +96,31 @@ void ErrExit (int err) {
 		case 0:
 			/*fprintf(stderr, "Error Opening File\n");*/
 			exit(0);
-			break;
+			
 		case 1:
 			/*fprintf(stderr, "Error Checking File Extension\n");*/
 			exit(0);
-			break;
+			
 		case 2:
 			/*fprintf(stderr, "Invalid Mode\n");*/
 			exit(0);
-			break;
+			
 		case 3:
 			/*fprintf(stderr,"Error Allocating Memory\n");*/
 			exit(0);
-			break;
+			
 		case 4:
 			/*fprintf(stderr,"Invalid Arguments\n");*/
 			exit(0);
-			break;
+			
 		case 5:
 			/*fprintf(stderr,"Error Reading Graph\n");*/
 			exit(0);
-			break;
+			
 		case 6:
 			/*fprintf(stderr,"Error Reading Edge\n");*/
 			exit(0);
-			break;
+			
 	}
 	return;
 }
@@ -162,13 +162,12 @@ struct PBArg *ArgRead(FILE *EntryFile){
 			
 		case 3:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
 				ErrExit(4);
-			
-				break;
 			}
+			break;
 		case 4:if (fscanf(EntryFile, " %d", &aux->vi)!=1){
-				break;
+				ErrExit(4);
 			}
-			
+			break;
 		default:ErrExit(2);
 	}
 	

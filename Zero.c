@@ -77,6 +77,8 @@ int AZero(FILE *entryfp, struct PBArg *Arg){
 	} while (k < Arg->e);
 	
 	free(aux);
+	
+	if (g<=0) Arg->err=1;
 
 	return g;
 }
@@ -105,6 +107,8 @@ int BZero(FILE *entryfp, struct PBArg *Arg,double cost)
 
 	free(aux);
 	
+	if (Flag==0) Arg->err=1;
+	
 	return (int) Flag;
 }
 
@@ -119,7 +123,7 @@ int CZero(FILE *entryfp, struct PBArg *Arg)
 	lamps=LampsInit(G->vertice[Arg->vi-1],lenght);
 	
 	
-	for (i=0;(c==0)&&(i<lenght);i++){
+	for (i=0;(c<1)&&(i<lenght);i++){
 		
 		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
 		
@@ -129,7 +133,9 @@ int CZero(FILE *entryfp, struct PBArg *Arg)
 	LGFree(G);
 	if (c>0){
 		c=1;
-	} return c;
+	}
+	
+	return c;
 }
 
 int DZero(FILE *entryfp, struct PBArg *Arg)

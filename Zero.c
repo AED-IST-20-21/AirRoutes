@@ -36,6 +36,8 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 			return;
 		}
 	}
+	free(Arg);
+	return;
 }
 
 /**************************************
@@ -59,9 +61,9 @@ void AZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg){
 		if ((aux->vi==Arg->vi)||(aux->vj==Arg->vi))
 			g++;
 		
-	} while (k < Arg->v);
+	} while (k < Arg->e);
 
-	printf("%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);	
+	/*printf("%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);*/
 	fprintf(outputfp,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi, g);
 	
 	free(aux);
@@ -84,14 +86,14 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	if((aux = (struct edge*) malloc(sizeof(struct edge)))==NULL)
 		ErrExit(3);
 	
-	while (k<=Arg->v){
+	while (k<Arg->e){
 	
 		aux=EdgeRead(entryfp,aux);
 		
-		if ( ( (aux->vi==(Arg->vi)||(Arg->vj)) && (aux->vj==(Arg->vj)||(Arg->vj)) ) && (Flag==0) ){
+		if (( (aux->vi==((Arg->vi)||(Arg->vj))) || (aux->vj==((Arg->vi)||(Arg->vj)))) && (Flag==0) ){
 			
 			Flag=1;
-			printf("%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
+			/*printf("%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);*/
 			fprintf(outputfp,"%d %d %s %d %.2f\n\n",Arg->v,Arg->e,Arg->var,Arg->vi,aux->cost);
 		}
 		
@@ -102,7 +104,7 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 	
 	
 	if (Flag==0){
-		printf("%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);
+		/*printf("%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);*/
 		fprintf(outputfp,"%d %d %s %d doesn't exist\n\n",Arg->v,Arg->e,Arg->var,Arg->vi);
 	}
 	free(aux);
@@ -113,115 +115,115 @@ void BZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 void CZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct graph *G;
-	struct list *aux[2];
-	
-	int Find=0;
+	int *lamps,i,lenght,c=0;
 
 	G = LGRead(entryfp, Arg);
 	
-	ListTurn(G->vertice[Arg->vi],ON);
+	lamps=LampsInit(G->vertice[Arg->vi-1]);
+	lenght=LenghtList(G->vertice[Arg->vi-1]);
 	
-	aux[0]=G->vertice[Arg->vi]; /* Lista de todos os adjacentes a vi */
-	
-	while (aux[0]!=NULL)
-	{
+	for (i=0;(c==0)&&(i<lenght);i++){
 		
-		aux[1]=G->vertice[aux[0]->v];
+		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
 		
-		if (LampFind(aux[1],CZ)!=0)
-		{
-			ListTurn(G->vertice[Arg->vi],OFF);
-			Find = 1;
-			break;
-		}
-		
-		aux[0]=aux[0]->next;
 	}
-	ListTurn(G->vertice[Arg->vi],OFF);
-	if (Find==0){
-		fprintf(outputfp ,"%d %d %s %d 0\n", Arg->v, Arg->e, Arg->var, Arg->vi);
-	} else if (Find==1){
-		fprintf(outputfp ,"%d %d %s %d 1\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	if (c==0){
+		fprintf(outputfp ,"%d %d %s %d 0\n\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	} else if (c>0){
+		fprintf(outputfp ,"%d %d %s %d 1\n\n", Arg->v, Arg->e, Arg->var, Arg->vi);
 	} else {
 		ErrExit(1);
 	}
+	
+	free(lamps);
+	LGFree(G);
+	
 	return;
 }
 
 void DZero(FILE *entryfp,FILE *outputfp, struct PBArg *Arg)
 {
 	struct graph *G;
-	struct list *aux[2];
-	int cnt=0;
+	int *lamps,i,lenght,c=0;
 	
 	G = LGRead(entryfp, Arg);
 	
-	ListTurn(G->vertice[Arg->vi],ON);
+	lamps=LampsInit(G->vertice[Arg->vi-1]);
+	lenght=LenghtList(G->vertice[Arg->vi-1]);
 	
-	aux[0]=G->vertice[Arg->vi]; /* Lista de todos os adjacentes a vi */
-	
-	while (aux[0]!=NULL)
-	{
-		aux[1]=G->vertice[aux[0]->v];
-		cnt += LampFind(aux[1],CZ);
-		aux[0]=aux[0]->next;
+	for (i=0;(c==0)&&(i<lenght);i++){
+		
+		c+=ClickFind(G->vertice[lamps[i]-1],lamps,lenght,i);
+		
 	}
-	
-	fprintf(outputfp ,"%d %d %s %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi,cnt);
-	ListTurn(G->vertice[Arg->vi],OFF);
+	if (c==0){
+		fprintf(outputfp ,"%d %d %s %d 0\n\n", Arg->v, Arg->e, Arg->var, Arg->vi);
+	} else if (c>0){
+		fprintf(outputfp ,"%d %d %s %d %d\n\n", Arg->v, Arg->e, Arg->var, Arg->vi,c);
+	} else {
+		ErrExit(1);
+	}
+	free(lamps);
+	LGFree(G);
 	return;
 }
 
-/**
- * Function to turn all the lights on or off
- * @param L List to switch the lights
- * @param mode Switch on or off
- */
-int ListTurn(struct list *L, int mode){
-
-	struct list *aux=L;
-	int g=0;
+int *LampsInit(struct list *lvi){
 	
-	while (aux!=NULL){
+	int *lamps,lenght=LenghtList(lvi),i;
+	struct list *laux;
+	
+	if ((lamps = (int *) calloc(lenght,sizeof(int))) == NULL)
+		ErrExit(3);
+	
+	laux=lvi;
+	
+	for (i=0;i<lenght;i++){
 		
-		aux->lamp=mode;
-		aux=aux->next;
-		g++;
+		Sort(lamps,laux->v,lenght);
+		
+		laux=laux->next;
 	}
-	return g;
+	return lamps;
 }
 
-/**
- * Function to find On Lamps in a list
- * @param L List
- * @param mode Find 1 lamp or count the number of lamps on
- * @return Lamps found
- */
-int LampFind(struct list *L, int mode){
+void Sort(int *a,int v, int size)
+{
+	int i,temp;
 	
-	struct list *aux=L;
-	int c=0;
-		
-	if (mode==CZ){
-			while (aux!=NULL){
-		
-			if (aux->lamp==ON)
-				return 1;
+	for (i=0;i<size-1;i++){
+
+		a[0]=v;
+		if (a[i+1]<a[i]){
 			
-			aux=aux->next;
+			temp=a[i+1];
+			a[i+1]=a[i];
+			a[i]=temp;
+		}
 		
-		}
-		return 0;
-	} else {	
-		while (aux!=NULL)
-		{	
-			if (aux->lamp==ON){
-				c++;
-				aux->lamp=Visited;
-			}
-			aux=aux->next;	
-		}
-		return c;		
 	}
+	
+	return;
 }
 
+int ClickFind(struct list *adj,int *lamps,int size,int j){
+
+	int c=0,i;
+	struct list *aux;
+	
+	aux=adj;
+	
+	while(aux!=NULL){
+		for (i=j;i<size;i++){
+			if (aux->v==lamps[i]){
+			
+				c++;
+				
+			}
+		}
+		aux=aux->next;
+	}
+	
+	return c;
+	
+}

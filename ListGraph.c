@@ -52,25 +52,27 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	G = GraphInit();
 
-	G->Arg = PBinit(Arg);
 	G->Arg = Arg;
 
 	G->vertice = CreateListV(Arg->v);
 
-	temp = (struct edge*) malloc(sizeof(struct edge));/*TODO*/
+	if ((temp = (struct edge*) malloc(sizeof(struct edge))) == NULL)
+		ErrExit(3);
+	
 	temp->vi = 0;
+	temp->vj = 0;
 	temp->cost = 0;
 
-	for (i = 0; i < Arg->v; i++) {
+	for (i = 0; i < Arg->e; i++) {
 		
 		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3)
 			ErrExit(5);
 		
-		AddList(G->vertice[temp->vi]);
-		PutList(G->vertice[temp->vi], temp->vj, temp->cost);
-
-		AddList(G->vertice[temp->vj]);
-		PutList(G->vertice[temp->vj], temp->vi, temp->cost);
+		G->vertice[temp->vi-1]=AddList(G->vertice[temp->vi-1]);
+		PutList(G->vertice[temp->vi-1], temp->vj, temp->cost);
+		
+		G->vertice[temp->vj-1]=AddList(G->vertice[temp->vj-1]);
+		PutList(G->vertice[temp->vj-1], temp->vi, temp->cost);
 	
 	}
 	free(temp);	
@@ -93,6 +95,14 @@ void FreeListV(struct list **LV,int V){
 	}
 	
 	free(LV);
+	return;
+}
+
+void LGFree(struct graph *g){
+	
+	FreeListV(g->vertice,g->Arg->v);
+	free(g);
+	
 	return;
 }
 
@@ -122,10 +132,8 @@ struct list * AddList(struct list* next){
 	struct list * new;
 
     /* Memory allocation */
-    new = (struct list *) malloc(sizeof(struct list));
-
-    /* Check memory allocation errors */
-    ErrExit(3); 
+	if ((new = (struct list *) malloc(sizeof(struct list)))==NULL)
+        ErrExit(3);
 
     /* Initialize new node */
     new->v = 0;
@@ -153,10 +161,28 @@ struct list** CreateListV(int V){
 	int i;
 
 	struct list** LV = (struct list**) malloc(V * sizeof(struct list*));	
+	
 	for (i=0; i<V; i++)
 	{
-		/*LV[i]=() malloc(sizeof());*/
 		LV[i]=NULL;
 	}
 	return LV;
+}
+
+int LenghtList(struct list *L){
+	
+	struct list *aux;
+	int c=0;
+	
+	aux=L;
+	
+	while (aux!=NULL){
+	
+	c++;
+	aux=aux->next;
+	
+	}
+	
+	return c;
+	
 }

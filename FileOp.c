@@ -135,48 +135,10 @@ struct PBArg *ArgRead(FILE *EntryFile){
 	char temp[3];
 
 	aux = PBinit();
-/*	
-	if (fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp)==EOF){
-		printf("Makeshift FEOF is Working...\n");
-		return NULL;
-	}
-*/
-
-	if (fscanf(EntryFile, " %d", &aux->v)==EOF)
-	{
-		printf("Makeshift (v) FEOF is Working...\n");
-		return NULL;
-	}
-
-	/*aux->v = atoi(temp);*/
 	
-	if (feof(EntryFile)!=0)
-		{
-			printf("Found (v) EOF\n");
-		}
-
-	if (fscanf(EntryFile, " %d", &aux->e)==EOF)
-	{
-		printf("Makeshift (e) FEOF is Working...\n");
-		return NULL;
-	}
-
-	if (feof(EntryFile)!=0)
-		{
-			printf("Found(e) EOF\n");
-		}
-
-	if (fscanf(EntryFile, " %s", temp)==EOF)
-	{
-		printf("Makeshift (var) FEOF is Working...\n");
-		return NULL;
-	}
-
-	if (feof(EntryFile)!=0)
-		{
-			printf("Found (var) EOF\n");
-		}
-
+	if (fscanf(EntryFile, " %d %d %s", &aux->v, &aux->e, temp)!=3)
+		ErrExit(4);
+	
 	strncpy(aux->var,temp,2);
 	aux->var[2]='\0';
 	
@@ -188,10 +150,10 @@ struct PBArg *ArgRead(FILE *EntryFile){
 		case 2:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
 			break;
 			
-		case 3:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
+		case 3:fscanf(EntryFile, " %d", &aux->vi);
 			break;
 			
-		case 4:fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj);
+		case 4:fscanf(EntryFile, " %d", &aux->vi);
 			break;
 			
 		default:ErrExit(2);
@@ -253,13 +215,13 @@ struct edge *EdgeRead(FILE *fp,struct edge *aux){
  * @param G Graph dinamically allocated to be freed
  */
  
-void End(FILE *EntryFile,FILE *OutputFile,struct graph *G,struct PBArg *Arg){
-/*	
-	fclose(EntryFile);
+void End(char *OutputFileName,FILE *OutputFile,FILE *EntryFile){
+
+	free(OutputFileName);
+
 	fclose(OutputFile);
-	GraphFree(G);
-	free(Arg);
-	*/
+	fclose(EntryFile);
+	
 	return;
 	
 }

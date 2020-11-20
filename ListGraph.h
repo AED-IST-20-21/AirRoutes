@@ -50,6 +50,8 @@ struct list* CreateListNode();
 struct list* AddList(struct list* );
 void PutList(struct list* ,int ,double );
 struct list** CreateListV(int );
+void LGFree(struct graph *g);
+int LenghtList(struct list *L);
 
 #endif
 

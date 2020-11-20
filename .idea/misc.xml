@@ -22,4 +22,18 @@
     </option>
   </component>
   <component name="MakefileWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="StickyNotes">
+    <option name="stickyNotes">
+      <list>
+        <SerializedStickyNote>
+          <option name="archived" value="true" />
+          <option name="description" value="void End(char *OutputFileName,struct PBArg *Arg,FILE *OutputFile,FILE *EntryFile);" />
+        </SerializedStickyNote>
+        <SerializedStickyNote>
+          <option name="archived" value="true" />
+          <option name="description" value="declarations" />
+        </SerializedStickyNote>
+      </list>
+    </option>
+  </component>
 </project>

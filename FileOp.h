@@ -51,5 +51,6 @@ int ArgCheck (struct PBArg *aux);
 
 /* Vetor de Arestas */
 struct edge *EdgeRead(FILE *fp,struct edge *aux);
+void End(char *OutputFileName,FILE *OutputFile,FILE *EntryFile);
 
 #endif

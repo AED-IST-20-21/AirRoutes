@@ -21,15 +21,16 @@ int main(int argc, char *argv[])
 
 	EntryFile = RFileOpen(EntryFileName);
 	OutputFile = WFileOpen(OutputFileName);
-
+	
 	do{
-
+		
 		if (feof(EntryFile)!=0)
 		{
-			printf("Found EOF\n");
+			/*printf("Found EOF\n");*/
+			End(OutputFileName,OutputFile,EntryFile);
 			break;
 		}
-
+		
 		Arg = ArgRead(EntryFile);
 		
 		if (Arg->var[1]=='0'){
@@ -39,12 +40,14 @@ int main(int argc, char *argv[])
 		} else { /*if (Arg->var[1]=='1'){
 			
 			VControl(EntryFile);*/
-
+			
 			ErrExit(2);
 		}
 		
-	} while (1);	
-
+		
+		
+	} while (1);
+	
 	return 0;
 }
 

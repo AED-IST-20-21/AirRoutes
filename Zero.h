@@ -14,10 +14,6 @@
 #include <float.h>
 #include <stdlib.h>
 
-#define ON 1
-#define OFF 0
-#define Visited 2
-
 #define CZ 0
 #define DZ 1
 
@@ -26,6 +22,7 @@ void AZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 void BZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 void CZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
 void DZero(FILE *entryfp,FILE *outputfp,struct PBArg *Arg);
-int ListTurn(struct list *, int );
-int LampFind(struct list *, int );
+int ClickFind(struct list *adj,int *lamps,int size,int j);
+int *LampsInit(struct list *lvi);
+void Sort(int *a,int v, int size);
 #endif //AIRROUTES_LIST_H

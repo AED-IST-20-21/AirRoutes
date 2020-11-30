@@ -10,7 +10,7 @@
         <option name="analyzerType" value="OUTPUT_PARSING" />
         <option name="buildOptions" value="" />
         <option name="buildTarget" value="all" />
-        <option name="cleanTarget" value="clean" />
+        <option name="cleanTarget" value="bakbone" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>

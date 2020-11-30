@@ -12,6 +12,8 @@
 #include <stdlib.h>
 
 #include "FileOp.h"
+#include "VectorGraph.h"
+#include "ListGraph.h"
 
 struct graph {
 	struct PBArg* Arg;
@@ -43,5 +45,6 @@ struct edge{
 int ArgCheck (struct PBArg *);
 struct PBArg *PBinit();
 struct graph* GraphInit();
+void GFree(struct graph *);
 
 #endif //AIRROUTES_GRAPH_H

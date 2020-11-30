@@ -12,5 +12,7 @@
 void VControl (FILE *, FILE *, struct PBArg *);
 void AOne(FILE *, FILE *, struct PBArg *);
 void BOne(FILE *, FILE *, struct PBArg *);
+void COne(FILE *, FILE *, struct PBArg *);
+void DOne(FILE *, FILE *, struct PBArg *);
 #endif //AIRROUTES_ONE_H
 

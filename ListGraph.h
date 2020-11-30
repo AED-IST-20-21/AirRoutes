@@ -18,12 +18,9 @@ struct list* CreateListNode();
 struct list* AddList(struct list* );
 void PutList(struct list* ,int ,double );
 struct list** CreateListV(int );
-void LGFree(struct graph *);
 int LenghtList(struct list *);
 int ClickFind(struct list *,int *,int ,int );
 int *LampsInit(struct list *,int );
-
-
 
 #endif
 

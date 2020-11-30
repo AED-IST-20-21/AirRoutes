@@ -10,33 +10,6 @@
 #include <float.h>
 #include <stdlib.h>
 
-struct graph {
-	struct PBArg* Arg;
-	struct list** vertice;
-};
-
-
-struct PBArg {
-		int v;
-		int e;
-		int vi;
-		int vj;
-		char var[3];
-		bool err;
-};
-
-struct list{
-	int v;
-	double cost;
-	struct list *next;
-};
-
-
-struct edge{
-	int vi;
-	int vj;
-	double cost;
-};
 
 struct graph* GraphInit();
 struct graph *LGRead(FILE *entryfp, struct PBArg *);

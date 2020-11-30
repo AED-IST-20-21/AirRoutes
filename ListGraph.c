@@ -1,41 +1,7 @@
 #include <stdlib.h>
 
 #include "ListGraph.h"
-
-
-
-struct graph* GraphInit(){
-	struct graph *G;
-	
-	if ((G = (struct graph *) malloc(sizeof(struct graph)))==NULL)
-		ErrExit(3);
-	
-	return G;
-}
-
-/**********************
- * Memory allocation and Initialization of PBArg
- * @return clean PBArg
- *********************/
-struct PBArg *PBinit(){
-	
-	struct PBArg *aux;
-	
-		if ((aux = (struct PBArg* ) malloc(sizeof(struct PBArg)))==NULL)
-			ErrExit(3);
-		
-	aux->v = 0;
-	aux->e = 0;
-	aux->vi = 0;
-	aux->vj = 0;
-	aux->var[0] = '\0';
-	aux->err =0;
-	
-	return aux;
-}
-
-
-
+#include "Graph.h"
 
 /**
  * Function to read entire graph from file
@@ -55,7 +21,7 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 
 	G->Arg = Arg;
 
-	G->vertice = CreateListV(Arg->v);
+	G->data = (struct list **) CreateListV(Arg->v);
 
 	if ((temp = (struct edge*) malloc(sizeof(struct edge))) == NULL)
 		ErrExit(3);
@@ -103,7 +69,7 @@ void FreeListV(struct list **LV,int V){
 
 void LGFree(struct graph *g){
 	
-	FreeListV(g->vertice,g->Arg->v);
+	FreeListV(g->data,g->Arg->v);
 	free(g);
 	
 	return;
@@ -183,6 +149,47 @@ int LenghtList(struct list *L){
 	c++;
 	aux=aux->next;
 	
+	}
+	
+	return c;
+	
+}
+
+int *LampsInit(struct list *lvi,int lenght){
+	
+	int *lamps,i;
+	struct list *laux;
+	
+	if ((lamps = (int *) calloc(lenght,sizeof(int))) == NULL)
+		ErrExit(3);
+	
+	laux=lvi;
+	
+	for (i=0;i<lenght;i++){
+		
+		lamps[i]=laux->v;
+		
+		laux=laux->next;
+	}
+	return lamps;
+}
+
+int ClickFind(struct list *adj,int *lamps,int size,int j){
+	
+	int c=0,i;
+	struct list *aux;
+	
+	aux=adj;
+	
+	while(aux!=NULL){
+		for (i=j;i<size;i++){
+			if (aux->v==lamps[i]){
+				
+				c++;
+				
+			}
+		}
+		aux=aux->next;
 	}
 	
 	return c;

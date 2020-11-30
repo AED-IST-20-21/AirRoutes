@@ -5,29 +5,29 @@
 
 void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 {
-	int BG=0,AC=0;
+	int G=0,AC=0;
 	double cost=0;
 	
 	switch(AC=ArgCheck(Arg))
 	{
 		case 1:
 		{
-			BG=AZero(entryfp,Arg);
+			G=AZero(entryfp,Arg);
 			break;
 		}
 		case 2:
 		{
-			BG=BZero(entryfp,Arg,&cost);
+			G=BZero(entryfp,Arg,&cost);
 			break;
 		}
 		case 3:
 		{
-			BG=CZero(entryfp,Arg);
+			G=CZero(entryfp,Arg);
 			break;
 		}
 		case 4:
 		{
-			BG=DZero(entryfp,Arg);
+			G=DZero(entryfp,Arg);
 			break;
 		
 		}
@@ -38,20 +38,9 @@ void LControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 		}
 	}
 	
-	LPrint(outputfp,Arg,BG,cost,AC);
+	LPrint(outputfp,Arg,G,cost,AC);
 	
 	free(Arg);
-	return;
-}
-
-void BadGraph(FILE *fp){
-	
-	int temp1,temp2;
-	double temp3;
-	
-	while (fscanf(fp," %d %d %lf",&temp1, &temp2, &temp3)==3){
-	
-	}
 	return;
 }
 
@@ -174,46 +163,7 @@ int DZero(FILE *entryfp, struct PBArg *Arg)
 	 return c;
 }
 
-int *LampsInit(struct list *lvi,int lenght){
-	
-	int *lamps,i;
-	struct list *laux;
-	
-	if ((lamps = (int *) calloc(lenght,sizeof(int))) == NULL)
-		ErrExit(3);
-	
-	laux=lvi;
-	
-	for (i=0;i<lenght;i++){
-		
-		lamps[i]=laux->v;
-		
-		laux=laux->next;
-	}
-	return lamps;
-}
 
-int ClickFind(struct list *adj,int *lamps,int size,int j){
-
-	int c=0,i;
-	struct list *aux;
-	
-	aux=adj;
-	
-	while(aux!=NULL){
-		for (i=j;i<size;i++){
-			if (aux->v==lamps[i]){
-			
-				c++;
-				
-			}
-		}
-		aux=aux->next;
-	}
-	
-	return c;
-	
-}
 
 void LPrint(FILE *outputfp,struct PBArg *Arg,int h,double cost,int mode){
 	

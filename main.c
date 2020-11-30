@@ -7,7 +7,7 @@
 #include "Zero.h"
 #include "ListGraph.h"
 
-struct PBArg *Arg;
+
 
  
 int main(int argc, char *argv[])
@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
 	
 	char *EntryFileName, *OutputFileName;
 	FILE *EntryFile, *OutputFile;
-
+	struct PBArg *Arg;
+	
 	if (argc!=2) return 0;
 	
 	EntryFileName=argv[1];
@@ -37,12 +38,11 @@ int main(int argc, char *argv[])
 			
 			LControl(EntryFile,OutputFile,Arg);
 			
-		} /*else { if (Arg->var[1]=='1'){
+		} else { if (Arg->var[1]=='1'){
 			
-			VControl(EntryFile);
+			VControl(EntryFile,OutputFile,Arg);
 			
-			ErrExit(2);
-		}*/
+		} else ErrExit(2);
 		
 		while(fscanf(EntryFile," ")==1);
 	}

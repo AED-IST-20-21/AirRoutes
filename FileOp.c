@@ -8,6 +8,8 @@
 #define OldExt ".routes0"
 #define NewExt ".queries"
 
+#define DEBUG
+
 /***************************
  * Function to check entry file extension
  * @param FileName Name of the entry file
@@ -94,31 +96,45 @@ void ErrExit (int err) {
 	
 	switch (err) {
 		case 0:
-			/*fprintf(stderr, "Error Opening File\n");*/
+#ifdef DEBUG
+			fprintf(stderr, "Error Opening File\n");
+#endif
 			exit(0);
 			
 		case 1:
-			/*fprintf(stderr, "Error Checking File Extension\n");*/
+#ifdef DEBUG
+			fprintf(stderr, "Error Checking File Extension\n");
+#endif
 			exit(0);
 			
 		case 2:
-			/*fprintf(stderr, "Invalid Mode\n");*/
+#ifdef DEBUG
+			fprintf(stderr, "Invalid Mode\n");
+#endif
 			exit(0);
 			
 		case 3:
-			/*fprintf(stderr,"Error Allocating Memory\n");*/
+#ifdef DEBUG
+			fprintf(stderr,"Error Allocating Memory\n");
+#endif
 			exit(0);
 			
-		case 4:
-			/*fprintf(stderr,"Invalid Arguments\n");*/
+			case 4:
+#ifdef DEBUG
+			fprintf(stderr,"Invalid Arguments\n");
+#endif
 			exit(0);
 			
 		case 5:
-			/*fprintf(stderr,"Error Reading Graph\n");*/
+#ifdef DEBUG
+			fprintf(stderr,"Error Reading Graph\n");
+#endif
 			exit(0);
 			
 		case 6:
-			/*fprintf(stderr,"Error Reading Edge\n");*/
+#ifdef DEBUG
+			fprintf(stderr,"Error Reading Edge\n");
+#endif
 			exit(0);
 			
 	}

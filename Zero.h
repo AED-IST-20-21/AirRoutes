@@ -7,6 +7,7 @@
 
 #include "FileOp.h"
 #include "ListGraph.h"
+#include "Graph.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -17,13 +18,10 @@
 #define CZ 0
 #define DZ 1
 
-void LControl (FILE *entryfp,FILE *outputfp, struct PBArg *Arg);
-int AZero(FILE *entryfp,struct PBArg *Arg);
-int BZero(FILE *entryfp, struct PBArg *Arg,double* cost);
-int CZero(FILE *entryfp,struct PBArg *Arg);
-int DZero(FILE *entryfp,struct PBArg *Arg);
-int ClickFind(struct list *adj,int *lamps,int size,int j);
-int *LampsInit(struct list *lvi,int lenght);
-void BadGraph(FILE *);
-void LPrint(FILE *outputfp,struct PBArg *Arg,int h,double cost,int mode);
+void LControl (FILE *,FILE *, struct PBArg *);
+int AZero(FILE *,struct PBArg *);
+int BZero(FILE *, struct PBArg *,double *);
+int CZero(FILE *,struct PBArg *);
+int DZero(FILE *,struct PBArg *);
+
 #endif //AIRROUTES_LIST_H

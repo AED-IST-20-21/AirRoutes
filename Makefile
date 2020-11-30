@@ -9,7 +9,7 @@ CC = gcc
 DB = gdb
 CFLAGS = -g -Wall -std=c99
 
-OBJECTS = main.o FileOp.o ListGraph.o Zero.o
+OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o Graph.o
 
 EXE = backbone
 
@@ -22,13 +22,17 @@ TMPOBJECTS = main.c FileOp.c FileOp.h
 backbone: $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
-main.o: main.c ListGraph.h Zero.h FileOp.h
+main.o: main.c Zero.h FileOp.h One.h
 
-FileOp.o: FileOp.c FileOp.h ListGraph.h
+FileOp.o: FileOp.c FileOp.h Graph.h
 
-ListGraph.o: ListGraph.c ListGraph.h
+Zero.o: Zero.c Zero.h FileOp.h ListGraph.h Graph.h
 
-Zero.o: Zero.c Zero.h FileOp.h ListGraph.h
+One.o: One.c One.h FileOp.h VectorGraph.h Graph.h
+
+ListGraph.o: ListGraph.c ListGraph.h Graph.h
+
+Graph.o: Graph.c Graph.h FileOp.h
 
 clean:
 	rm -f *.o backbone temp

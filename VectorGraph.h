@@ -7,5 +7,7 @@
 
 #include "FileOp.h"
 
+struct graph *VGRead(FILE *entryfp, struct PBArg *Arg);
+struct edge *lessVertice(struct edge *a,struct edge *b);
 
 #endif //AIRROUTES_VECTORGRAPH_H

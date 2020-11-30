@@ -5,6 +5,14 @@
 #ifndef AIRROUTES_GRAPH_H
 #define AIRROUTES_GRAPH_H
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <float.h>
+#include <stdlib.h>
+
+#include "FileOp.h"
+
 struct graph {
 	struct PBArg* Arg;
 	void* data;
@@ -30,5 +38,10 @@ struct edge{
 	int vj;
 	double cost;
 };
+
+
+int ArgCheck (struct PBArg *);
+struct PBArg *PBinit();
+struct graph* GraphInit();
 
 #endif //AIRROUTES_GRAPH_H

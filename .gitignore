@@ -7,6 +7,8 @@
 *.iml
 out
 gen
+*.xml
+
 ### C template
 # Prerequisites
 *.d

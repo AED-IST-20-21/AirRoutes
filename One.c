@@ -6,7 +6,7 @@
 
 void VControl (FILE *entryfp, FILE *outputfp, struct PBArg *Arg){
 	
-	int AC;
+	int AC=0;
 	
 	switch (AC=ArgCheck(Arg))
 	{

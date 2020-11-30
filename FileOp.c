@@ -191,33 +191,6 @@ struct PBArg *ArgRead(FILE *EntryFile){
 	
 }
 
-/********************************
- * Function to check if the problem arguments are valid
- * @param aux Struct containing the problem arguments
- * @return mode if OK -1 else
- */
-int ArgCheck (struct PBArg *aux){
-	if ((aux->v>0)&&(aux->e>0)){
-	
-		if (strcmp(aux->var,"A0")==0){
-			return 1;
-
-		} else if (strcmp(aux->var,"B0")==0){
-			return 2;
-	
-		} else if (strcmp(aux->var,"C0")==0){
-			return 3;
-	
-		} else if (strcmp(aux->var,"D0")==0){
-			return 4;
-	
-		} else return -1;
-	
-	} else {
-		return -1;
-	}
-}
-
 
 /*******************************
  * Function to read an edge from file and store it in aux, dinamicaly allocated

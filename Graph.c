@@ -74,6 +74,20 @@ int ArgCheck(struct PBArg *aux) {
 	}
 }
 
+void GFree(struct graph *g) {
+	
+	if (ArgCheck(g->Arg)<10){
+		
+		FreeListV(g->data, g->Arg->v);
+	
+	}else free(g->data);
+	
+	free(g);
+	
+	return;
+}
+
+
 
 
 

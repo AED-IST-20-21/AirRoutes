@@ -33,7 +33,7 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	for (i = 0; i < Arg->e; i++) {
 		
 		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3) {
-			LGFree(G);
+			GFree(G);
 			return NULL;
 		}
 		
@@ -67,13 +67,7 @@ void FreeListV(struct list **LV, int V) {
 	return;
 }
 
-void LGFree(struct graph *g) {
-	
-	FreeListV(g->data, g->Arg->v);
-	free(g);
-	
-	return;
-}
+
 
 /**
  * Function to free a dinamically allocated adjancency list

@@ -7,7 +7,7 @@
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	int AC = 0;
-
+	
 	
 	switch (AC = ArgCheck(Arg)) {
 		case 11:
@@ -42,12 +42,12 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	G = VGRead(entryfp, Arg);
 	sum = Kruskal(Arg->v, Arg->e, G->data);
 	
-	qsort(G->data[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
 	if ((sum > 0) && (Arg->err == 0)) {
 		
 		fprintf(outputfp, "%d %d %s %d %lf\n", Arg->v, Arg->e, Arg->var, Arg->v - 1, sum);
-		EdgePrint(outputfp,G->data, 0, Arg->v - 1);
+		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
 	
@@ -57,20 +57,53 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *G;
-	double sum;
+	struct edge *aux;
+	double sum = 0;
+	short int flag = 0;
+	int *id;
+	
+	if ((aux = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
 	
 	G = VGRead(entryfp, Arg);
 	sum = Kruskal(Arg->v, Arg->e, G->data, sum);
 	
-	qsort(G->data[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	aux=binsearch(id,G);
 	
-	if ((flag >= 0) && (Arg->err == 0)) {
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	
+	if (Arg->err == 0) {
 		
-		fprintf(outputfp, "%d %d %s %d %d %d %lf %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,flag);
-		EdgePrint(outputfp,G->data, 0, Arg->v - 1);
-		/*if (flag!=-1) fprintf(outputfp, "%d %d %lf",TO IMPLEMENT);*/
+		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
+		        flag);
+		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+		if (flag < 0) fprintf(outputfp, "%d %d %lf\n", aux->vi, aux->vj, aux->cost);
 		
-	} else if (Arg->err==0) fprintf(outputfp, "%d %d %s -1", Arg->v,Arg->e,Arg->var);
+	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	
+	return;
+}
+
+void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
+	
+	struct graph *G;
+	double sum;
+	
+	G = VGRead(entryfp, Arg);
+	sum = Kruskal(Arg->v, Arg->e, G->data);
+	
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	
+	if ((sum > 0) && (Arg->err == 0)) {
+		
+		fprintf(outputfp, "%d %d %s %d %lf\n", Arg->v, Arg->e, Arg->var, Arg->v - 1, sum);
+		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+		
+	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
+	
+	return;
+}
+
+void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	return;
 }

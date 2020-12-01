@@ -12,6 +12,9 @@
 #include "VectorGraph.h"
 #include "Kruskal.h"
 
+#define B1 0
+#define D1 1
+
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	int AC = 0;
@@ -68,7 +71,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *G;
 	struct edge *aux, *bindata;
-	double sum = 0;
+	double sum = 0, newsum=0;
 	short int flag = 0;
 	int *id;
 	
@@ -78,9 +81,12 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	G = VGRead(entryfp, Arg);
 	
 	sum = Kruskal(G, bindata, Bin);
-	emptybin(bindata,G);
-	binsearch(id, G, G->Arg->v);
+	emptybin(bindata, ((struct edge*) G->data), G->Arg->v, G->Arg->e);
+
 	
+
+	binsearch(id, G, G->Arg->v);	
+
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
 	if (Arg->err == 0) {
@@ -133,14 +139,16 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	G = VGRead(entryfp, Arg);
 	
 	sum = Kruskal(G, bindata, Bin);
-	emptybin(bindata,G);
+	emptybin(bindata, ((struct edge*) G->data), G->Arg->v, G->Arg->e);
 
+	find(Arg, ((struct edge**) G->data), D1);
 
 	do
 	{
 		RelPos = binsearch(id, G, RelPos);
 		count++;	/*Numero de arestas (no bin) que repõem a conectividade*/
 	} while (RelPos!=-1);
+	
 
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	/*
@@ -153,6 +161,8 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	*/
+	free(id);
+
 	GFree(G, FreeEdgeV);
 	return;
 }

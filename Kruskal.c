@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "Graph.h"
+#include "VectorGraph.h" /*Temporary*/
 
 void UFinit(int N, int *id, int *sz) {
 	int i;
@@ -80,7 +81,7 @@ double Bin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, d
 	int i, k, j;
 	
 	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
-		if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
+		if (!UFfind(mst[i].vi, mst[i].vj, id)) {
 			UFunion(mst[i].vi, mst[i].vj, id, sz);
 			mst[k++] = mst[i];
 			cost += mst[i].cost;
@@ -97,7 +98,7 @@ double NoBin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin,
 	int i, k;
 	
 	for (i = 0, k = 0; i < E && k < V - 1; i++) {
-		if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
+		if (!UFfind(mst[i].vi, mst[i].vj, id)) {
 			UFunion(mst[i].vi, mst[i].vj, id, sz);
 			mst[k++] = mst[i];
 			cost += mst[i].cost;
@@ -145,46 +146,64 @@ double Kruskal(struct graph *G, struct edge *bin,
 	return cost;
 }
 
-int find(struct PBArg *Arg, bool mode,) { /*MODE ON IS B1*/
+double find(struct PBArg *Arg, struct edge* mst, int* id, bool mode) { /*MODE ON IS B1*/
 	
-	int i, k, j;
+	int i, k, j, V = Arg->v, E = Arg->e;
+	int *sz;
+	double cost=0;
+	struct edge* bindata;
+
+	id = (int *) malloc(V * sizeof(int));
+	sz = (int *) malloc(V * sizeof(int));
 	
-	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
-		if (mode) {
-			if ((Arg->vi != mst[i].vi) || (Arg->vi != mst[i].vj)) {
-				if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
+	UFinit(V, id, sz);
+			
+	bindata=CreateEdgeV(Arg->e-Arg->v+1);
+
+	if (mode) {
+		for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
+			if ((Arg->vi != mst[i].vi) || (Arg->vi != mst[i].vj)) {	
+				if (!UFfind(mst[i].vi, mst[i].vj, id)) {
 					
 					UFunion(mst[i].vi, mst[i].vj, id, sz);
 					mst[k++] = mst[i];
 					cost += mst[i].cost;
 				} else {
-					bin[j] = mst[i];
-					printf("|bin[%d] = %d-%d|\n", j, bin[j].vi, bin[j].vj);
+					bindata[j] = mst[i];
+					printf("|bin[%d] = %d-%d|\n", j, bindata[j].vi, bindata[j].vj);
 					j++;
 				}
 			}
-		} else {
+			/*
+			cost = Bin(Arg->e, Arg->v, id, sz, mst, bindata, cost);
+			emptybin(bindata, mst, V, E);
+
+			free(id);
+			free(sz);
+			*/
+		}
+	} else {
+		for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
 			if (((Arg->vi != mst[i].vi) && (Arg->vj != mst[i].vj)) ||
 			    ((Arg->vj != mst[i].vi) && (Arg->vi != mst[i].vj))) {
-				if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
+				if (!UFfind(mst[i].vi, mst[i].vj, id)) {
 					
 					UFunion(mst[i].vi, mst[i].vj, id, sz);
 					mst[k++] = mst[i];
 					cost += mst[i].cost;
 				} else {
-					bin[j] = mst[i];
-					printf("|bin[%d] = %d-%d|\n", j, bin[j].vi, bin[j].vj);
+					bindata[j] = mst[i];
+					printf("|bin[%d] = %d-%d|\n", j, bindata[j].vi, bindata[j].vj);
 					j++;
 				}
 			}
-			
-			
 		}
 	}
+
+	emptybin(bindata, mst, V, E);
+
+	free(sz);
+
 	return cost;
-	
-	
 }
 
-
-}

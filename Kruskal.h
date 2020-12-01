@@ -6,7 +6,7 @@
 /*CWQU*/
 void UFinit(int, int *, int *);
 
-int UFfind(int, int, int *, int *);
+int UFfind(int, int, int *);
 
 int UFunion(int, int, int *, int *);
 
@@ -22,5 +22,7 @@ double NoBin(int, int, int *, int *, struct edge *, struct edge *, double);
 /*Kruskal*/
 double Kruskal(struct graph *G, struct edge *bin,
                double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double));
+
+double find(struct PBArg *, struct edge**, bool mode);
 
 #endif

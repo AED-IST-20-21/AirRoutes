@@ -11,6 +11,6 @@ struct graph *VGRead(FILE *, struct PBArg *);
 /*int lessVertice(const void *,const void *);*/
 struct edge *CreateEdgeV(int );
 int binsearch(int *,struct graph *, int);
-void emptybin(struct edge *bin, struct graph *g);
+void emptybin(struct edge *bin, struct edge*, int, int);
 
 #endif //AIRROUTES_VECTORGRAPH_H

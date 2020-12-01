@@ -131,15 +131,9 @@ int ArgCheck(struct PBArg *aux) {
 
 
 void GFree(struct graph *g, void (*FreeData)(void*, int))
-{	
-	if (ArgCheck(g->Arg)<10){
-		
-		FreeData(g->data, g->Arg->v);
-	
-	} else free(g->data); /*???*/
-	
+{
+	FreeData(g->data, g->Arg->v);
 	free(g);
-	
 	return;
 }
 
@@ -177,17 +171,6 @@ void FreeList(struct list *L)
 	return;
 }
 
-/*Edge Vector*/
-struct edge *CreateEdgeV(int size) {
-	
-	struct edge *aux;
-	
-	if ( (aux =(struct edge*) malloc(size * sizeof(struct edge)) ) == NULL){
-		ErrExit(3);
-	}
-	
-	return aux;
-}
 
 void FreeEdgeV(void * EdgeVector, int size)
 {

@@ -118,17 +118,17 @@ void PrintMST(struct edge* mst)
 }
 /**/
 
-double Kruskal(int V, int E, struct edge mst[], struct edge* bin,
+double Kruskal(struct graph* G, struct edge* bin,
  double (*GoKruskal)(int, int, int*, int* , struct edge*, struct edge*, double))
 {
-	int N = V;
+	int V = G->Arg->v,E = G->Arg->e;
 
-	int *id = (int *) malloc(N * sizeof(int));
-	int *sz = (int *) malloc(N * sizeof(int));
+	int *id = (int *) malloc(V * sizeof(int));
+	int *sz = (int *) malloc(V * sizeof(int));
 	double cost=0;
 
-	qsort(mst, E, sizeof(struct edge), lessCost);
-	/*PrintMST(mst);*/
+	qsort(((struct edge **)G->data), E, sizeof(struct edge), lessCost);
+	
 	UFinit(V, id, sz);
 /*
 	for (i = 0, k = 0; i < E && k < G->V-1; i++){
@@ -139,82 +139,10 @@ double Kruskal(int V, int E, struct edge mst[], struct edge* bin,
 		}
 	}
 */
-	cost = (*GoKruskal)(E, N, id, sz, mst, bin, cost);
+	cost = (*GoKruskal)(E, V, id, sz, G->data, bin, cost);
 
 	free(id);
 	free(sz);
 	return cost;
 }
 
-/*
-int main(int argc, char* argv[])
-{
-	int E=10, V=8, N=atoi(argv[1]);
-	struct edge TestMe[10];
-	struct edge* bin;
-
-	TestMe[0].v = 1;
-	TestMe[0].vj = 2;
-	TestMe[0].cost = 20.5;
-
-	TestMe[1].v = 1;
-	TestMe[1].vj = 4;
-	TestMe[1].cost = 9.22;
-
-	TestMe[2].v = 2;
-	TestMe[2].vj = 6;
-	TestMe[2].cost = 11.7;
-
-	TestMe[3].v = 2;
-	TestMe[3].vj = 7;
-	TestMe[3].cost = 3.68;
-
-	TestMe[4].v = 3;
-	TestMe[4].vj = 5;
-	TestMe[4].cost = 4.0;
-
-	TestMe[5].v = 4;
-	TestMe[5].vj = 5;
-	TestMe[5].cost = 3.96;
-
-	TestMe[6].v = 4;
-	TestMe[6].vj = 6;
-	TestMe[6].cost = 5.3;
-
-	TestMe[7].v = 4;
-	TestMe[7].vj = 7;
-	TestMe[7].cost = 5.2;
-
-	TestMe[8].v = 4;
-	TestMe[8].vj = 8;
-	TestMe[8].cost = 4.8;
-
-	TestMe[9].v = 6;
-	TestMe[9].vj = 8;
-	TestMe[9].cost = 5.1;
-
-	if(N==1){	
-		
-		bin = BinInit(E-V+1);
-		Kruskal(V,E, TestMe, bin, Bin);
-
-		printf("\nBin Active\n");
-		for (V=0; V<3; V++)
-		{
-			TestMe[7+V] = bin[V];
-			printf("|bin[%d] = %d-%d|\n", V, bin[V].vi, bin[V].vj);
-		}
-		printf("\n");
-		
-		PrintMST(TestMe);
-		free(bin);
-
-	} else {
-	
-		Kruskal(V,E, TestMe, NULL, NoBin);
-		PrintMST(TestMe);
-	}
-
-	return 0;
-}
-*/

@@ -34,20 +34,23 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	return G;
 }
 
-struct edge *binsearch(int *id, struct graph *g) {
+
+
+int binsearch(int *id, struct graph *g, int start) {
 	
 	int i = 0;
 	/* TODO
 	id[g->Arg->vi]=0;
 	id[g->Arg->vj]=0;
 	*/
-	for (i = g->Arg->v; i < g->Arg->e; i++) {
+	for (i = start; i < g->Arg->e; i++)
+	{
 		
 		if (id[((struct edge *) g->data)[i].vi] != id[((struct edge **) g->data)[i]->vj])
-			return ((struct edge **) g->data)[i];
+			return i;
 		
 	}
-	return NULL;
+	return -1;
 }
 
 /*Edge Vector*/
@@ -71,3 +74,37 @@ void emptybin(struct edge *bin, struct graph *g) {
 	free(bin);
 	return;
 }
+
+int* EdgeBreak(struct edge** EdgeV, int size)
+{
+	int *id, i, Family;
+
+	id = (int*) malloc(size * sizeof(int));
+
+	Family = EdgeV[0]->vi; /*Arbitrário*/
+	for (i=0; i<size; i++)
+	{
+		if ( EdgeV[i]->cost==-1 )
+		{
+			id[i]=-1;
+			Family = EdgeV[i+1]->vi;
+		} else {
+			id[i]= Family ;
+		}
+	}
+	return id;
+}
+
+void EdgeDelete(struct edge** EdgeV, int pos)
+{
+	int i;
+	/*
+	EdgeV[pos].vi = -1;
+	EdgeV[pos].vj = -1;
+	*/
+	EdgeV[pos]->cost = -1;
+
+	return;
+}
+
+

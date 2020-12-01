@@ -70,6 +70,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct edge *aux, *bindata;
 	double sum = 0;
 	short int flag = 0;
+	int *id;
 	
 	
 	if ((aux = (struct edge *) malloc(sizeof(struct edge))) == NULL) ErrExit(3);
@@ -78,7 +79,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	sum = Kruskal(G, bindata, Bin);
 	emptybin(bindata,G);
-	/*aux=binsearch(id,G);*/
+	binsearch(id, G, G->Arg->v);
 	
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
@@ -119,5 +120,39 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
+	struct graph *G;
+	struct edge /**aux,*/ *bindata;
+	double sum = 0;
+	short int flag = 0;
+	int *id, count=0, RelPos = G->Arg->v;
+	
+	
+	/*if ((aux = (struct edge *) malloc(sizeof(struct edge))) == NULL) ErrExit(3);*/
+	bindata=CreateEdgeV(Arg->e-Arg->v+1);
+
+	G = VGRead(entryfp, Arg);
+	
+	sum = Kruskal(G, bindata, Bin);
+	emptybin(bindata,G);
+
+
+	do
+	{
+		RelPos = binsearch(id, G, RelPos);
+		count++;	/*Numero de arestas (no bin) que repõem a conectividade*/
+	} while (RelPos!=-1);
+
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	/*
+	if (Arg->err == 0) {
+		
+		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
+		        flag);
+		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+		if (flag < 0) fprintf(outputfp, "%d %d %lf\n", aux->vi, aux->vj, aux->cost);
+		
+	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	*/
+	GFree(G, FreeEdgeV);
 	return;
 }

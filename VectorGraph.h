@@ -10,7 +10,7 @@
 struct graph *VGRead(FILE *, struct PBArg *);
 /*int lessVertice(const void *,const void *);*/
 struct edge *CreateEdgeV(int );
-struct edge *binsearch(int *,struct graph *);
-struct edge **emptybin(struct edge *bin, struct graph *g);
+int binsearch(int *,struct graph *, int);
+void emptybin(struct edge *bin, struct graph *g);
 
 #endif //AIRROUTES_VECTORGRAPH_H

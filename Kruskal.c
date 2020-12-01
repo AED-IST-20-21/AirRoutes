@@ -3,43 +3,51 @@
 
 #include "Graph.h"
 
-void UFinit(int N, int* id, int* sz)
-{
+void UFinit(int N, int *id, int *sz) {
 	int i;
-
+	
 	for (i = 0; i < N; i++) {
-		id[i] = i; sz[i] = 1;
+		id[i] = i;
+		sz[i] = 1;
 	}
 }
 
-int UFfind(int p, int q, int* id, int* sz)
-{
+int UFfind(int p, int q, int *id) {
 	int i, j;
-
+	
 	for (i = p; i != id[i]; i = id[i]);
 	for (j = q; j != id[j]; j = id[j]);
-	if (i == j){
+	if (i == j) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
 
-void UFunion(int p, int q, int* id, int* sz)
-{
+void UFunion(int p, int q, int *id, int *sz) {
 	int i, j, x, t;
-
+	
 	for (i = p; i != id[i]; i = id[i]); /*Find root p*/
 	for (j = q; j != id[j]; j = id[j]); /*Find root q*/
-
+	
 	if (sz[i] < sz[j]) {
-		id[i] = j; sz[j] += sz[i]; t = j;	
+		id[i] = j;
+		sz[j] += sz[i];
+		t = j;
 	} else {
-		id[j] = i; sz[i] += sz[j]; t = i;
+		id[j] = i;
+		sz[i] += sz[j];
+		t = i;
 	}
-	for (i = p; i != id[i]; i = x) {x = id[i]; id[i] = t;} /*Change root p*/
-	for (j = q; j != id[j]; j = x) {x = id[j]; id[j] = t;} /*Change root q*/
-
+	for (i = p; i != id[i]; i = x) {
+		x = id[i];
+		id[i] = t;
+	} /*Change root p*/
+	for (j = q; j != id[j]; j = x) {
+		x = id[j];
+		id[j] = t;
+	} /*Change root q*/
+	
 }
 
 /* void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void*, const void*)) 
@@ -55,29 +63,24 @@ int lessVertice(const void *a, const void *b) {
 	} else return 1;
 }
 
-int lessCost(const void* a, const void* b)
-{
-	if ( ((struct edge*) a)->cost > ( (struct edge*) b )->cost )
-	{
+int lessCost(const void *a, const void *b) {
+	if (((struct edge *) a)->cost > ((struct edge *) b)->cost) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
 
-struct edge* BinInit(int N)
-{
-	struct edge* bin = (struct edge* ) malloc(N * sizeof(struct edge));
+struct edge *BinInit(int N) {
+	struct edge *bin = (struct edge *) malloc(N * sizeof(struct edge));
 	return bin;
 }
 
-double Bin(int E, int V, int* id, int* sz, struct edge* mst, struct edge* bin, double cost)
-{
+double Bin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, double cost) {
 	int i, k, j;
-
-	for (i = 0, k = 0, j=0; i < E && k < V; i++){
-		if (!UFfind(mst[i].vi, mst[i].vj, id, sz))
-		{
+	
+	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
+		if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
 			UFunion(mst[i].vi, mst[i].vj, id, sz);
 			mst[k++] = mst[i];
 			cost += mst[i].cost;
@@ -90,13 +93,11 @@ double Bin(int E, int V, int* id, int* sz, struct edge* mst, struct edge* bin, d
 	return cost;
 }
 
-double NoBin(int E, int V, int* id, int* sz, struct edge* mst, struct edge* bin, double cost)
-{
+double NoBin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, double cost) {
 	int i, k;
-
-	for (i = 0, k = 0; i < E && k < V-1; i++){
-		if (!UFfind(mst[i].vi, mst[i].vj, id, sz))
-		{
+	
+	for (i = 0, k = 0; i < E && k < V - 1; i++) {
+		if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
 			UFunion(mst[i].vi, mst[i].vj, id, sz);
 			mst[k++] = mst[i];
 			cost += mst[i].cost;
@@ -106,28 +107,26 @@ double NoBin(int E, int V, int* id, int* sz, struct edge* mst, struct edge* bin,
 }
 
 /**/
-void PrintMST(struct edge* mst)
-{
+void PrintMST(struct edge *mst) {
 	int i;
-	for (i=0; i<10; i++)
-	{
+	for (i = 0; i < 10; i++) {
 		printf("V->%d\tW->%d\tcost->%lf\t(%d)\n", mst[i].vi, mst[i].vj, mst[i].cost,
-				i+1);
+		       i + 1);
 	}
 	printf("\n");
 }
+
 /**/
 
-double Kruskal(struct graph* G, struct edge* bin,
- double (*GoKruskal)(int, int, int*, int* , struct edge*, struct edge*, double))
-{
-	int V = G->Arg->v,E = G->Arg->e;
-
+double Kruskal(struct graph *G, struct edge *bin,
+               double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double)) {
+	int V = G->Arg->v, E = G->Arg->e;
+	
 	int *id = (int *) malloc(V * sizeof(int));
 	int *sz = (int *) malloc(V * sizeof(int));
-	double cost=0;
-
-	qsort(((struct edge **)G->data), E, sizeof(struct edge), lessCost);
+	double cost = 0;
+	
+	qsort(((struct edge **) G->data), E, sizeof(struct edge), lessCost);
 	
 	UFinit(V, id, sz);
 /*
@@ -140,9 +139,52 @@ double Kruskal(struct graph* G, struct edge* bin,
 	}
 */
 	cost = (*GoKruskal)(E, V, id, sz, G->data, bin, cost);
-
+	
 	free(id);
 	free(sz);
 	return cost;
 }
 
+int find(struct PBArg *Arg, bool mode,) { /*MODE ON IS B1*/
+	
+	int i, k, j;
+	
+	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
+		if (mode) {
+			if ((Arg->vi != mst[i].vi) || (Arg->vi != mst[i].vj)) {
+				if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
+					
+					UFunion(mst[i].vi, mst[i].vj, id, sz);
+					mst[k++] = mst[i];
+					cost += mst[i].cost;
+				} else {
+					bin[j] = mst[i];
+					printf("|bin[%d] = %d-%d|\n", j, bin[j].vi, bin[j].vj);
+					j++;
+				}
+			}
+		} else {
+			if (((Arg->vi != mst[i].vi) && (Arg->vj != mst[i].vj)) ||
+			    ((Arg->vj != mst[i].vi) && (Arg->vi != mst[i].vj))) {
+				if (!UFfind(mst[i].vi, mst[i].vj, id, sz)) {
+					
+					UFunion(mst[i].vi, mst[i].vj, id, sz);
+					mst[k++] = mst[i];
+					cost += mst[i].cost;
+				} else {
+					bin[j] = mst[i];
+					printf("|bin[%d] = %d-%d|\n", j, bin[j].vi, bin[j].vj);
+					j++;
+				}
+			}
+			
+			
+		}
+	}
+	return cost;
+	
+	
+}
+
+
+}

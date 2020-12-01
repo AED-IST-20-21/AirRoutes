@@ -2,7 +2,15 @@
 // Created by anton on 11/30/2020.
 //
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <float.h>
+#include <stdlib.h>
+
 #include "One.h"
+#include "VectorGraph.h"
+#include "Kruskal.h"
 
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
@@ -40,9 +48,10 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	double sum;
 	
 	G = VGRead(entryfp, Arg);
-	sum = Kruskal(Arg->v, Arg->e, G->data);
+	sum = Kruskal(Arg->v, Arg->e, G->data, NULL, NoBin);
 	
-	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, 
+			sizeof(struct edge), lessVertice);
 	
 	if ((sum > 0) && (Arg->err == 0)) {
 		
@@ -51,6 +60,7 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
 	
+	GFree(G, FreeEdgeV);	
 	return;
 }
 
@@ -60,14 +70,14 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct edge *aux;
 	double sum = 0;
 	short int flag = 0;
-	int *id;
+	/*int *id;*/
 	
 	if ((aux = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
 	
 	G = VGRead(entryfp, Arg);
-	sum = Kruskal(Arg->v, Arg->e, G->data, sum);
-	
-	aux=binsearch(id,G);
+	sum = Kruskal(Arg->v, Arg->e, G->data, NULL, NoBin);
+
+	/*aux=binsearch(id,G);*/
 	
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
@@ -79,7 +89,8 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		if (flag < 0) fprintf(outputfp, "%d %d %lf\n", aux->vi, aux->vj, aux->cost);
 		
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
-	
+
+	GFree(G, FreeEdgeV);	
 	return;
 }
 
@@ -89,9 +100,10 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	double sum;
 	
 	G = VGRead(entryfp, Arg);
-	sum = Kruskal(Arg->v, Arg->e, G->data);
+	sum = Kruskal(Arg->v, Arg->e, G->data, NULL, NoBin);
 	
-	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, 
+			sizeof(struct edge), lessVertice);
 	
 	if ((sum > 0) && (Arg->err == 0)) {
 		
@@ -99,7 +111,8 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
-	
+
+	GFree(G, FreeEdgeV);	
 	return;
 }
 

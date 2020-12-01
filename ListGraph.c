@@ -33,7 +33,7 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	for (i = 0; i < Arg->e; i++) {
 		
 		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3) {
-			GFree(G);
+			GFree(G, FreeListV);
 			return NULL;
 		}
 		
@@ -53,26 +53,27 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
  * @param LV Vector of adjancecncy lists
  * @param V Number of vertices
  */
+/*
 void FreeListV(struct list **LV, int V) {
 	
 	int i;
 	
-	for (i = 0; i < V; i++) {
-		
-		FreeList(LV[i]);
-		
+	for (i = 0; i < V; i++)
+	{	
+		FreeList(LV[i]);	
 	}
 	
 	free(LV);
 	return;
 }
-
+*/
 
 
 /**
  * Function to free a dinamically allocated adjancency list
  * @param L List to be freed
  */
+/*
 void FreeList(struct list *L) {
 	struct list *aux, *Prev;
 	aux = L;
@@ -84,7 +85,7 @@ void FreeList(struct list *L) {
 	free(aux);
 	return;
 }
-
+*/
 /**
  * Adds a new element to the tail of the list
  * @param L List

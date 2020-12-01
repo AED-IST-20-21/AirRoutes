@@ -41,7 +41,8 @@ char *ExitFileName(char *FileName) {
 		exit(0);
 	
 	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
-	if((ExitFileName = (char *) malloc(((FileSize) + 1) * sizeof(char)))==NULL) ErrExit(3);
+	if((ExitFileName = (char *) malloc(((FileSize) + 1) * sizeof(char)))==NULL) 
+		ErrExit(3);
 	
 	strcpy(ExitFileName, FileName);
 	ExitFileName[strlen(FileName) - strlen(OldExt)] = '\0';
@@ -80,60 +81,7 @@ FILE *WFileOpen(char *name) {
 	
 }
 
-/*************************
- * Function to exit when an error occurs
- * @param int err indicating what error occurred
- * @return void
- ************************/
 
-void ErrExit(int err) {
-	
-	switch (err) {
-		case 0:
-#ifdef DEBUG
-			fprintf(stderr, "Error Opening File\n");
-#endif
-			exit(0);
-		
-		case 1:
-#ifdef DEBUG
-			fprintf(stderr, "Error Checking File Extension\n");
-#endif
-			exit(0);
-		
-		case 2:
-#ifdef DEBUG
-			fprintf(stderr, "Invalid Mode\n");
-#endif
-			exit(0);
-		
-		case 3:
-#ifdef DEBUG
-			fprintf(stderr, "Error Allocating Memory\n");
-#endif
-			exit(0);
-		
-		case 4:
-#ifdef DEBUG
-			fprintf(stderr, "Invalid Arguments\n");
-#endif
-			exit(0);
-		
-		case 5:
-#ifdef DEBUG
-			fprintf(stderr, "Error Reading Graph\n");
-#endif
-			exit(0);
-		
-		case 6:
-#ifdef DEBUG
-			fprintf(stderr, "Error Reading Edge\n");
-#endif
-			exit(0);
-		
-	}
-	return;
-}
 
 /*************************************************
  * Function to read one graph problem arguments and store them in the designated struct

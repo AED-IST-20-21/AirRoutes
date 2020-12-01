@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "ListGraph.h"
+/*#include "ListGraph.h"*/
 #include "Graph.h"
 
 
@@ -12,7 +12,7 @@ char* ExitFileName(char* );
 FILE *RFileOpen (char *);
 FILE *WFileOpen(char *);
 void FileClose(FILE* );
-void ErrExit (int );
+/*void ErrExit (int );*/
 struct PBArg *ArgRead(FILE*);
 int ArgCheck (struct PBArg *);
 struct edge *EdgeRead(FILE *,struct edge *);

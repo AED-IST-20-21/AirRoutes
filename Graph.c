@@ -4,6 +4,61 @@
 
 #include "Graph.h"
 
+/*************************
+ * Function to exit when an error occurs
+ * @param int err indicating what error occurred
+ * @return void
+ ************************/
+
+void ErrExit(int err) {
+	
+	switch (err) {
+		case 0:
+#ifdef DEBUG
+			fprintf(stderr, "Error Opening File\n");
+#endif
+			exit(0);
+		
+		case 1:
+#ifdef DEBUG
+			fprintf(stderr, "Error Checking File Extension\n");
+#endif
+			exit(0);
+		
+		case 2:
+#ifdef DEBUG
+			fprintf(stderr, "Invalid Mode\n");
+#endif
+			exit(0);
+		
+		case 3:
+#ifdef DEBUG
+			fprintf(stderr, "Error Allocating Memory\n");
+#endif
+			exit(0);
+		
+		case 4:
+#ifdef DEBUG
+			fprintf(stderr, "Invalid Arguments\n");
+#endif
+			exit(0);
+		
+		case 5:
+#ifdef DEBUG
+			fprintf(stderr, "Error Reading Graph\n");
+#endif
+			exit(0);
+		
+		case 6:
+#ifdef DEBUG
+			fprintf(stderr, "Error Reading Edge\n");
+#endif
+			exit(0);
+		
+	}
+	return;
+}
+
 struct graph *GraphInit() {
 	struct graph *G;
 	
@@ -74,13 +129,14 @@ int ArgCheck(struct PBArg *aux) {
 	}
 }
 
-void GFree(struct graph *g) {
-	
+
+void GFree(struct graph *g, void (*FreeData)(void*, int))
+{	
 	if (ArgCheck(g->Arg)<10){
 		
-		FreeListV(g->data, g->Arg->v);
+		FreeData(g->data, g->Arg->v);
 	
-	}else free(g->data);
+	} else free(g->data); /*???*/
 	
 	free(g);
 	
@@ -88,8 +144,62 @@ void GFree(struct graph *g) {
 }
 
 
+/*List Vector*/
+void FreeListV(void *ListVector, int size)
+{	
+	int i;
+	
+	for (i = 0; i < size; i++)
+	{	
+		FreeList(((struct list**) ListVector)[i]);	
+	}
+	
+	free(ListVector);
+	return;
+}
 
+/**
+ * Function to free a dinamically allocated adjancency list
+ * @param L List to be freed
+ */
+void FreeList(struct list *L)
+{
+	struct list *aux, *Prev;
+	aux = L;
 
+	while (aux != NULL)
+	{
+		Prev = aux;
+		aux = aux->next;
+		free(Prev);
+	}
+	free(aux);
+	return;
+}
 
+/*Edge Vector*/
+struct edge *CreateEdgeV(int size) {
+	
+	struct edge *aux;
+	
+	if ( (aux =(struct edge*) malloc(size * sizeof(struct edge)) ) == NULL){
+		ErrExit(3);
+	}
+	
+	return aux;
+}
 
+void FreeEdgeV(void * EdgeVector, int size)
+{
+	int i;
+	
+	for (i = 0; i < size; i++)
+	{	
+		free( ((struct edge**) EdgeVector)[i] );
+	}
+	
+	free((struct edge**) EdgeVector);
+	return;
+
+}
 

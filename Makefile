@@ -9,7 +9,7 @@ CC = gcc
 DB = gdb
 CFLAGS = -g -Wall -std=c99
 
-OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o VectorGraph.o Graph.o
+OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o VectorGraph.o Kruskal.o Graph.o
 
 EXE = backbone
 
@@ -28,13 +28,15 @@ FileOp.o: FileOp.c FileOp.h Graph.h
 
 Zero.o: Zero.c Zero.h FileOp.h ListGraph.h Graph.h
 
-One.o: One.c One.h FileOp.h VectorGraph.h Graph.h
+One.o: One.c One.h FileOp.h VectorGraph.h Kruskal.h Graph.h
 
 ListGraph.o: ListGraph.c ListGraph.h Graph.h
 
-VectorGraph.o: VectorGraph.c VectorGraph.h FileOp.h
+VectorGraph.o: VectorGraph.c VectorGraph.h FileOp.h Kruskal.h
 
-Graph.o: Graph.c Graph.h FileOp.h ListGraph.h VectorGraph.h
+Kruskal.o: Kruskal.c Kruskal.h Graph.h
+
+Graph.o: Graph.c Graph.h
 
 clean:
 	rm -f *.o backbone temp

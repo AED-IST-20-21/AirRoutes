@@ -118,7 +118,7 @@ int CZero(FILE *entryfp, struct PBArg *Arg) {
 		free(lamps);
 	}
 	
-	GFree(G);
+	GFree(G, FreeListV);
 	if (c > 0) {
 		c = 1;
 	}
@@ -151,7 +151,7 @@ int DZero(FILE *entryfp, struct PBArg *Arg) {
 		free(lamps);
 	}
 	
-	GFree(G);
+	GFree(G, FreeListV);
 	return c;
 }
 

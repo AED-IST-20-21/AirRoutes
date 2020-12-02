@@ -7,6 +7,9 @@
 void UFinit(int N, int *id, int *sz) {
 	int i;
 	
+	int *id = (int *) malloc(V * sizeof(int));
+	int *sz = (int *) malloc(V * sizeof(int));
+	
 	for (i = 0; i < N; i++) {
 		id[i] = i;
 		sz[i] = 1;
@@ -123,8 +126,7 @@ double Kruskal(struct graph *G, struct edge *bin,
                double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double)) {
 	int V = G->Arg->v, E = G->Arg->e;
 	
-	int *id = (int *) malloc(V * sizeof(int));
-	int *sz = (int *) malloc(V * sizeof(int));
+
 	double cost = 0;
 	
 	qsort(((struct edge **) G->data), E, sizeof(struct edge), lessCost);
@@ -146,64 +148,35 @@ double Kruskal(struct graph *G, struct edge *bin,
 	return cost;
 }
 
-double find(struct PBArg *Arg, struct edge* mst, int* id, bool mode) { /*MODE ON IS B1*/
+double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz) {
 	
 	int i, k, j, V = Arg->v, E = Arg->e;
-	int *sz;
-	double cost=0;
-	struct edge* bindata;
 
-	id = (int *) malloc(V * sizeof(int));
-	sz = (int *) malloc(V * sizeof(int));
+	double cost = 0;
+	struct edge *bindata;
+	
+	
 	
 	UFinit(V, id, sz);
-			
-	bindata=CreateEdgeV(Arg->e-Arg->v+1);
-
-	if (mode) {
-		for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
-			if ((Arg->vi != mst[i].vi) || (Arg->vi != mst[i].vj)) {	
-				if (!UFfind(mst[i].vi, mst[i].vj, id)) {
-					
-					UFunion(mst[i].vi, mst[i].vj, id, sz);
-					mst[k++] = mst[i];
-					cost += mst[i].cost;
-				} else {
-					bindata[j] = mst[i];
-					printf("|bin[%d] = %d-%d|\n", j, bindata[j].vi, bindata[j].vj);
-					j++;
-				}
-			}
-			/*
-			cost = Bin(Arg->e, Arg->v, id, sz, mst, bindata, cost);
-			emptybin(bindata, mst, V, E);
-
-			free(id);
-			free(sz);
-			*/
-		}
-	} else {
-		for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
-			if (((Arg->vi != mst[i].vi) && (Arg->vj != mst[i].vj)) ||
-			    ((Arg->vj != mst[i].vi) && (Arg->vi != mst[i].vj))) {
-				if (!UFfind(mst[i].vi, mst[i].vj, id)) {
-					
-					UFunion(mst[i].vi, mst[i].vj, id, sz);
-					mst[k++] = mst[i];
-					cost += mst[i].cost;
-				} else {
-					bindata[j] = mst[i];
-					printf("|bin[%d] = %d-%d|\n", j, bindata[j].vi, bindata[j].vj);
-					j++;
-				}
+	
+	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
+	
+	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
+		if (mst[i]->cost < 0) {
+			if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
+				
+				UFunion(mst[i]->vi, mst[i]->vj, id, sz);
+				mst[k++] = mst[i];
+				cost += mst[i]->cost;
+			} else {
+				bindata[j] = mst[i];
+				printf("|bin[%d] = %d-%d|\n", j, bindata[j]->vi, bindata[j]->vj);
+				j++;
 			}
 		}
 	}
-
+	
 	emptybin(bindata, mst, V, E);
-
-	free(sz);
-
 	return cost;
 }
 

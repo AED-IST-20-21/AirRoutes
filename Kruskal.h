@@ -23,6 +23,5 @@ double NoBin(int, int, int *, int *, struct edge *, struct edge *, double);
 double Kruskal(struct graph *G, struct edge *bin,
                double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double));
 
-double find(struct PBArg *, struct edge**, bool mode);
-
+double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz);
 #endif

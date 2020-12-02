@@ -70,21 +70,20 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *G;
-	struct edge *aux, *bindata;
+	struct edge *bindata;
 	double sum = 0, newsum=0;
 	short int flag = 0;
-	int *id;
+	int *id,*sz;
 	
+	UFinit(G->Arg->v,id,sz);
 	
-	if ((aux = (struct edge *) malloc(sizeof(struct edge))) == NULL) ErrExit(3);
 	bindata=CreateEdgeV(Arg->e-Arg->v+1);
 	G = VGRead(entryfp, Arg);
 	
 	sum = Kruskal(G, bindata, Bin);
 	emptybin(bindata, ((struct edge*) G->data), G->Arg->v, G->Arg->e);
-
-	
-
+	SearchDelete(G,0,G->Arg->v-1,EdgeDelete);
+	newsum=find(G->Arg,((struct edge **)G->data),id,sz);
 	binsearch(id, G, G->Arg->v);	
 
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
@@ -99,6 +98,9 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
 	GFree(G, FreeEdgeV);
+	free(id);
+	free(sz);
+	
 	return;
 }
 

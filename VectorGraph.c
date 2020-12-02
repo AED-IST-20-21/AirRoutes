@@ -35,7 +35,6 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 }
 
 
-
 int binsearch(int *id, struct graph *g, int start) {
 	
 	int i = 0;
@@ -43,8 +42,7 @@ int binsearch(int *id, struct graph *g, int start) {
 	id[g->Arg->vi]=0;
 	id[g->Arg->vj]=0;
 	*/
-	for (i = start; i < g->Arg->e; i++)
-	{
+	for (i = start; i < g->Arg->e; i++) {
 		
 		if (id[((struct edge *) g->data)[i].vi] != id[((struct edge **) g->data)[i]->vj])
 			return i;
@@ -65,7 +63,7 @@ struct edge *CreateEdgeV(int size) {
 	return aux;
 }
 
-void emptybin(struct edge *bin, struct edge* mst, int V, int E) {
+void emptybin(struct edge *bin, struct edge *mst, int V, int E) {
 	
 	int i, j;
 	
@@ -75,36 +73,48 @@ void emptybin(struct edge *bin, struct edge* mst, int V, int E) {
 	return;
 }
 
-int* EdgeBreak(struct edge** EdgeV, int size)
-{
+int *EdgeBreak(struct edge **EdgeV, int size) {
 	int *id, i, Family;
-
-	id = (int*) malloc(size * sizeof(int));
-
+	
+	id = (int *) malloc(size * sizeof(int));
+	
 	Family = EdgeV[0]->vi; /*Arbitrário*/
-	for (i=0; i<size; i++)
-	{
-		if ( EdgeV[i]->cost==-1 )
-		{
-			id[i]=-1;
-			Family = EdgeV[i+1]->vi;
+	for (i = 0; i < size; i++) {
+		if (EdgeV[i]->cost == -1) {
+			id[i] = -1;
+			Family = EdgeV[i + 1]->vi;
 		} else {
-			id[i]= Family ;
+			id[i] = Family;
 		}
 	}
 	return id;
 }
 
-void EdgeDelete(struct edge** EdgeV, int pos)
-{
-	int i;
-	/*
-	EdgeV[pos].vi = -1;
-	EdgeV[pos].vj = -1;
-	*/
-	EdgeV[pos]->cost = -1;
-
-	return;
+int SearchDelete(struct graph *g,int start,int end, int (*Delete)(struct edge *, int, int)) {
+	int i, cnt = 0;
+	
+	for (i = start; i < end; i++) {
+		
+		if ((*Delete)(((struct edge **) g->data)[i], g->Arg->vi, g->Arg->vj)) {
+			
+			((struct edge **) g->data)[i]->cost = -((struct edge **) g->data)[i]->cost;
+			cnt++;
+		}
+	}
+	return cnt;
 }
 
+int EdgeDelete(struct edge *aux, int vi, int vj) {
+	
+	if (((aux->vi == vi) && (aux->vj == vj)) || ((aux->vj == vi) && (aux->vi == vj))) return 0;
+	else return 1;
+	
+}
+
+int VerticeDelete(struct edge *aux, int vi, int vj) {
+	
+	if ((aux->vi = vi) || (aux->vj == vi)) return 0;
+	else return 1;
+	
+}
 

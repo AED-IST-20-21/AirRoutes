@@ -34,16 +34,13 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 }
 
 
-int binsearch(int *id, struct graph *g, int start) {
+short int binsearch(int *id, struct graph *g, int start) {
 	
-	int i = 0;
-	/* TODO
-	id[g->Arg->vi]=0;
-	id[g->Arg->vj]=0;
-	*/
+	short int i;
+
 	for (i = start; i < g->Arg->e; i++) {
 		
-		if (id[((struct edge *) g->data)[i].vi] != id[((struct edge **) g->data)[i]->vj])
+		if (id[((struct edge **) g->data)[i]->vi] != id[((struct edge **) g->data)[i]->vj])
 			return i;
 		
 	}
@@ -62,11 +59,11 @@ struct edge **CreateEdgeV(int size) {
 	return aux;
 }
 
-void emptybin(struct edge *bin, struct edge *mst, int V, int E) {
+void emptybin(struct edge **bin, struct graph *g) {
 	
 	int i, j;
 	
-	for (i = V - 1, j = 0; i < E; i++, j++) ((struct edge *) mst)[i] = bin[j];
+	for (i = g->Arg->v-1, j = 0; i < g->Arg->e; i++, j++) ((struct edge **)g->data)[i] = bin[j];
 	
 	free(bin);
 	return;
@@ -113,6 +110,14 @@ int EdgeDelete(struct edge *aux, int vi, int vj) {
 int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
 	if ((aux->vi = vi) || (aux->vj == vi)) return 0;
+	else return 1;
+	
+}
+
+int flagcheck(int pos, struct PBArg *Arg){
+	
+	if (pos<0) return -1;
+	else if ((0<pos)&&(pos<Arg->v)) return 0;
 	else return 1;
 	
 }

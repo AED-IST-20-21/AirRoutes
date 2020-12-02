@@ -9,11 +9,12 @@
 
 struct graph *VGRead(FILE *, struct PBArg *);
 /*int lessVertice(const void *,const void *);*/
-struct edge *CreateEdgeV(int );
-int binsearch(int *,struct graph *, int);
-void emptybin(struct edge *bin, struct edge*, int, int);
+struct edge **CreateEdgeV(int size);
+short int binsearch(int *,struct graph *, int);
+void emptybin(struct edge **bin, struct graph *g);
 int SearchDelete(struct graph *g,int start,int end, int (*Delete)(struct edge *, int, int));
 int EdgeDelete(struct edge *aux, int vi, int vj);
 int VerticeDelete(struct edge *aux, int vi, int vj);
+int flagcheck(int pos, struct PBArg *Arg);
 
 #endif //AIRROUTES_VECTORGRAPH_H

@@ -12,9 +12,6 @@
 #include "VectorGraph.h"
 #include "Kruskal.h"
 
-#define B1 0
-#define D1 1
-
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	int AC = 0;
@@ -70,29 +67,31 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /* CLOSED */
 void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *G;
-	struct edge *bindata;
-	double sum = 0, newsum=0;
-	short int flag = 0;
+	struct edge **bindata;
+	double sum = 0;
+	short int flag = 0,ncpos;
 	int *id,*sz;
 	
 	UFinit(Arg->v,id,sz);
-	
 	bindata=CreateEdgeV(Arg->e-Arg->v+1);
 	G = VGRead(entryfp, Arg);
 	
-	sum = Kruskal(G, bindata, Bin);
-	emptybin(bindata, ((struct edge*) G->data), G->Arg->v, G->Arg->e);
-	SearchDelete(G,0,G->Arg->v-1,EdgeDelete);
-	newsum=find(G->Arg,((struct edge **)G->data),id,sz);
-	binsearch(id, G, G->Arg->v);
-
+	sum = Kruskal(G, bindata, Bin); /*initial kruskal*/
+	emptybin(bindata,G); /* Dump the bin onto the graph */
+	SearchDelete(G,0,G->Arg->v-1,EdgeDelete); /* Search for the edge to delete in the backbone */
+	find(G->Arg,((struct edge **)G->data),id,sz); /* Restore Connectivity */
+	ncpos=binsearch(id, G, G->Arg->v);
+	
+	flag=flagcheck(ncpos,Arg);
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
 	if (Arg->err == 0) {
 		
 		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
-		        flag);
+		  flag);
 		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+		if (flag==1) fprintf(outputfp,"%d %d %lf",((struct edge **)G->data)[ncpos]->vi,
+				((struct edge **)G->data)[ncpos]->vj,((struct edge **)G->data)[ncpos]->cost);
 		
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
@@ -102,6 +101,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	return;
 }
+
 
 void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 

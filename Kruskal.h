@@ -15,13 +15,13 @@ int lessVertice(const void *, const void *);
 int lessCost(const void *, const void *);
 
 /*struct edge BinInit(int);*/
-double Bin(int, int, int *, int *, struct edge *, struct edge *, double);
+double Bin( struct graph *g,int *id, int *sz, struct edge **bin);
+double NoBin(struct graph *g,int *id, int *sz, struct edge **bin);
 
-double NoBin(int, int, int *, int *, struct edge *, struct edge *, double);
 
 /*Kruskal*/
-double Kruskal(struct graph *G, struct edge *bin,
-               double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double));
+double Kruskal(struct graph *G, struct edge **bin,
+               double (*GoKruskal)(struct graph *, int *, int *, struct edge **));
 
 double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz);
 #endif

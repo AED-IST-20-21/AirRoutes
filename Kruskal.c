@@ -5,10 +5,11 @@
 #include "VectorGraph.h"
 
 void UFinit(int V, int *id, int *sz) {
+	
 	int i;
 	
-	id = (int *) malloc(V * sizeof(int));
-	sz = (int *) malloc(V * sizeof(int));
+	if ((id = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
+	if ((sz = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
 	
 	for (i = 0; i < V; i++) {
 		id[i] = i;
@@ -93,14 +94,14 @@ double Bin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin,
 	return cost;
 }
 
-double NoBin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, double cost) {
+double NoBin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double cost) {
 	int i, k;                                                            /* Kruskal´s Algorithm without using the bin */
 	
 	for (i = 0, k = 0; i < E && k < V - 1; i++) {
-		if (!UFfind(mst[i].vi, mst[i].vj, id)) {
-			UFunion(mst[i].vi, mst[i].vj, id, sz);
+		if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
+			UFunion(mst[i]->vi, mst[i]->vj, id, sz);
 			mst[k++] = mst[i];
-			cost += mst[i].cost;
+			cost += mst[i]->cost;
 		}
 	}
 	return cost;
@@ -115,25 +116,16 @@ void PrintMST(struct edge **mst) {
 	printf("\n");
 }
 
-double Kruskal(struct graph *G, struct edge **bin,
-		double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double)) {
+double Kruskal(struct graph *g, struct edge **bin,
+		double (*GoKruskal)(int, int, int *, int *, struct edge **, struct edge **, double)) {
 	
-	int V = G->Arg->v, E = G->Arg->e,*id,*sz;
+	int *id,*sz;
 	double cost = 0;
 	
-	qsort(((struct edge **) G->data), E, sizeof(struct edge), lessCost);                         /* Sorting the graph */
-	
-	UFinit(V, id, sz);                                    /*Initialization of the id and sz vectors, necessary to CWQU*/
-/*
-	for (i = 0, k = 0; i < E && k < G->V-1; i++){
-		if (!UFfind(mst[i].vi, mst[i].vj, id, sz))
-		{
-			UFunion(mst[i].vi, mst[i].vj, id, sz);remove?
-			mst[k++] = mst[i];
-		}
-	}
-*/                                                     /*Actual kruskal application, which depends on the usage of bin*/
-	cost = (*GoKruskal)(E, V, id, sz, G->data, bin, cost);
+	UFinit(g->Arg->v, id, sz);                            /*Initialization of the id and sz vectors, necessary to CWQU*/
+	qsort(((struct edge **) g->data), g->Arg->e, sizeof(struct edge), lessCost);                 /* Sorting the graph */
+																   /*Actual kruskal, which depends on the usage of bin*/
+	cost = (*GoKruskal)(g->Arg->e, g->Arg->v, id, sz, g->data, bin, cost);
 	
 	free(id);
 	free(sz);

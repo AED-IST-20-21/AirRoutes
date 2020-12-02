@@ -59,8 +59,7 @@ struct list* CreateListV();*/ /*?*/
 void FreeListV(void *, int); /* (struct list**) */
 void FreeList(struct list*);
 
-/*Edge Vector*/
-struct edge* CreateEdgeV(int); /*?*/
+
 
 void FreeEdgeV(void *, int); /* (struct edge*) */
 

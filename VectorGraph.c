@@ -16,15 +16,14 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	struct graph *G;
 	int i;
 	
-	G = GraphInit();
+	G = GraphInit();                                                                            /*Initialize the graph*/
 	
 	G->Arg = Arg;
+	G->data = (struct edge **) CreateEdgeV(Arg->v);
 	
-	G->data = (struct edge *) CreateEdgeV(Arg->v);
-	
-	for (i = 0; i < Arg->e; i++) {
+	for (i = 0; i < Arg->e; i++) {                                                      /*Reading the graph from file*/
 		if (fscanf(entryfp, "%d %d %lf", &((struct edge **) G->data)[i]->vi, &((struct edge **) G->data)[i]->vj,
-		           &((struct edge **) G->data)[i]->cost) != 3) {
+		           &((struct edge **) G->data)[i]->cost) != 3) {                  /*Checking for errors during reading*/
 			GFree(G, FreeEdgeV);
 			Arg->err = 1;
 			return NULL;
@@ -52,11 +51,11 @@ int binsearch(int *id, struct graph *g, int start) {
 }
 
 /*Edge Vector*/
-struct edge *CreateEdgeV(int size) {
+struct edge **CreateEdgeV(int size) {
 	
-	struct edge *aux;
+	struct edge **aux;
 	
-	if ((aux = (struct edge *) malloc(size * sizeof(struct edge))) == NULL) {
+	if ((aux = (struct edge **) malloc(size * sizeof(struct edge))) == NULL) {
 		ErrExit(3);
 	}
 	

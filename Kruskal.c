@@ -2,15 +2,15 @@
 #include <stdio.h>
 
 #include "Graph.h"
-#include "VectorGraph.h" /*Temporary*/
+#include "VectorGraph.h"
 
-void UFinit(int N, int *id, int *sz) {
+void UFinit(int V, int *id, int *sz) {
 	int i;
 	
-	int *id = (int *) malloc(V * sizeof(int));
-	int *sz = (int *) malloc(V * sizeof(int));
+	id = (int *) malloc(V * sizeof(int));
+	sz = (int *) malloc(V * sizeof(int));
 	
-	for (i = 0; i < N; i++) {
+	for (i = 0; i < V; i++) {
 		id[i] = i;
 		sz[i] = 1;
 	}
@@ -54,10 +54,6 @@ void UFunion(int p, int q, int *id, int *sz) {
 	
 }
 
-/* void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void*, const void*)) 
- * qsort(values, 5, sizeof(int), cmpfunc) */
-
-
 int lessVertice(const void *a, const void *b) {
 	
 	if (((struct edge *) a)->vi < ((struct edge *) b)->vi) return 0;
@@ -75,22 +71,22 @@ int lessCost(const void *a, const void *b) {
 	}
 }
 
-struct edge *BinInit(int N) {
-	struct edge *bin = (struct edge *) malloc(N * sizeof(struct edge));
+struct edge **BinInit(int N) {
+	struct edge **bin = (struct edge **) malloc(N * sizeof(struct edge));
 	return bin;
 }
 
-double Bin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, double cost) {
-	int i, k, j;
+double Bin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double cost) {
+	int i, k, j;                                                                 /* Kruskal´s Algorithm using the bin */
 	
 	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
-		if (!UFfind(mst[i].vi, mst[i].vj, id)) {
-			UFunion(mst[i].vi, mst[i].vj, id, sz);
+		if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
+			UFunion(mst[i]->vi, mst[i]->vj, id, sz);
 			mst[k++] = mst[i];
-			cost += mst[i].cost;
+			cost += mst[i]->cost;
 		} else {
 			bin[j] = mst[i];
-			printf("|bin[%d] = %d-%d|\n", j, bin[j].vi, bin[j].vj);
+			printf("|bin[%d] = %d-%d|\n", j, bin[j]->vi, bin[j]->vj);
 			j++;
 		}
 	}
@@ -98,7 +94,7 @@ double Bin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, d
 }
 
 double NoBin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin, double cost) {
-	int i, k;
+	int i, k;                                                            /* Kruskal´s Algorithm without using the bin */
 	
 	for (i = 0, k = 0; i < E && k < V - 1; i++) {
 		if (!UFfind(mst[i].vi, mst[i].vj, id)) {
@@ -110,37 +106,33 @@ double NoBin(int E, int V, int *id, int *sz, struct edge *mst, struct edge *bin,
 	return cost;
 }
 
-/**/
-void PrintMST(struct edge *mst) {
+void PrintMST(struct edge **mst) {
 	int i;
 	for (i = 0; i < 10; i++) {
-		printf("V->%d\tW->%d\tcost->%lf\t(%d)\n", mst[i].vi, mst[i].vj, mst[i].cost,
+		printf("V->%d\tW->%d\tcost->%lf\t(%d)\n", mst[i]->vi, mst[i]->vj, mst[i]->cost,
 		       i + 1);
 	}
 	printf("\n");
 }
 
-/**/
-
-double Kruskal(struct graph *G, struct edge *bin,
-               double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double)) {
-	int V = G->Arg->v, E = G->Arg->e;
+double Kruskal(struct graph *G, struct edge **bin,
+		double (*GoKruskal)(int, int, int *, int *, struct edge *, struct edge *, double)) {
 	
-
+	int V = G->Arg->v, E = G->Arg->e,*id,*sz;
 	double cost = 0;
 	
-	qsort(((struct edge **) G->data), E, sizeof(struct edge), lessCost);
+	qsort(((struct edge **) G->data), E, sizeof(struct edge), lessCost);                         /* Sorting the graph */
 	
-	UFinit(V, id, sz);
+	UFinit(V, id, sz);                                    /*Initialization of the id and sz vectors, necessary to CWQU*/
 /*
 	for (i = 0, k = 0; i < E && k < G->V-1; i++){
 		if (!UFfind(mst[i].vi, mst[i].vj, id, sz))
 		{
-			UFunion(mst[i].vi, mst[i].vj, id, sz);
+			UFunion(mst[i].vi, mst[i].vj, id, sz);remove?
 			mst[k++] = mst[i];
 		}
 	}
-*/
+*/                                                     /*Actual kruskal application, which depends on the usage of bin*/
 	cost = (*GoKruskal)(E, V, id, sz, G->data, bin, cost);
 	
 	free(id);
@@ -153,7 +145,7 @@ double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz) {
 	int i, k, j, V = Arg->v, E = Arg->e;
 
 	double cost = 0;
-	struct edge *bindata;
+	struct edge **bindata;
 	
 	
 	

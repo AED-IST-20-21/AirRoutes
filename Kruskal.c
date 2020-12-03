@@ -77,32 +77,31 @@ struct edge **BinInit(int N) {
 	return bin;
 }
 
-double Bin( struct graph *g,int *id, int *sz, struct edge **bin) {
-	int i, k, j;
-	double sum = 0;                /* Kruskal´s Algorithm using the bin */
+double Bin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double cost) {
+	int i, k, j;                                                                 /* Kruskal´s Algorithm using the bin */
 	
-	for (i = 0, k = 0, j = 0; i < g->Arg->e && k < g->Arg->v; i++) {
-		if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id)) {
-			UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
-			((struct edge **)g->data)[k++] = ((struct edge **)g->data)[i];
-			sum += ((struct edge **)g->data)[i]->cost;
+	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
+		if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
+			UFunion(mst[i]->vi, mst[i]->vj, id, sz);
+			mst[k++] = mst[i];
+			cost += mst[i]->cost;
 		} else {
-			bin[j] = ((struct edge **)g->data)[i];
+			bin[j] = mst[i];
 			printf("|bin[%d] = %d-%d|\n", j, bin[j]->vi, bin[j]->vj);
 			j++;
 		}
 	}
-	return sum;
+	return cost;
 }
-double NoBin(struct graph *g,int *id, int *sz, struct edge **bin) {
-	int i, k;
-	double cost = 0;            /* Kruskal´s Algorithm without using the bin */
+
+double NoBin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double cost) {
+	int i, k;                                                            /* Kruskal´s Algorithm without using the bin */
 	
-	for (i = 0, k = 0; i < g->Arg->e && k < g->Arg->v - 1; i++) {
-		if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id)) {
-			UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
-			((struct edge **)g->data)[k++] = ((struct edge **)g->data)[i];
-			cost += ((struct edge **)g->data)[i]->cost;
+	for (i = 0, k = 0; i < E && k < V - 1; i++) {
+		if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
+			UFunion(mst[i]->vi, mst[i]->vj, id, sz);
+			mst[k++] = mst[i];
+			cost += mst[i]->cost;
 		}
 	}
 	return cost;
@@ -118,7 +117,7 @@ void PrintMST(struct edge **mst) {
 }
 
 double Kruskal(struct graph *g, struct edge **bin,
-		double (*GoKruskal)(struct graph *, int *, int *, struct edge **)) {
+		double (*GoKruskal)(int, int, int *, int *, struct edge **, struct edge **, double)) {
 	
 	int *id,*sz;
 	double cost = 0;
@@ -126,42 +125,42 @@ double Kruskal(struct graph *g, struct edge **bin,
 	UFinit(g->Arg->v, id, sz);                            /*Initialization of the id and sz vectors, necessary to CWQU*/
 	qsort(((struct edge **) g->data), g->Arg->e, sizeof(struct edge), lessCost);                 /* Sorting the graph */
 																   /*Actual kruskal, which depends on the usage of bin*/
-	cost = (*GoKruskal)(g, id, sz, bin);
+	cost = (*GoKruskal)(g->Arg->e, g->Arg->v, id, sz, g->data, bin, cost);
 	
 	free(id);
 	free(sz);
 	return cost;
 }
 
-double find(struct graph *g,int *id,int *sz) {
+double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz) {
 	
-	int i, k, j;
+	int i, k, j, V = Arg->v, E = Arg->e;
 
 	double cost = 0;
 	struct edge **bindata;
 	
 	
 	
-	UFinit(g->Arg->v, id, sz);
+	UFinit(V, id, sz);
 	
-	bindata = CreateEdgeV(g->Arg->e - g->Arg->v + 1);
+	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
 	
-	for (i = 0, k = 0, j = 0; i < g->Arg->e && k < g->Arg->v; i++) {
-		if (((struct edge **)g->data)[i]->cost < 0) {
-			if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id)) {
+	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
+		if (mst[i]->cost < 0) {
+			if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
 				
-				UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
-				((struct edge **)g->data)[k++] = ((struct edge **)g->data)[i];
-				cost += ((struct edge **)g->data)[i]->cost;
+				UFunion(mst[i]->vi, mst[i]->vj, id, sz);
+				mst[k++] = mst[i];
+				cost += mst[i]->cost;
 			} else {
-				bindata[j] = ((struct edge **)g->data)[i];
+				bindata[j] = mst[i];
 				printf("|bin[%d] = %d-%d|\n", j, bindata[j]->vi, bindata[j]->vj);
 				j++;
 			}
 		}
 	}
 	
-	emptybin(bindata,g);
+	emptybin(bindata, mst, V, E);
 	return cost;
 }
 

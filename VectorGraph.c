@@ -34,9 +34,9 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 }
 
 
-short int binsearch(int *id, struct graph *g, int start) {
+int binsearch(int *id, struct graph *g, int start) {
 	
-	short int i;
+	int i;
 
 	for (i = start; i < g->Arg->e; i++) {
 		
@@ -59,11 +59,11 @@ struct edge **CreateEdgeV(int size) {
 	return aux;
 }
 
-void emptybin(struct edge **bin, struct graph *g) {
+void emptybin(struct edge **bin, struct edge **mst, int V, int E) {
 	
 	int i, j;
 	
-	for (i = g->Arg->v-1, j = 0; i < g->Arg->e; i++, j++) ((struct edge **)g->data)[i] = bin[j];
+	for (i = V - 1, j = 0; i < E; i++, j++) ((struct edge **) mst)[i] = bin[j];
 	
 	free(bin);
 	return;

@@ -69,15 +69,15 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *G;
 	struct edge **bindata;
 	double sum = 0;
-	short int flag = 0,ncpos;
-	int *id,*sz;
+	short int flag = 0;
+	int *id,*sz,ncpos;
 	
 	UFinit(Arg->v,id,sz);
 	bindata=CreateEdgeV(Arg->e-Arg->v+1);
 	G = VGRead(entryfp, Arg);
 	
 	sum = Kruskal(G, bindata, Bin); /*initial kruskal*/
-	emptybin(bindata,G); /* Dump the bin onto the graph */
+	emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e); /* Dump the bin onto the graph */
 	SearchDelete(G,0,G->Arg->v-1,EdgeDelete); /* Search for the edge to delete in the backbone */
 	find(G->Arg,((struct edge **)G->data),id,sz); /* Restore Connectivity */
 	ncpos=binsearch(id, G, G->Arg->v);

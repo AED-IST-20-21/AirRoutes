@@ -41,19 +41,6 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 }
 
 
-int binsearch(int *id,int *sz, struct graph *g, int start) {
-	
-	int i;
-
-	for (i = start; i < g->Arg->e; i++) {
-		
-		if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id))
-			UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
-			return i;
-		
-	}
-	return -1;
-}
 
 /*Edge Vector*/
 struct edge **CreateEdgeV(int size) {
@@ -130,3 +117,15 @@ int flagcheck(int pos, struct PBArg *Arg){
 	
 }
 
+void EdgeSwitch(struct edge **data,int posA,int posB){
+	struct edge *temp;
+	
+	if ((temp=malloc(sizeof (struct edge)))==NULL) ErrExit(3);
+	
+	temp=data[posA];
+	data[posA]=data[posB];
+	data[posB]=temp;
+	
+	free(temp);
+	return;
+}

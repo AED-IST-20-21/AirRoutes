@@ -110,24 +110,40 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *G;
 	struct edge **bindata;
-	double sum = 0;
-	short int flag = 0;
+	double sum[2] = {0,0};
 	int *id = NULL, *sz = NULL, ncpos;
+	fpos_t args, end;
 	
 	UFinit(Arg->v, id, sz);
 	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
 	G = VGRead(entryfp, Arg);
 	
-	sum = Kruskal(G, bindata, Bin); /*initial kruskal*/
-	if (SearchDelete(G, 0, G->Arg->v - 1, EdgeDelete) != 0) {
-		find(G->Arg, ((struct edge **) G->data), id, sz); /* Restore Connectivity */
+	sum[0]=Kruskal(G, bindata, Bin); /*initial kruskal*/
+	fgetpos(outputfp,&args);
+	fprintf(outputfp,"\n");
+	EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+	
+	if ((ncpos=SearchDelete(G, 0, G->Arg->v - 1, EdgeDelete))!= 0) {
+		
+		EdgeSwitch(G->data,ncpos,G->Arg->e);
+		G->Arg->e--;
+		sum[1] = Kruskal(G,bindata,NoBin);
+		G->Arg->e++;
+		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+		fgetpos(outputfp,&end);
 	}
 	
-	/*TODO Impressão*/
+	fsetpos(outputfp,&args);
+	if (Arg->err == 0) fprintf(outputfp, "%d %d %s %d %lf %d %lf",Arg->v,Arg->e,Arg->var,Arg->v-1,sum[0],
+							Arg->v-1,sum[1]);
+	else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
+	fsetpos(outputfp,&end);
 	GFree(G, FreeEdgeV);
 	free(id);
 	free(sz);
+	
+	return;
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
@@ -135,8 +151,8 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *G;
 	struct edge **bindata;
 	double sum = 0;
-	short int flag = 0,PosSz;
-	int *id, count=0,*RelPos;
+	short int flag = 0,PosSz,ncpos=0;
+	int *id=NULL,*sz=NULL,count=0,*RelPos=NULL;
 	
 	G = VGRead(entryfp, Arg);
 	bindata=CreateEdgeV(Arg->e-Arg->v+1);
@@ -147,14 +163,15 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	if ((PosSz=(SearchDelete(G, 0, G->Arg->v - 1, VerticeDelete))) != 0) {
 		find(G->Arg, ((struct edge **) G->data), id, sz); /* Restore Connectivity */
 		emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e);
-		ncpos = binsearch(id,sz, G, G->Arg->v);
+		
 		
 		if ((RelPos=(int *) malloc((PosSz-1)*sizeof(int)))==NULL) ErrExit(3);
 		RelPos[0]=Arg->v;
 		
 		do
 		{
-			RelPos[++count] = binsearch(id, G,RelPos[count]);
+			RelPos[count+1] = binsearch(id,sz, G,RelPos[count]);
+			count++;
 			/*Numero de arestas (no bin) que repõem a conectividade*/
 		} while (count<PosSz);
 	}
@@ -166,7 +183,8 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
 		        flag);
 		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
-		if (flag < 0) fprintf(outputfp, "%d %d %lf\n", aux->vi, aux->vj, aux->cost);
+		if (flag<0)fprintf(outputfp, "%d %d %lf", ((struct edge **) G->data)[ncpos]->vi,
+		        ((struct edge **) G->data)[ncpos]->vj, ((struct edge **) G->data)[ncpos]->cost);
 		
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	

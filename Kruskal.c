@@ -137,8 +137,8 @@ double find(struct graph *g,struct edge **bindata,int *id,int *sz) {
 	int i, k, j;
 	double sum = 0;
 	
-	UFinit(V, id, sz);
-	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
+	UFinit(g->Arg->v, id, sz);
+	bindata = CreateEdgeV(g->Arg->e - g->Arg->v + 1);
 	
 	for (i = 0, k = 0, j = 0; i < g->Arg->e && k < g->Arg->v; i++) {
 		if (((struct edge **)g->data)[i]->cost < 0) {
@@ -157,5 +157,19 @@ double find(struct graph *g,struct edge **bindata,int *id,int *sz) {
 	
 
 	return sum;
+}
+
+int binsearch(int *id,int *sz, struct graph *g, int start) {
+	
+	int i;
+	
+	for (i = start; i < g->Arg->e; i++) {
+		
+		if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id)){
+			UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
+			return i;
+		}
+	}
+	return -1;
 }
 

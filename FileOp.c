@@ -5,7 +5,7 @@
 #include "FileOp.h"
 
 #define OldExt ".routes"
-#define NewExt ".queries"
+#define NewExt ".bbones"
 
 #define DEBUG
 

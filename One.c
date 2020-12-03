@@ -70,28 +70,31 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct edge **bindata;
 	double sum = 0;
 	short int flag = 0;
-	int *id,*sz,ncpos;
+	int *id = NULL, *sz = NULL, ncpos;
 	
-	UFinit(Arg->v,id,sz);
-	bindata=CreateEdgeV(Arg->e-Arg->v+1);
+	UFinit(Arg->v, id, sz);
+	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
 	G = VGRead(entryfp, Arg);
 	
 	sum = Kruskal(G, bindata, Bin); /*initial kruskal*/
 	emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e); /* Dump the bin onto the graph */
-	SearchDelete(G,0,G->Arg->v-1,EdgeDelete); /* Search for the edge to delete in the backbone */
-	find(G->Arg,((struct edge **)G->data),id,sz); /* Restore Connectivity */
-	ncpos=binsearch(id, G, G->Arg->v);
 	
-	flag=flagcheck(ncpos,Arg);
+	if (SearchDelete(G, 0, G->Arg->v - 1, EdgeDelete) != 0) {
+		find(G->Arg, ((struct edge **) G->data), id, sz); /* Restore Connectivity */
+		emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e);
+		ncpos = binsearch(id,sz, G, G->Arg->v);
+	}
+	
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
 	if (Arg->err == 0) {
 		
 		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
-		  flag);
+		        flag);
 		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
-		if (flag==1) fprintf(outputfp,"%d %d %lf",((struct edge **)G->data)[ncpos]->vi,
-				((struct edge **)G->data)[ncpos]->vj,((struct edge **)G->data)[ncpos]->cost);
+		if (flag == 1)
+			fprintf(outputfp, "%d %d %lf", ((struct edge **) G->data)[ncpos]->vi,
+			        ((struct edge **) G->data)[ncpos]->vj, ((struct edge **) G->data)[ncpos]->cost);
 		
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
@@ -104,13 +107,75 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 
 
 void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-
-	return;
 	
+	struct graph *G;
+	struct edge **bindata;
+	double sum = 0;
+	short int flag = 0;
+	int *id = NULL, *sz = NULL, ncpos;
+	
+	UFinit(Arg->v, id, sz);
+	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
+	G = VGRead(entryfp, Arg);
+	
+	sum = Kruskal(G, bindata, Bin); /*initial kruskal*/
+	if (SearchDelete(G, 0, G->Arg->v - 1, EdgeDelete) != 0) {
+		find(G->Arg, ((struct edge **) G->data), id, sz); /* Restore Connectivity */
+	}
+	
+	/*TODO Impressão*/
+	
+	GFree(G, FreeEdgeV);
+	free(id);
+	free(sz);
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-
+	
+	struct graph *G;
+	struct edge **bindata;
+	double sum = 0;
+	short int flag = 0,PosSz;
+	int *id, count=0,*RelPos;
+	
+	G = VGRead(entryfp, Arg);
+	bindata=CreateEdgeV(Arg->e-Arg->v+1);
+	
+	sum = Kruskal(G, bindata, Bin);
+	emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e);
+	
+	if ((PosSz=(SearchDelete(G, 0, G->Arg->v - 1, VerticeDelete))) != 0) {
+		find(G->Arg, ((struct edge **) G->data), id, sz); /* Restore Connectivity */
+		emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e);
+		ncpos = binsearch(id,sz, G, G->Arg->v);
+		
+		if ((RelPos=(int *) malloc((PosSz-1)*sizeof(int)))==NULL) ErrExit(3);
+		RelPos[0]=Arg->v;
+		
+		do
+		{
+			RelPos[++count] = binsearch(id, G,RelPos[count]);
+			/*Numero de arestas (no bin) que repõem a conectividade*/
+		} while (count<PosSz);
+	}
+	
+	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
+	
+	if (Arg->err == 0) {
+		
+		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
+		        flag);
+		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
+		if (flag < 0) fprintf(outputfp, "%d %d %lf\n", aux->vi, aux->vj, aux->cost);
+		
+	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	
+	free(id);
+	free(sz);
+	GFree(G, FreeEdgeV);
+	free(RelPos);
+	
 	return;
+	
 	
 }

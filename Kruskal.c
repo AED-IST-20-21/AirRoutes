@@ -119,7 +119,7 @@ void PrintMST(struct edge **mst) {
 double Kruskal(struct graph *g, struct edge **bin,
 		double (*GoKruskal)(int, int, int *, int *, struct edge **, struct edge **, double)) {
 	
-	int *id,*sz;
+	int *id=NULL,*sz=NULL;
 	double cost = 0;
 	
 	UFinit(g->Arg->v, id, sz);                            /*Initialization of the id and sz vectors, necessary to CWQU*/
@@ -132,35 +132,30 @@ double Kruskal(struct graph *g, struct edge **bin,
 	return cost;
 }
 
-double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz) {
+double find(struct graph *g,struct edge **bindata,int *id,int *sz) {
 	
-	int i, k, j, V = Arg->v, E = Arg->e;
-
-	double cost = 0;
-	struct edge **bindata;
-	
-	
+	int i, k, j;
+	double sum = 0;
 	
 	UFinit(V, id, sz);
-	
 	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
 	
-	for (i = 0, k = 0, j = 0; i < E && k < V; i++) {
-		if (mst[i]->cost < 0) {
-			if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
+	for (i = 0, k = 0, j = 0; i < g->Arg->e && k < g->Arg->v; i++) {
+		if (((struct edge **)g->data)[i]->cost < 0) {
+			if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id)) {
 				
-				UFunion(mst[i]->vi, mst[i]->vj, id, sz);
-				mst[k++] = mst[i];
-				cost += mst[i]->cost;
+				UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
+				((struct edge **)g->data)[k++] = ((struct edge **)g->data)[i];
+				sum += ((struct edge **)g->data)[i]->cost;
 			} else {
-				bindata[j] = mst[i];
+				bindata[j] = ((struct edge **)g->data)[i];
 				printf("|bin[%d] = %d-%d|\n", j, bindata[j]->vi, bindata[j]->vj);
 				j++;
 			}
 		}
 	}
 	
-	emptybin(bindata, mst, V, E);
-	return cost;
+
+	return sum;
 }
 

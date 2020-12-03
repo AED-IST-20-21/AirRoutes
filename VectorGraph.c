@@ -27,6 +27,13 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 			GFree(G, FreeEdgeV);
 			Arg->err = 1;
 			return NULL;
+		} else if ((((struct edge **) G->data)[i]->vi<0) || (((struct edge **) G->data)[i]->vj<0) ||
+				(((struct edge **) G->data)[i]->vi>Arg->v) ||(((struct edge **) G->data)[i]->vj>Arg->v)){
+			
+			GFree(G, FreeEdgeV);
+			Arg->err = 1;
+			return NULL;
+			
 		}
 	}
 	
@@ -34,13 +41,14 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 }
 
 
-int binsearch(int *id, struct graph *g, int start) {
+int binsearch(int *id,int *sz, struct graph *g, int start) {
 	
 	int i;
 
 	for (i = start; i < g->Arg->e; i++) {
 		
-		if (id[((struct edge **) g->data)[i]->vi] != id[((struct edge **) g->data)[i]->vj])
+		if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id))
+			UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
 			return i;
 		
 	}

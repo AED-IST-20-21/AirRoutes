@@ -67,6 +67,8 @@ dkms.conf
 
 *.routes
 *.routes0
-*.queries
+*.bbbone
+*.check
 *.queries0
 backbone
+test/

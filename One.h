@@ -5,8 +5,16 @@
 #ifndef AIRROUTES_ONE_H
 #define AIRROUTES_ONE_H
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <float.h>
+#include <stdlib.h>
+
 #include "FileOp.h"
 #include "Graph.h"
+#include "VectorGraph.h"
+#include "Kruskal.h"
 
 void VControl (FILE *, FILE *, struct PBArg *);
 void AOne(FILE *, FILE *, struct PBArg *);

@@ -108,27 +108,19 @@ struct PBArg *ArgRead(FILE *EntryFile) {
 	
 	switch (ArgCheck(aux)) {
 		
-		case 1:
+		case 1: case 3: case 4: case 14:
 			if (fscanf(EntryFile, " %d", &aux->vi) != 1) {
 				aux->err = 1;
 			}
 			break;
 		
-		case 2:
+		case 2: case 12: case 13:
 			if (fscanf(EntryFile, " %d %d", &aux->vi, &aux->vj) != 2) {
 				aux->err = 1;
 			}
 			break;
-		
-		case 3:
-			if (fscanf(EntryFile, " %d", &aux->vi) != 1) {
-				aux->err = 1;
-			}
-			break;
-		case 4:
-			if (fscanf(EntryFile, " %d", &aux->vi) != 1) {
-				aux->err = 1;
-			}
+			
+		case 11:
 			break;
 		default:
 			aux->err = 1;

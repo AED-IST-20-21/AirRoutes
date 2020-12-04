@@ -15,41 +15,45 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	struct graph *G;
 	int i;
+	struct edge *temp;
+	
 	
 	G = GraphInit();                                                                            /*Initialize the graph*/
 	
 	G->Arg = Arg;
-	G->data = (struct edge **) CreateEdgeV(Arg->v);
 	
+	if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
+	if ((G->data=(void **) malloc(Arg->e*sizeof(void *)))==NULL) ErrExit(3);
 	for (i = 0; i < Arg->e; i++) {                                                      /*Reading the graph from file*/
-		if (fscanf(entryfp, "%d %d %lf", &((struct edge **) G->data)[i]->vi, &((struct edge **) G->data)[i]->vj,
-		           &((struct edge **) G->data)[i]->cost) != 3) {                  /*Checking for errors during reading*/
+		
+		if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
+		G->data[i] = (struct edge *)  CreateEdge(Arg->e);
+		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) !=3) {                  /*Checking for errors during reading*/
 			GFree(G, FreeEdgeV);
 			Arg->err = 1;
 			return NULL;
-		} else if ((((struct edge **) G->data)[i]->vi<0) || (((struct edge **) G->data)[i]->vj<0) ||
-				(((struct edge **) G->data)[i]->vi>Arg->v) ||(((struct edge **) G->data)[i]->vj>Arg->v)){
-			
+		} else if ((temp->vi < 0) || (temp->vj < 0) || (temp->vi > Arg->v) || (temp->vj > Arg->v)) {
 			GFree(G, FreeEdgeV);
 			Arg->err = 1;
 			return NULL;
-			
 		}
+		
+		((struct edge **) G->data)[i]->vi = temp->vi;
+		((struct edge **) G->data)[i]->vj = temp->vj;
+		((struct edge **) G->data)[i]->cost = temp->cost;
 	}
 	
+	free(temp);
 	return G;
 }
 
 
-
 /*Edge Vector*/
-struct edge **CreateEdgeV(int size) {
+struct edge *CreateEdge(int size) {
 	
-	struct edge **aux;
+	struct edge *aux;
 	
-	if ((aux = (struct edge **) malloc(size * sizeof(struct edge))) == NULL) {
-		ErrExit(3);
-	}
+	if ((aux = (struct edge *) malloc(sizeof(struct edge))) == NULL) ErrExit(3);
 	
 	return aux;
 }
@@ -81,7 +85,7 @@ int *EdgeBreak(struct edge **EdgeV, int size) {
 	return id;
 }
 
-int SearchDelete(struct graph *g,int start,int end, int (*Delete)(struct edge *, int, int)) {
+int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge *, int, int)) {
 	int i, cnt = 0;
 	
 	for (i = start; i < end; i++) {
@@ -109,22 +113,22 @@ int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
 }
 
-int flagcheck(int pos, struct PBArg *Arg){
+int flagcheck(int pos, struct PBArg *Arg) {
 	
-	if (pos<0) return -1;
-	else if ((0<pos)&&(pos<Arg->v)) return 0;
+	if (pos < 0) return -1;
+	else if ((0 < pos) && (pos < Arg->v)) return 0;
 	else return 1;
 	
 }
 
-void EdgeSwitch(struct edge **data,int posA,int posB){
+void EdgeSwitch(struct edge **data, int posA, int posB) {
 	struct edge *temp;
 	
-	if ((temp=malloc(sizeof (struct edge)))==NULL) ErrExit(3);
+	if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
 	
-	temp=data[posA];
-	data[posA]=data[posB];
-	data[posB]=temp;
+	temp = data[posA];
+	data[posA] = data[posB];
+	data[posB] = temp;
 	
 	free(temp);
 	return;

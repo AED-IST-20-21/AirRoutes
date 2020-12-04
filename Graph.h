@@ -17,7 +17,7 @@
 */
 struct graph {
 	struct PBArg* Arg;
-	void* data;
+	void** data;
 };
 
 struct PBArg {

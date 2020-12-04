@@ -1,21 +1,9 @@
-//
-// Created by anton on 11/30/2020.
-//
-
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <float.h>
-#include <stdlib.h>
 
 #include "One.h"
-#include "VectorGraph.h"
-#include "Kruskal.h"
 
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	int AC = 0;
-	
 	
 	switch (AC = ArgCheck(Arg)) {
 		case 11:
@@ -155,7 +143,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	int *id=NULL,*sz=NULL,count=0,*RelPos=NULL;
 	
 	G = VGRead(entryfp, Arg);
-	bindata=CreateEdgeV(Arg->e-Arg->v+1);
+	/*bindata=CreateEdge(Arg->e-Arg->v+1);*/
 	
 	sum = Kruskal(G, bindata, Bin);
 	emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e);

@@ -24,4 +24,7 @@ double Kruskal(struct graph *G, struct edge **bin,
                double (*GoKruskal)(int, int, int *, int *, struct edge **, struct edge **, double));
 
 double find(struct PBArg *Arg, struct edge **mst,int *id,int *sz);
+
+int binsearch(int*, int*, struct graph* , int);
+
 #endif

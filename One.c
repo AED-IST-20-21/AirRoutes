@@ -193,7 +193,11 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	GFree(G, FreeEdgeV);
 	free(RelPos);
 	
-	return;
-	
-	
+	return;	
 }
+
+void EOne(FILE* entryfp, FILE* outputfp, struct PBArg *Arg)
+{
+	return;
+}
+

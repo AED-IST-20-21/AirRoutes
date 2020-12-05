@@ -137,8 +137,8 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *G;
 	struct edge **bindata;
 	double sum = 0;
-	short int flag = 0,PosSz,ncpos=0;
-	int *id=NULL,*sz=NULL,count=0,*RelPos=NULL;
+	short int flag = 0,PosSz, ncpos=0;
+	int *id=NULL,*sz=NULL,count=0,*RelPos=NULL, i;
 	
 	G = VGRead(entryfp, Arg);
 	bindata=CreateEdgeV(Arg->e-Arg->v+1);
@@ -162,12 +162,44 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		} while (count<PosSz);
 	}
 	
+	/* Verify if every element in id[] has same root */	
+	count = 0;
+	PosSz = 0;
+
+	for (i=0; i<Arg->e; i++)  /* Find 1st non error value for root*/
+	{
+		if (i!=RelPos[count])
+		{
+			PosSz = id[i];
+			break;
+		}
+	}
+
+	for	(i=0; i<Arg->e; i++)
+	{
+		if (i!=RelPos[count])
+		{
+			if (id[i] != PosSz)
+			{
+				PosSz = -1;
+				break;
+			}
+		} else {
+			count++;
+		}
+	}
+
+	if (PosSz == -1)
+	{
+		Arg->err = 1;
+	}
+
 	qsort(((struct edge **) G->data)[0], Arg->v - 1, sizeof(struct edge), lessVertice);
 	
 	if (Arg->err == 0) {
 		
-		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
-		        flag);
+		fprintf(outputfp, "%d %d %s %d %d %lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum,
+			   	Arg->v - 1, flag);
 		EdgePrint(outputfp, G->data, 0, Arg->v - 1);
 		if (flag<0)fprintf(outputfp, "%d %d %lf", ((struct edge **) G->data)[ncpos]->vi,
 		        ((struct edge **) G->data)[ncpos]->vj, ((struct edge **) G->data)[ncpos]->cost);

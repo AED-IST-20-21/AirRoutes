@@ -15,34 +15,38 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	struct graph *G;
 	int i;
-	struct edge *temp;
+	/*struct edge *temp;*/
 	
 	G = GraphInit();                                                                            /*Initialize the graph*/
 	
 	G->Arg = Arg;
-	G->data =CreateEdgeV(Arg->e);
+	G->data = CreateEdgeV(Arg->e);
 	
-	if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
 	for (i = 0; i < Arg->e; i++) {                                                      /*Reading the graph from file*/
 		
-		if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
-		
-		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) !=3) {                  /*Checking for errors during reading*/
+		if ((G->data[i] = (struct edge*) malloc(sizeof(struct edge)))==NULL) ErrExit(3);
+
+		if (fscanf(entryfp, "%d %d %lf", &G->data[i]->vi, &G->data[i]->vj, &G->data[i]->cost) !=3) 
+		{                  /*Checking for errors during reading*/
 			VGFree(G);
 			Arg->err = 1;
 			return NULL;
-		} else if ((temp->vi < 0) || (temp->vj < 0) || (temp->vi > Arg->v) || (temp->vj > Arg->v)) {
+		} else if ((G->data[i]->vi < 0) || (G->data[i]->vj < 0) 
+				|| (G->data[i]->vi > Arg->v) || (G->data[i]->vj > Arg->v)) 
+		{
 			VGFree(G);
 			Arg->err = 1;
 			return NULL;
 		}
-		
+
+		/*
 		G->data[i]->vi = temp->vi;
 		G->data[i]->vj = temp->vj;
 		G->data[i]->cost = temp->cost;
+		*/
 	}
 	
-	free(temp);
+	/*free(temp);*/
 	return G;
 }
 

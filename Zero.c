@@ -94,7 +94,7 @@ int BZero(FILE *entryfp, struct PBArg *Arg, double *cost) {
 }
 
 int CZero(FILE *entryfp, struct PBArg *Arg) {
-	struct graph *G;
+	struct graph0 *G;
 	int *lamps, i, lenght, c = 0;
 	
 	if ((G = LGRead(entryfp, Arg)) == NULL)Arg->err = 1;
@@ -118,7 +118,7 @@ int CZero(FILE *entryfp, struct PBArg *Arg) {
 		free(lamps);
 	}
 	
-	GFree(G, FreeListV);
+	LGFree(G);
 	if (c > 0) {
 		c = 1;
 	}
@@ -127,7 +127,7 @@ int CZero(FILE *entryfp, struct PBArg *Arg) {
 }
 
 int DZero(FILE *entryfp, struct PBArg *Arg) {
-	struct graph *G;
+	struct graph0 *G;
 	int *lamps, i, lenght, c = 0;
 	
 	if ((G = LGRead(entryfp, Arg)) == NULL)Arg->err = 1;
@@ -151,7 +151,7 @@ int DZero(FILE *entryfp, struct PBArg *Arg) {
 		free(lamps);
 	}
 	
-	GFree(G, FreeListV);
+	LGFree(G);
 	return c;
 }
 

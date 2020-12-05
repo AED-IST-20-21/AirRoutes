@@ -137,41 +137,6 @@ void GFree(struct graph *g, void (*FreeData)(void*, int))
 	return;
 }
 
-
-/*List Vector*/
-void FreeListV(void *ListVector, int size)
-{	
-	int i;
-	
-	for (i = 0; i < size; i++)
-	{	
-		FreeList(((struct list**) ListVector)[i]);	
-	}
-	
-	free(ListVector);
-	return;
-}
-
-/**
- * Function to free a dinamically allocated adjancency list
- * @param L List to be freed
- */
-void FreeList(struct list *L)
-{
-	struct list *aux, *Prev;
-	aux = L;
-
-	while (aux != NULL)
-	{
-		Prev = aux;
-		aux = aux->next;
-		free(Prev);
-	}
-	free(aux);
-	return;
-}
-
-
 void FreeEdgeV(void * EdgeVector, int size)
 {
 	int i;

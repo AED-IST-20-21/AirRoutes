@@ -57,15 +57,26 @@ void UFunion(int p, int q, int *id, int *sz) {
 
 int lessVertice(const void *a, const void *b) {
 	
-	if (((struct edge *) a)->vi < ((struct edge *) b)->vi) return 0;
-	else if (((struct edge *) a)->vi == ((struct edge *) b)->vi) {
-		if (((struct edge *) a)->vj < ((struct edge *) b)->vj)return 0;
+	struct edge * va, *vb;
+	
+	va=*(struct edge **)a;
+	vb=*(struct edge **)b;
+	
+	if (va->vi < vb->vi) return 0;
+	else if (va->vi == vb->vi) {
+		if (va->vj < vb->vj)return 0;
 		else return 1;
 	} else return 1;
 }
 
 int lessCost(const void *a, const void *b) {
-	if (((struct edge *) a)->cost > ((struct edge *) b)->cost) {
+	
+	struct edge * va, *vb;
+	
+	va=*(struct edge **)a;
+	vb=*(struct edge **)b;
+	
+	if (va->cost > vb->cost) {
 		return 1;
 	} else {
 		return 0;

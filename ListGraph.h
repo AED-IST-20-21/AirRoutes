@@ -10,12 +10,14 @@
 #include <float.h>
 #include <stdlib.h>
 
-struct graph *LGRead(FILE *, struct PBArg *);
+struct graph0 *LGRead(FILE *, struct PBArg *);
+struct graph0* Graph0Init();
+void LGFree(struct graph0 *g);
 /*struct list *NewListElement();*/
-/*
+
 void FreeListV(struct list **,int );
 void FreeList(struct list* );
-*/
+
 /*struct list* CreateListNode();*/
 
 struct list* AddList(struct list* );

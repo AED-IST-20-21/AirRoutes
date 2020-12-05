@@ -3,9 +3,7 @@
 
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
-	int AC = 0;
-	
-	switch (AC = ArgCheck(Arg)) {
+	switch (ArgCheck(Arg)) {
 		case 11:
 			AOne(entryfp, outputfp, Arg);
 			break;
@@ -48,7 +46,7 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /* CLOSED */
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);                       /* Print error message */
 	
-	GFree(g, FreeEdgeV);                                                                            /* Free the graph */
+	VGFree(g);                                                                            /* Free the graph */
 	return;
 }
 
@@ -86,7 +84,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
-	GFree(G, FreeEdgeV);
+	VGFree(G);
 	free(id);
 	free(sz);
 	
@@ -127,7 +125,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
 	fsetpos(outputfp,&end);
-	GFree(G, FreeEdgeV);
+	VGFree(G);
 	free(id);
 	free(sz);
 	
@@ -143,7 +141,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	int *id=NULL,*sz=NULL,count=0,*RelPos=NULL;
 	
 	G = VGRead(entryfp, Arg);
-	/*bindata=CreateEdge(Arg->e-Arg->v+1);*/
+	bindata=CreateEdgeV(Arg->e-Arg->v+1);
 	
 	sum = Kruskal(G, bindata, Bin);
 	emptybin(bindata, ((struct edge **) G->data), G->Arg->v, G->Arg->e);
@@ -178,7 +176,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	free(id);
 	free(sz);
-	GFree(G, FreeEdgeV);
+	VGFree(G);
 	free(RelPos);
 	
 	return;	

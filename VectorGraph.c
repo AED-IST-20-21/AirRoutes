@@ -17,30 +17,29 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	int i;
 	struct edge *temp;
 	
-	
 	G = GraphInit();                                                                            /*Initialize the graph*/
 	
 	G->Arg = Arg;
+	G->data =CreateEdgeV(Arg->e);
 	
 	if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
-	if ((G->data=(void **) malloc(Arg->e*sizeof(void *)))==NULL) ErrExit(3);
 	for (i = 0; i < Arg->e; i++) {                                                      /*Reading the graph from file*/
 		
 		if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
-		G->data[i] = (struct edge *)  CreateEdge(Arg->e);
+		
 		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) !=3) {                  /*Checking for errors during reading*/
-			GFree(G, FreeEdgeV);
+			VGFree(G);
 			Arg->err = 1;
 			return NULL;
 		} else if ((temp->vi < 0) || (temp->vj < 0) || (temp->vi > Arg->v) || (temp->vj > Arg->v)) {
-			GFree(G, FreeEdgeV);
+			VGFree(G);
 			Arg->err = 1;
 			return NULL;
 		}
 		
-		((struct edge **) G->data)[i]->vi = temp->vi;
-		((struct edge **) G->data)[i]->vj = temp->vj;
-		((struct edge **) G->data)[i]->cost = temp->cost;
+		G->data[i]->vi = temp->vi;
+		G->data[i]->vj = temp->vj;
+		G->data[i]->cost = temp->cost;
 	}
 	
 	free(temp);
@@ -49,11 +48,11 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 
 
 /*Edge Vector*/
-struct edge *CreateEdge(int size) {
+struct edge **CreateEdgeV(int size) {
 	
-	struct edge *aux;
+	struct edge **aux;
 	
-	if ((aux = (struct edge *) malloc(sizeof(struct edge))) == NULL) ErrExit(3);
+	if ((aux = (struct edge **) malloc(size*sizeof(struct edge *))) == NULL) ErrExit(3);
 	
 	return aux;
 }
@@ -90,9 +89,9 @@ int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge 
 	
 	for (i = start; i < end; i++) {
 		
-		if ((*Delete)(((struct edge **) g->data)[i], g->Arg->vi, g->Arg->vj)) {
+		if ((*Delete)(g->data[i], g->Arg->vi, g->Arg->vj)) {
 			
-			((struct edge **) g->data)[i]->cost = -((struct edge **) g->data)[i]->cost;
+			g->data[i]->cost = -g->data[i]->cost;
 			cnt++;
 		}
 	}
@@ -132,4 +131,11 @@ void EdgeSwitch(struct edge **data, int posA, int posB) {
 	
 	free(temp);
 	return;
+}
+
+void VGFree(struct graph *g){
+	
+	free(g->data);
+	free(g);
+	
 }

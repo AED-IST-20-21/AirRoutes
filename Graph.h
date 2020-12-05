@@ -17,7 +17,11 @@
 */
 struct graph {
 	struct PBArg* Arg;
-	void** data;
+	struct edge **data;
+};
+struct graph0 {
+	struct PBArg* Arg;
+	struct list** data;
 };
 
 struct PBArg {
@@ -50,14 +54,12 @@ struct PBArg *PBinit();
 
 /*Graph*/
 struct graph* GraphInit();
-void GFree(struct graph *, void (*FreeData)(void*, int));
+/*void GFree(struct graph *, void (*FreeData)(void*, int));*/
 
 /*List Vector*/
 /*struct list* AddList(struct list*);
 struct list* CreateListV();*/ /*?*/
 
-void FreeListV(void *, int); /* (struct list**) */
-void FreeList(struct list*);
 
 
 

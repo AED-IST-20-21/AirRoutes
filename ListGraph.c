@@ -4,20 +4,37 @@
 
 
 /**
- * Function to read entire graph from file
+ * Function to read entire graph0 from file
  * @param entryfp File from which to read
  * @param v Number
  * @param Arg
  * @return
  */
-struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
+
+void LGFree(struct graph0 *g){
 	
-	struct graph *G;
+	FreeListV(g->data,g->Arg->v);
+	free(g);
+	
+	return;
+}
+
+struct graph0* Graph0Init(){
+	struct graph0 *G;
+	
+	if ((G = (struct graph0 *) malloc(sizeof(struct graph0)))==NULL) ErrExit(3);
+	
+	return G;
+}
+
+struct graph0 *LGRead(FILE *entryfp, struct PBArg *Arg) {
+	
+	struct graph0 *G;
 	struct edge *temp = NULL;
 	
 	int i;
 	
-	G = GraphInit();
+	G = Graph0Init();
 	
 	G->Arg = Arg;
 	
@@ -33,7 +50,7 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	for (i = 0; i < Arg->e; i++) {
 		
 		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3) {
-			GFree(G, FreeListV);
+			LGFree(G);
 			return NULL;
 		}
 		
@@ -53,7 +70,7 @@ struct graph *LGRead(FILE *entryfp, struct PBArg *Arg) {
  * @param LV Vector of adjancecncy lists
  * @param V Number of vertices
  */
-/*
+
 void FreeListV(struct list **LV, int V) {
 	
 	int i;
@@ -66,14 +83,14 @@ void FreeListV(struct list **LV, int V) {
 	free(LV);
 	return;
 }
-*/
+
 
 
 /**
  * Function to free a dinamically allocated adjancency list
  * @param L List to be freed
  */
-/*
+
 void FreeList(struct list *L) {
 	struct list *aux, *Prev;
 	aux = L;
@@ -85,7 +102,7 @@ void FreeList(struct list *L) {
 	free(aux);
 	return;
 }
-*/
+
 /**
  * Adds a new element to the tail of the list
  * @param L List

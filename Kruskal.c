@@ -73,9 +73,12 @@ int lessCost(const void *a, const void *b) {
 	
 	struct edge * va, *vb;
 	
-	va=*(struct edge **)a;
-	vb=*(struct edge **)b;
-	
+	va = *(struct edge **)a;
+	vb = *(struct edge **)b;
+
+	/*printf("%d %d %lf\n", va->vi, va->vj, va->cost);
+	printf("%d %d %lf\n", vb->vi, vb->vj, vb->cost);*/
+
 	if (va->cost > vb->cost) {
 		return 1;
 	} else {
@@ -134,7 +137,7 @@ double Kruskal(struct graph *g, struct edge **bin,
 	double cost = 0;
 	
 	UFinit(g->Arg->v, id, sz);                            /*Initialization of the id and sz vectors, necessary to CWQU*/
-	qsort(((struct edge **) g->data), g->Arg->e, sizeof(struct edge), lessCost);                 /* Sorting the graph */
+	qsort(g->data, g->Arg->e, sizeof(struct edge*), lessCost);                 /* Sorting the graph */
 																   /*Actual kruskal, which depends on the usage of bin*/
 	cost = (*GoKruskal)(g->Arg->e, g->Arg->v, id, sz, g->data, bin, cost);
 	

@@ -190,17 +190,17 @@ void EdgePrint(FILE *outputfp,struct edge **data, short start, short end) {
 	return;
 }
 
-void EOnePrint(FILE *outputfp, struct graph *g,int sum, int *backup) {
+void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup) {
 	
 	int i;
 	
 	fprintf(outputfp, "%d %d %s %d %.2lf", g->Arg->v, g->Arg->e, g->Arg->var, g->Arg->v - 1, sum);
 	
 	for (i = 0; i < g->Arg->v; i++) {
-		if (backup[i]->vi > 0) {
+		if (g->data[backup[i]]->vi > 0) {
 			
 			fprintf(outputfp, "%d %d %.2lf %d %d %.2lf\n", g->data[i]->vi, g->data[i]->vj, g->data[i]->cost,
-			        backup[i]->vi, backup[i]->vj, backup[i]->cost);
+			        g->data[backup[i]]->vi, g->data[backup[i]]->vj, g->data[backup[i]]->cost);
 			
 		} else fprintf(outputfp, "%d %d %.2lf -1\n", g->data[i]->vi, g->data[i]->vj, g->data[i]->cost);
 		

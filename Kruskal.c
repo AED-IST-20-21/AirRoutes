@@ -160,14 +160,14 @@ double find(struct graph *g,struct edge **bindata,int *id,int *sz) {
 	bindata = CreateEdgeV(g->Arg->e - g->Arg->v + 1);
 	
 	for (i = 0, k = 0, j = 0; i < g->Arg->e && k < g->Arg->v; i++) {
-		if (((struct edge **)g->data)[i]->cost < 0) {
-			if (!UFfind(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id)) {
+		if (g->data[i]->cost < 0) {
+			if (!UFfind(g->data[i]->vi, g->data[i]->vj, id)) {
 				
-				UFunion(((struct edge **)g->data)[i]->vi, ((struct edge **)g->data)[i]->vj, id, sz);
-				((struct edge **)g->data)[k++] = ((struct edge **)g->data)[i];
-				sum += ((struct edge **)g->data)[i]->cost;
+				UFunion(g->data[i]->vi, g->data[i]->vj, id, sz);
+				g->data[k++] = g->data[i];
+				sum += g->data[i]->cost;
 			} else {
-				bindata[j] = ((struct edge **)g->data)[i];
+				bindata[j] = g->data[i];
 				printf("|bin[%d] = %d-%d|\n", j, bindata[j]->vi, bindata[j]->vj);
 				j++;
 			}

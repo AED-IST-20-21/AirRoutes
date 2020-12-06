@@ -1,15 +1,63 @@
-%! Author = anton
-%! Date = 12/6/2020
 
 % Preamble
-\documentclass[11pt]{article}
+\documentclass[14pt]{article}
+%encoding
+%--------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%--------------------------------------
 
-% Packages
-\usepackage{amsmath}
+%Portuguese-specific commands
+%--------------------------------------
+\usepackage[portuguese]{babel}
+%--------------------------------------
 
+%Hyphenation rules
+%--------------------------------------
+\usepackage{hyphenat}
+\hyphenation{mate-mática recu-perar}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{AED}
+\fancyhead[RE,LO]{AirRoutes}
+\fancyfoot[RE,CO]{António Vidais & Tiago Leite}
+\fancyfoot[LE,RO]{\thepage}
+%--------------------------------------
+\title{AirRoutes - Algoritmos e Estruturas de Dados}
+\date{Dezembro de 2020}
+\author{António Vidais \\96162 \and Tiago Leite \\96332}
 % Document
 \begin{document}
+    \maketitle
+    \section{Descrição do Problema}
+    Este projeto, criado no âmbito da Unidade Curricular de Algoritmos e Estruturas de Dados, aborda o problema de
+    encontrar um conjunto mínimo de rotas que garantam a existência de um caminho entre cada par de aeroportos,
+    sem qualquer redundância. O Programa que este projeto visa produzir deve não
+    só produzir uma rede mínima de rotas, mas sim a rede que garante todos os destinos já existentes, com o menor
+    custo.
+    Uma ferramenta como esta pode ser necessária, em termos práticos,quando uma companhia aérea se encontra num cenário
+    de contenção de custos.
+    Numa situação desta natureza, poderá ser necessário reduzir o seu conjunto de rotas à rede que
+    garante que todos os aeroportos nela podem ser utilizados, com o menor custo.
 
+    O Projeto que este relatório descreve foi desenvolvido na linguagem C e, para o seu correto funcionamento deve
+    receber as informações de todas as rotas existentes através de um ficheiro de texto.
+    Este deve conter uma ou mais redes de aeroportos, cada uma devidamente identificada com um cabeçalho contendo o
+    número de aeroportos, o número total de rotas existentes e a variante que se pertende obter.
+    Terminada a execução, o programa produz um segundo ficheiro de texto que contêm o conjunto mínimo de menor custo
+    para cada rede fornecida, também identificados pelo cabeçalho fornecido, com a adição de algumas informações úteis,
+    como o número de rotas mantidas e o custo total da rede
 
+    \section{Abordagem do Problema}
+    Para resolver este problema, foi necessário criar uma estrutura capaz de guardar uma representação do grafo formado
+    pelo conjunto de rotas fornecido.
+    A escolha desta estrutura requer uma análise cuidada ao tipo de grafo (denso ou esparço)e aos algoritmos que se
+    pretende utilizar.
+    Uma má escolha poderia levar a tempos de execução muito maiores que os pretendidos e maior utilização de memória,
+    devido ao aumento da complexidade.
+    
+    \section{Arquitetura do Projeto}
 
 \end{document}

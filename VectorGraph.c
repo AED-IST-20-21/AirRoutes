@@ -143,3 +143,5 @@ void VGFree(struct graph *g){
 	free(g);
 	
 }
+
+

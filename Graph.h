@@ -15,6 +15,9 @@
 #include "VectorGraph.h"
 #include "ListGraph.h"
 */
+
+#define DEBUG
+
 struct graph {
 	struct PBArg* Arg;
 	struct edge **data;

@@ -7,10 +7,7 @@
 void UFinit(int V, int *id, int *sz) {
 	
 	int i;
-	
-	if ((id = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
-	if ((sz = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
-	
+
 	for (i = 0; i < V; i++) {
 		id[i] = i;
 		sz[i] = 1;
@@ -98,6 +95,7 @@ double Bin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin,
 		if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
 			UFunion(mst[i]->vi, mst[i]->vj, id, sz);
 			mst[k++] = mst[i];
+			/*printf("mst: %d %d %lf", mst[k-1]->vi, mst[k-1]->vj, mst[k-1]->cost);*/
 			cost += mst[i]->cost;
 		} else {
 			bin[j] = mst[i];
@@ -111,13 +109,17 @@ double Bin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin,
 double NoBin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double cost) {
 	int i, k;                                                            /* Kruskal´s Algorithm without using the bin */
 	
-	for (i = 0, k = 0; i < E && k < V - 1; i++) {
+	for (i = 0, k = 0; i < E && k < V-1 ; i++) {
 		if (!UFfind(mst[i]->vi, mst[i]->vj, id)) {
 			UFunion(mst[i]->vi, mst[i]->vj, id, sz);
 			mst[k++] = mst[i];
+			/*printf("mst(i): %d %d %lf\n", mst[k-1]->vi, mst[k-1]->vj, mst[k-1]->cost);*/
 			cost += mst[i]->cost;
+		} else {
+			/*printf("Find(i):%d %d %lf\n", mst[i]->vi, mst[i]->vj, mst[i]->cost);*/
 		}
 	}
+	/*printf("\n");*/
 	return cost;
 }
 
@@ -135,12 +137,15 @@ double Kruskal(struct graph *g, struct edge **bin,
 	
 	int *id=NULL,*sz=NULL;
 	double cost = 0;
-	
+
+	if ((id = (int *) malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
+	if ((sz = (int *) malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);	
+
 	UFinit(g->Arg->v, id, sz);                            /*Initialization of the id and sz vectors, necessary to CWQU*/
 	qsort(g->data, g->Arg->e, sizeof(struct edge*), lessCost);                 /* Sorting the graph */
 																   /*Actual kruskal, which depends on the usage of bin*/
 	cost = (*GoKruskal)(g->Arg->e, g->Arg->v, id, sz, g->data, bin, cost);
-	
+
 	free(id);
 	free(sz);
 	return cost;

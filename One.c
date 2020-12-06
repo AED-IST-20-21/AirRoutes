@@ -35,7 +35,9 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /* CLOSED */
 	
 	g = VGRead(entryfp, Arg);                                                              /* Reading graph from file */
 	sum = Kruskal(g, NULL, NoBin);                                     /* find the backbone using Kruskal´s Algorithm */
-	
+
+	/*EdgePrint(stdout, g->data, 0, Arg->v - 1);*/
+
 	qsort(g->data, Arg->v - 1,               /* Sorting the backbone using the vertice criteria */
 	      sizeof(struct edge*), lessVertice);
 	

@@ -126,14 +126,14 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 	int StopMe, NewStop, V = Arg->v;
 	int *id = NULL, *sz = NULL, ncpos;
 	fpos_t args, end;
-
+	/*
 	if ((id = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
 	if ((sz = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);	
-	
+	*/
 	g = VGRead(entryfp, Arg);
-
+	/*
 	UFinit(Arg->v, id, sz);
-
+	*/
 	StopMe = Kruskal(g, &Sum); /*initial kruskal*/
 
 	fgetpos(outputfp, &args);  /* Get */
@@ -198,8 +198,9 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg)
 	fsetpos(stdout, &end);  /* Set */
 
 	VGFree(g);
+	/*
 	free(id);
-	free(sz);
+	free(sz);*/
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {

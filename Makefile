@@ -9,6 +9,8 @@ CC = gcc
 DB = gdb
 CFLAGS = -g -Wall -std=c99
 
+#vpath = /mnt/c/Users/UX430UA/Desktop/Tests_AED
+
 OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o VectorGraph.o Kruskal.o Graph.o
 
 EXE = backbone

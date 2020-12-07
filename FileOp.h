@@ -3,12 +3,12 @@
 
 #include <stdio.h>
 
-/*#include "ListGraph.h"*/
-#include "Graph.h"
+#include "Graph.h"                                                      /* Required because of the struct definitions */
 
+/**********************************************************************************************************************/
 
-int FileCheck(char* );
-char* ExitFileName(char* );
+char* ExitFileName(char* );                /* Function to create the exit file´s name from the name of the entry file */
+int FileCheck(char* );                                  /*  Function to check if an entry file´s name if valid or not */
 FILE *RFileOpen (char *);
 FILE *WFileOpen(char *);
 struct PBArg *ArgRead(FILE*);
@@ -17,5 +17,7 @@ int EdgeCheck(int , struct edge *);
 void LPrint(FILE *,struct PBArg *,int,double,int);
 void EdgePrint(FILE *,struct edge **, short, short);
 void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup);
+
+/**********************************************************************************************************************/
 
 #endif

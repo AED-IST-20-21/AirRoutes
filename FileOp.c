@@ -4,59 +4,50 @@
 
 #include "FileOp.h"
 
-#define OldExt ".routes"
+#define OldExt ".routes"                                                            /* Extensions can be changed here */
 #define NewExt ".bbones"
 
-
-
-/***************************
- * Function to check entry file extension
- * @param FileName Name of the entry file
- * @return 0 if OK, -1 else
- */
-
-int FileCheck(char *FileName) {
-	int i;
-	int FileSize = strlen(FileName);
+/***********************************************************************************************************************
+ * Function to create the exit file´s name from the name of the entry file
+ * @param FileName Name of the input file
+ * @return Name of the Output File
+ **********************************************************************************************************************/
+char *ExitFileName(char *FileName) {
+	char *ExitFileName;   /* Name of the Output file */
+	int FileSize;   /* Auxiliary Variable to remove the extension from the entry name */
 	
+	if (FileCheck(FileName) != 0) exit(1);   /* Checking if the Entry file Name if valid */
+	
+	
+	FileSize = strlen(FileName) - strlen(OldExt) + strlen(NewExt);   /*Determining Size of name without extension*/
+	
+	if((ExitFileName = (char *) malloc(((FileSize) + 1) * sizeof(char)))==NULL)
+		ErrExit(3);   /* Memory Allocation for the name of the output file */
+	
+	strncpy(ExitFileName, FileName,FileSize-strlen(NewExt));   /* Copy name without extension */
+	strcat(ExitFileName, NewExt);   /* Adding Exit Extension */
+	ExitFileName[FileSize] = '\0';
+	
+	return ExitFileName;
+}
+
+/***********************************************************************************************************************
+ * Function to check if an entry file´s name if valid or not
+ * @param FileName Name to be checked
+ * @return 0 if OK, -1 else
+ **********************************************************************************************************************/
+int FileCheck(char *FileName) {
+	int i;                                                                                      /* Auxiliary Variable */
+	int FileSize = strlen(FileName);                                                              /* Size of file name*/
+	 /* Run the size of file extension starting from the end of the string because we don´t know the size of the name */
 	for (i = FileSize - 1; i > (FileSize - strlen(OldExt)); i--) {
-		if (FileName[i] != OldExt[(i - FileSize) + strlen(OldExt)]) {
+		if (FileName[i] != OldExt[(i - FileSize) + strlen(OldExt)]) {  /* If 1 char isn´t right in the extension exit */
 			return -1;
 		}
 	}
 	return 0;
 }
 
-/********************************
- * Function to add the exit file extension, given the file name with the old extension
- * @param FileName Entry file name
- * @return String with name and extension
- */
-
-char *ExitFileName(char *FileName) {
-	char *ExitFileName;
-	int FileSize;
-	
-	if (FileCheck(FileName) != 0)
-		exit(0);
-	
-	FileSize = (strlen(FileName) - strlen(OldExt) + strlen(NewExt));
-	if((ExitFileName = (char *) malloc(((FileSize) + 1) * sizeof(char)))==NULL) 
-		ErrExit(3);
-	
-	strcpy(ExitFileName, FileName);
-	ExitFileName[strlen(FileName) - strlen(OldExt)] = '\0';
-	strcat(ExitFileName, NewExt);
-	ExitFileName[FileSize] = '\0';
-	
-	return ExitFileName;
-}
-
-/********************************
- * function to open a file when given a filename
- * @param filename
- * @return Pointer to FILE
- *******************************/
 
 FILE *RFileOpen(char *name) {
 	
@@ -158,7 +149,7 @@ struct edge *EdgeRead(FILE *fp, struct edge *aux) {
 	return aux;
 }
 
-int EdgeCheck(int size, struct edge *aux) {
+int EdgeCheck(struct edge *aux) {
 	
 	if ((aux->vi <= 0) || (aux->vj <= 0) || (aux->vi > size) || (aux->vj > size) || (aux->cost <= 0)) return -1;
 	else return 0;

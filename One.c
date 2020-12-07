@@ -62,124 +62,104 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	VGFree(g);   /* Free the allocated memory for the graph */
 }
 
+/***********************************************************************************************************************
+ * Control of mode B1, which outputs the backbone without a predefined edge
+ * @param entryfp Input File
+ * @param outputfp Output File
+ * @param Arg Problem Arguments
+ **********************************************************************************************************************/
 void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
-	double Sum = 0, NewSum;
-	short int flag = 0, V = Arg->v;
+	double Sum = 0, NewSum=0;
 	int *id = NULL, *sz = NULL, ncpos, StopMe, NewStop;
 	
-	g = VGRead(entryfp, Arg);
-	StopMe = Kruskal(g, &Sum);
+	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
+	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
 	
-	if (SearchDelete(g, 0, StopMe, EdgeDelete) != 0) {
-		
-		if ((id = (int *) malloc(V * sizeof(int))) == NULL) ErrExit(3);
-		if ((sz = (int *) malloc(V * sizeof(int))) == NULL) ErrExit(3);
-		UFinit(V, id, sz);
+	if (SearchDelete(g, 0, StopMe, EdgeDelete) != 0) {   /* If the deleted edge belongs to the backbone */
+		/* Apply an incomplete version of Kruskal´s to get an edge that replaces the deleted one */
+		if ((id = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
+		if ((sz = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
+		/* In this version, the algorithm is divided so it can output different information */
 		NewStop = CWQU(g, &NewSum, id, sz, StopMe);
 		
-		if (StopMe - NewStop > 1) {
+		if (StopMe - NewStop > 1) {   /* Check if there is one edge replacing the deleted, or if more are necessary */
 			(Arg->err = 1);
 		} else {
-			ncpos = binsearch(g->data, id, sz, NewStop, g->Arg->e);
+			ncpos = binsearch(g->data, id, sz, NewStop, g->Arg->e);   /* Get the position of that edge */
 		}
 	}
 	
-	if (Arg->err == 0) {
+	if (Arg->err == 0) {   /* If there were no errors, output the backbone. Else print error message */
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
-		fprintf(outputfp,"%d %d %s %d %d %.2lf %d %d\n",
-		  Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum, StopMe, flag);
+		fprintf(outputfp,"%d %d %s %d %d %.2lf %d %d\n",Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum, StopMe);
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		if ((ncpos < Arg->e) && (ncpos >= StopMe)) {
-			fprintf(outputfp,
-			        "%d %d %lf", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
+			fprintf(outputfp,"%d %d %lf", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
 		}
-	} else
-		fprintf(outputfp,
-		        "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+		
+	} else fprintf(outputfp,"%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	
-	VGFree(g);
+	VGFree(g); /* Before exiting, free the graph and auxiliary vectors */
 	free(id);
 	free(sz);
 }
 
 void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-	struct graph *g;
+	
+	struct graph *g, *newg;
 	double Sum, NewSum;
-	int StopMe, NewStop, V = Arg->v;
-	int *id = NULL, *sz = NULL, ncpos;
-	fpos_t args, end;
+	int StopMe, NewStop;
+	int *id = NULL, *sz = NULL, *newid = NULL, *newsz = NULL;
+	bool flag;
 	
 	g = VGRead(entryfp, Arg);
-	StopMe = Kruskal(g, &Sum); /*initial kruskal*/
 	
-	fgetpos(outputfp, &args);  /* Get */
-	fprintf(outputfp, "\n");
+	if ((id = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
+	if ((sz = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
 	
-	fgetpos(stdout, &args);  /* Get */
-	fprintf(stdout, "\n");
+	qsort(g->data, g->Arg->e, sizeof(struct edge *), lessCost);
 	
-	qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
+	StopMe = EdgeSearch(g, 0, Arg->e);
+	NewStop = CWQU(g, &Sum, id, sz, StopMe);
 	
-	EdgePrint(outputfp, g->data, 0, StopMe);
-	fprintf(outputfp, "\n");
-	
-	EdgePrint(stdout, g->data, 0, StopMe);
-	fprintf(stdout, "\n");
-	
-	if ((ncpos = SearchOverflow(g, Sum, 0, StopMe, EdgeDelete)) != 0) {
-		/*	
-		EdgeSwitch(g->data, ncpos, g->Arg->e);
-		g->Arg->e--;
-		*/
-		NewStop = Kruskal(g, &NewSum);
-		/*
-		g->Arg->e++;
-		*/
-		EdgePrint(outputfp, g->data, 0, NewStop);
-		fprintf(outputfp, "\n");
+	if (NewStop < Arg->v) {
 		
-		EdgePrint(stdout, g->data, 0, NewStop);
-		fprintf(stdout, "\n");
+		if ((newid = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
+		if ((newsz = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
 		
-	} else {
-		Arg->err = 1;
-	}
-	
-	fgetpos(outputfp, &end);  /* Get */
-	
-	fsetpos(outputfp, &args);  /* Set */
-	
-	fgetpos(stdout, &end);  /* Get */
-	
-	fsetpos(stdout, &args);  /* Set */
-	
-	if (Arg->err == 0) {
-		fprintf(outputfp, "%d %d %s %d %lf %d %lf\n",
-		        Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
+		vectorcpy(newid, id);
+		vectorcpy(newsz, sz);
 		
-		fprintf(stdout, "%d %d %s %d %lf %d %lf\n",
-		        Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
+		newg = graphcpy(g);
 		
-	} else {
-		fprintf(outputfp, "%d %d %s %d %d -1\n",
-		        Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+		StopMe = CWQU(g, &Sum, id, sz, Arg->e);
 		
-		fprintf(stdout, "%d %d %s %d %d -1\n",
-		        Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+		newg->data[NewStop]->cost = -newg->data[NewStop]->cost;
+		EdgeBreak(g->data, Arg->e, newid);
 		
-	}
+		NewStop = CWQU(newg, &NewSum, newid, newsz, Arg->e);
+		
+		newg->data[NewStop]->cost = -newg->data[NewStop]->cost;
+		
+	} else flag = 1;
 	
-	fsetpos(outputfp, &end);  /* Set */
-	
-	fsetpos(stdout, &end);  /* Set */
+	if ((Arg->err == 0) && (flag == 0)) {
+		
+		fprintf(outputfp, "%d %d %s %d %lf %d %lf\n", Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
+		EdgePrint(outputfp, g->data, 0, g->Arg->v);
+		EdgePrint(outputfp, newg->data, 0, newg->Arg->v);
+		
+	} else if ((Arg->err == 0) && (flag == 1)) {
+		
+		fprintf(outputfp, "%d %d %s %d %lf -1\n", Arg->v, Arg->e, Arg->var, StopMe, Sum);
+		EdgePrint(outputfp, g->data, 0, g->Arg->v);
+		
+	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
 	
 	VGFree(g);
-	/*
-	free(id);
-	free(sz);*/
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {

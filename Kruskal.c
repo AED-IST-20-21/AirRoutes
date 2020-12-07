@@ -228,7 +228,7 @@ void Reverse(struct edge** mst, int start, int end)
 	return;
 }
 
-int CWQU(struct graph *g, double* cost, int *id,int *sz, int Stop) {
+int CWQU(struct graph *g, double *cost, int *id,int *sz, int Stop) {
 	
 	int i, cnt = 0;
 	

@@ -171,7 +171,7 @@ void LPrint(FILE *outputfp, struct PBArg *Arg, int h, double cost, int mode) {
 	
 }
 
-void EdgePrint(FILE *outputfp,struct edge **data, short start, short end) {
+void EdgePrint(FILE *outputfp,struct edge **data, int start, int end) {
 	int i;
 	for (i = start; i < end; i++) {
 		

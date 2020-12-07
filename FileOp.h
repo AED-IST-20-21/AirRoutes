@@ -15,7 +15,7 @@ struct PBArg *ArgRead(FILE*);
 struct edge *EdgeRead(FILE *,struct edge *);
 int EdgeCheck(int , struct edge *);
 void LPrint(FILE *,struct PBArg *,int,double,int);
-void EdgePrint(FILE *,struct edge **, short, short);
+void EdgePrint(FILE *,struct edge **, int, int);
 void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup);
 
 /**********************************************************************************************************************/

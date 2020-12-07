@@ -74,10 +74,8 @@ void emptybin(struct edge **bin, struct edge **mst, int offset, int end) {
 	return;
 }
 
-int *EdgeBreak(struct edge **EdgeV, int size) {
-	int *id, i, Family;
-	
-	id = (int *) malloc(size * sizeof(int));
+void EdgeBreak(struct edge **EdgeV, int size,int *id) {
+	int i, Family;
 	
 	Family = EdgeV[0]->vi; /*Arbitrário*/
 	for (i = 0; i < size; i++) {
@@ -88,7 +86,6 @@ int *EdgeBreak(struct edge **EdgeV, int size) {
 			id[i] = Family;
 		}
 	}
-	return id;
 }
 
 int SearchOverflow(struct graph *g, double sum, int start, int end, int (*Delete)(struct edge *, int, int)) 
@@ -168,4 +165,29 @@ void VGFree(struct graph *g){
 	
 }
 
+int EdgeSearch(struct graph *g, int start, int end) {
+	
+	int i;
+	
+	for (i = start; i < end; i++) {
+		
+		if (EdgeDelete(g->data[i], g->Arg->vi, g->Arg->vj)) return i;
+	}
+	return -1;
+}
 
+int vectorcpy(int *new,int *source){
+	
+	int i;
+	for (i=0; i < sizeof(source) / sizeof(int); i++) new[i]=source[i];
+	return i;
+}
+
+struct graph *graphcpy(struct graph *source){
+	struct graph *new;
+	int i;
+	new=GraphInit();
+	new->Arg=source->Arg;
+	for (i=0; i < source->Arg->e; i++) new->data[i]=source->data[i];
+	return new;
+}

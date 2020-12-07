@@ -18,7 +18,7 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg);
 int lessVertice(const void *,const void *);
 struct edge **CreateEdgeV(int size);
 /*void emptybin(struct edge **bin, struct edge **mst, int V, int E);*/
-
+void EdgeBreak(struct edge **EdgeV, int size,int *id);
 int SearchOverflow(struct graph *, double, int ,int , int (*Delete)(struct edge *, int, int));
 int SearchDelete(struct graph *g,int start,int end, int (*Delete)(struct edge *, int, int));
 int EdgeDelete(struct edge *aux, int vi, int vj);
@@ -26,6 +26,7 @@ int VerticeDelete(struct edge *aux, int vi, int vj);
 int flagcheck(int pos, struct PBArg *Arg);
 void EdgeSwitch(struct edge **data,int posA,int posB);
 void VGFree(struct graph *g);
-
-
+int EdgeSearch(struct graph *g, int start, int end);
+int vectorcpy(int *new,int *source);
+struct graph *graphcpy(struct graph *source);
 #endif //AIRROUTES_VECTORGRAPH_H

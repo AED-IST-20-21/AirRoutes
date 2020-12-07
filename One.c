@@ -1,5 +1,6 @@
 
 #include "One.h"
+#include "Kruskal.h"
 
 void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
@@ -33,18 +34,28 @@ void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /* CLOSED */
 	
 	struct graph *g;
-	double sum;
+	/*
+	struct edge** bin=NULL;
+	*/
+	double sum = 0;
+	int StopMe;
 	
-	g = VGRead(entryfp, Arg);                                                              /* Reading graph from file */
-	sum = Kruskal(g, NULL, NoBin);                                /* find the backbone using Kruskal´s Algorithm */
-	
-	qsort(g->data, Arg->v - 1, sizeof(struct edge *),
-	      lessVertice);  /* Sorting the backbone using the vertice criteria */
-	
+	g = VGRead(entryfp, Arg);	/* Reading graph from file */
+	/*
+	BinSize = NmbrUnion(g->data, Arg->v, Arg->e);
+	bin = CreateEdgeV(Arg->e - BinSize);
+	*/
+	StopMe = Kruskal(g, &sum);  /* find the backbone using Kruskal's Algorithm */
+	/*emptybin(bin, g->data, StopMe, BinSize);
+	emptybin(bin, g->data, 12, 3);*/
+
+	 /* Sorting the backbone using the vertice criteria */
+	qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
+
 	if ((sum > 0) && (Arg->err == 0)) {                                      /* Print the graph, if there is no error */
 		
 		fprintf(outputfp, "%d %d %s %d %.2lf\n", Arg->v, Arg->e, Arg->var, Arg->v - 1, sum);
-		EdgePrint(outputfp, g->data, 0, Arg->v - 1);
+		EdgePrint(outputfp, g->data, 0, StopMe);
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);                       /* Print error message */
 	
@@ -54,32 +65,50 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /* CLOSED */
 void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
-	struct edge **bindata;
-	double sum = 0;
-	short int flag = 0;
-	int *id = NULL, *sz = NULL, ncpos;
-	
-	UFinit(Arg->v, id, sz);
-	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
+	double Sum = 0, NewSum;
+	short int flag = 0, V = Arg->v;
+	int *id = NULL, *sz = NULL, ncpos, StopMe, NewStop;
+
+	if ((id = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
+	if ((sz = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);	
+
 	g = VGRead(entryfp, Arg);
+
+	/*OptimizeMe*/	
+	/*
+	SizeBinData = 5; 	
+	SizeBinData = Arg->e - SizeBinData;
+	sum = 0;
 	
-	sum = Kruskal(g, bindata, Bin); /*initial kruskal*/
-	emptybin(bindata, g->data, g->Arg->v, g->Arg->e); /* Dump the bin onto the graph */
-	
-	if (SearchDelete(g, 0, g->Arg->v - 1, EdgeDelete) != 0) {
-		find(g->Arg, g->data, id, sz); /* Restore Connectivity */
-		emptybin(bindata, g->data, g->Arg->v, g->Arg->e);
-		ncpos = binsearch(id, sz, g, g->Arg->v);
+	bindata = CreateEdgeV(SizeBinData);
+	*/
+	StopMe = Kruskal(g, &Sum); /*initial kruskal*/
+	/*
+	emptybin(bindata, g->data, g->Arg->v, g->Arg->e);*/ /* Dump the bin onto the graph */
+		
+	UFinit(V, id, sz);
+
+	if (SearchDelete(g, 0, StopMe, EdgeDelete) != 0) {
+		NewStop = CWQU(g, &NewSum, id, sz, StopMe); /* Restore Connectivity */
+		/*emptybin(bindata, g->data, StopMe, g->Arg->e);*/
+
+		if (StopMe - NewStop > 1) /* Seria necessário mais do  1 aresta */
+		{						  /* para repor a conectividade */
+			Arg->err = 1;
+		} else {
+			ncpos = binsearch(g->data, id, sz, StopMe, g->Arg->e);
+		}
 	}
 	
-	qsort(g->data, Arg->v - 1, sizeof(struct edge *), lessVertice);
+
+	qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 	
 	if (Arg->err == 0) {
 		
-		fprintf(outputfp, "%d %d %s %d %d %.2lf %d %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, sum, Arg->v - 1,
-		        flag);
-		EdgePrint(outputfp, g->data, 0, Arg->v - 1);
-		if ((ncpos < Arg->e) && (ncpos >= Arg->v)) {
+		fprintf(outputfp, "%d %d %s %d %d %.2lf %d %d\n",
+				Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum, StopMe, flag);
+		EdgePrint(outputfp, g->data, 0, StopMe);
+		if ((ncpos < Arg->e) && (ncpos >= StopMe)) {
 			fprintf(outputfp, "%d %d %lf", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
 		}
 	} else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
@@ -90,40 +119,84 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 }
 
 
-void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-	
+void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) 
+{		
 	struct graph *g;
-	struct edge **bindata;
-	double sum[2] = {0, 0};
+	double Sum, NewSum;
+	int StopMe, NewStop, V = Arg->v;
 	int *id = NULL, *sz = NULL, ncpos;
 	fpos_t args, end;
+
+	if ((id = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);
+	if ((sz = (int *) malloc(V * sizeof(int)))==NULL) ErrExit(3);	
 	
-	UFinit(Arg->v, id, sz);
-	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
 	g = VGRead(entryfp, Arg);
-	
-	sum[0] = Kruskal(g, bindata, Bin); /*initial kruskal*/
-	fgetpos(outputfp, &args);
+
+	UFinit(Arg->v, id, sz);
+
+	StopMe = Kruskal(g, &Sum); /*initial kruskal*/
+
+	fgetpos(outputfp, &args);  /* Get */
 	fprintf(outputfp, "\n");
-	EdgePrint(outputfp, g->data, 0, Arg->v - 1);
 	
-	if ((ncpos = SearchDelete(g, 0, g->Arg->v - 1, EdgeDelete)) != 0) {
-		
+	fgetpos(stdout, &args);  /* Get */
+	fprintf(stdout, "\n");
+
+	qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
+
+	EdgePrint(outputfp, g->data, 0, StopMe);
+	fprintf(outputfp,"\n");
+
+	EdgePrint(stdout, g->data, 0, StopMe);
+	fprintf(stdout,"\n");
+
+	if ((ncpos = SearchOverflow(g, Sum, 0, StopMe, EdgeDelete)) != 0) {
+		/*	
 		EdgeSwitch(g->data, ncpos, g->Arg->e);
 		g->Arg->e--;
-		sum[1] = Kruskal(g, bindata, NoBin);
+		*/
+		NewStop = Kruskal(g, &NewSum);
+		/*
 		g->Arg->e++;
-		EdgePrint(outputfp, g->data, 0, Arg->v - 1);
-		fgetpos(outputfp, &end);
+		*/
+		EdgePrint(outputfp, g->data, 0, NewStop);
+		fprintf(outputfp,"\n");
+
+		EdgePrint(stdout, g->data, 0, NewStop);
+		fprintf(stdout,"\n");
+
+	} else {
+		Arg->err = 1;
 	}
 	
-	fsetpos(outputfp, &args);
-	if (Arg->err == 0)
-		fprintf(outputfp, "%d %d %s %d %lf %d %lf", Arg->v, Arg->e, Arg->var, Arg->v - 1, sum[0],
-		        Arg->v - 1, sum[1]);
-	else fprintf(outputfp, "%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	fgetpos(outputfp, &end);  /* Get */
+
+	fsetpos(outputfp, &args);  /* Set */
+
+	fgetpos(stdout, &end);  /* Get */
+
+	fsetpos(stdout, &args);  /* Set */
+
+	if (Arg->err == 0){
+		fprintf(outputfp, "%d %d %s %d %lf %d %lf\n", 
+				Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
 	
-	fsetpos(outputfp, &end);
+		fprintf(stdout, "%d %d %s %d %lf %d %lf\n", 
+				Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
+
+	} else {
+		fprintf(outputfp, "%d %d %s %d %d -1\n", 
+				Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+
+		fprintf(stdout, "%d %d %s %d %d -1\n", 
+				Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+
+	}
+		
+	fsetpos(outputfp, &end);  /* Set */
+
+	fsetpos(stdout, &end);  /* Set */
+
 	VGFree(g);
 	free(id);
 	free(sz);
@@ -131,6 +204,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
+#if 0	
 	struct graph *g;
 	struct edge **bindata;
 	double sum = 0;
@@ -202,10 +276,11 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	free(sz);
 	VGFree(g);
 	free(RelPos);
+#endif
 }
 
 void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-	
+#if 0	
 	struct graph *g;
 	struct edge **bindata;
 	double sum;
@@ -235,7 +310,7 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	
 	EOnePrint(outputfp,g,sum,backup);
-	
+#endif
 }
 
 

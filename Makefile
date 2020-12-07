@@ -14,7 +14,7 @@ OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o VectorGraph.o Kruskal.o Graph
 EXE = backbone
 
 #Test file
-TEST = enunciado_mix.routes0
+TEST = 15_020C.routes
 
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h

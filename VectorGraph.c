@@ -61,11 +61,14 @@ struct edge **CreateEdgeV(int size) {
 	return aux;
 }
 
-void emptybin(struct edge **bin, struct edge **mst, int V, int E) {
+void emptybin(struct edge **bin, struct edge **mst, int offset, int end) {
 	
-	int i, j;
+	int j;
 	
-	for (i = V - 1, j = 0; i < E; i++, j++) ((struct edge **) mst)[i] = bin[j];
+	for (j = 0; j < end; j++) 
+	{
+		mst[j+offset-1] = bin[j];
+	}
 	
 	free(bin);
 	return;
@@ -88,6 +91,22 @@ int *EdgeBreak(struct edge **EdgeV, int size) {
 	return id;
 }
 
+int SearchOverflow(struct graph *g, double sum, int start, int end, int (*Delete)(struct edge *, int, int)) 
+{
+	int i, cnt = 0;
+	
+	for (i = start; i < end; i++) {
+		
+		if ((*Delete)(g->data[i], g->Arg->vi, g->Arg->vj)) {
+			
+			g->data[i]->cost = g->data[i]->cost + sum;
+			cnt++;
+		}
+	}
+	return cnt;
+}
+
+
 int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge *, int, int)) {
 	int i, cnt = 0;
 	
@@ -104,15 +123,15 @@ int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge 
 
 int EdgeDelete(struct edge *aux, int vi, int vj) {
 	
-	if (((aux->vi == vi) && (aux->vj == vj)) || ((aux->vj == vi) && (aux->vi == vj))) return 0;
-	else return 1;
+	if (((aux->vi == vi) && (aux->vj == vj)) || ((aux->vj == vi) && (aux->vi == vj))) return 1;
+	else return 0;
 	
 }
 
 int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
-	if ((aux->vi = vi) || (aux->vj == vi)) return 0;
-	else return 1;
+	if ((aux->vi = vi) || (aux->vj == vi)) return 1;
+	else return 0;
 	
 }
 
@@ -138,7 +157,12 @@ void EdgeSwitch(struct edge **data, int posA, int posB) {
 }
 
 void VGFree(struct graph *g){
-	
+
+	int i;
+	for (i=0; i<g->Arg->e; i++)
+	{
+		free(g->data[i]);
+	}
 	free(g->data);
 	free(g);
 	

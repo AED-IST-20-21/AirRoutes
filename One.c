@@ -163,63 +163,30 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-
-#if 0
+	
 	struct graph *g;
-	struct edge **bindata;
-	double sum = 0;
-	short int flag = 0,  ncpos = 0;
-	int *id = NULL, *sz = NULL,PosSz, count = 0, *RelPos = NULL, i;
+	double Sum = 0, NewSum=0;
+	int *id = NULL, *sz = NULL, *del, delcnt, StopMe, NewStop,i;;
 	
-	g = VGRead(entryfp, Arg);
-	bindata = CreateEdgeV(Arg->e - Arg->v + 1);
+	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
+	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
 	
-	sum = Kruskal(g, bindata, Bin);
-	emptybin(bindata, g->data, g->Arg->v, g->Arg->e);
-	
-	if ((PosSz = SearchDelete(g, 0, g->Arg->v - 1, VerticeDelete)) != 0) {
-		find(g->Arg, g->data, id, sz); /* Restore Connectivity */
-		emptybin(bindata, g->data, g->Arg->v, g->Arg->e);
-		
-		
-		if ((RelPos = (int *) malloc((PosSz - 1) * sizeof(int))) == NULL) ErrExit(3);
-		RelPos[0] = Arg->v;
-		
-		do {
-			RelPos[count + 1] = binsearch(id, sz, g, RelPos[count]);
-			count++;
-			/*Numero de arestas (no bin) que repõem a conectividade*/
-		} while (count < PosSz);
-	}
-	
-	/* Verify if every element in id[] has same root */
-	count = 0;
-	PosSz = 0;
-	
-	for (i = 0; i < Arg->e; i++)  /* Find 1st non error value for root*/
-	{
-		if (i != RelPos[count]) {
-			PosSz = id[i];
-			break;
+	if ((delcnt=SearchDelete(g, 0, StopMe, VerticeDelete) != 0)) {   /* If the deleted edge belongs to the backbone */
+		/* Apply an incomplete version of Kruskal´s to get an edge that replaces the deleted one */
+		if ((id = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
+		if ((sz = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
+		if ((del = (int *) malloc( delcnt * sizeof(int))) == NULL) ErrExit(3);
+		/* In this version, the algorithm is divided so it can output different information */
+		CWQU(g, &NewSum, id, sz, StopMe);
+		del[0]=StopMe;
+		for (i=0; i < delcnt; i++){
+			del[i] = binsearch(g->data, id, sz, del[0], g->Arg->e);
+			del[i] =CWQU(g, &NewSum, id, sz,del[i]);
+			del[i] = binsearch(g->data, id, sz, del[i], g->Arg->e);   /* Get the position of that edge */
+			g->data[del[i]]->cost=-g->data[del[i]]->cost;
 		}
 	}
 	
-	for (i = 0; i < Arg->e; i++) {
-		if (i != RelPos[count]) {
-			if (id[i] != PosSz) {
-				PosSz = -1;
-				break;
-			}
-		} else {
-			count++;
-		}
-	}
-	
-	if (PosSz == -1) {
-		Arg->err = 1;
-	}
-	
-	qsort(g->data, Arg->v - 1, sizeof(struct edge *), lessVertice);
 	
 	if (Arg->err == 0) {
 		
@@ -235,8 +202,8 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	free(id);
 	free(sz);
 	VGFree(g);
-	free(RelPos);
-#endif
+	
+
 }
 
 void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {

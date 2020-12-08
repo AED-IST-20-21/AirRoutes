@@ -54,7 +54,7 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	if ((sum > 0) && (Arg->err == 0)) { /* Print backbone if no errors were detected during execution */
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice); /* Sort the backbone in vertice order */
-		fprintf(outputfp, "%d %d %s %d %.2lf\n", Arg->v, Arg->e, Arg->var, Arg->v - 1, sum);
+		fprintf(outputfp, "%d %d %s %d %.2lf\n", Arg->v, Arg->e, Arg->var, StopMe, sum);
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);    /* print error message */
@@ -94,7 +94,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	if (Arg->err == 0) {   /* If there were no errors, output the backbone. Else print error message */
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
-		fprintf(outputfp,"%d %d %s %d %d %.2lf %d %d\n",Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum, StopMe);
+		fprintf(outputfp,"%d %d %s %d %d %.2lf %d\n",Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum, StopMe);
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		if ((ncpos < Arg->e) && (ncpos >= StopMe)) {
 			fprintf(outputfp,"%d %d %lf", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);

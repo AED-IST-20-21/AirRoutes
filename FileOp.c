@@ -13,19 +13,26 @@
  * @return Name of the Output File
  **********************************************************************************************************************/
 char *ExitFileName(char *FileName) {
-	char *ExitFileName;   /* Name of the Output file */
-	int FileSize;   /* Auxiliary Variable to remove the extension from the entry name */
+	char *ExitFileName = NULL;   /* Name of the Output file */
+	int FileSize = 0, i;   /* Auxiliary Variable to remove the extension from the entry name */
 	
 	if (FileCheck(FileName) != 0) exit(1);   /* Checking if the Entry file Name if valid */
 	
 	
 	FileSize = strlen(FileName) - strlen(OldExt) + strlen(NewExt);   /*Determining Size of name without extension*/
 	
-	if((ExitFileName = (char *) malloc(((FileSize) + 1) * sizeof(char)))==NULL)
+	if( (ExitFileName = (char*) malloc((FileSize + 1) * sizeof(char))) == NULL)
+	{
 		ErrExit(3);   /* Memory Allocation for the name of the output file */
+	}
 	
 	strncpy(ExitFileName, FileName,FileSize-strlen(NewExt));   /* Copy name without extension */
-	strcat(ExitFileName, NewExt);   /* Adding Exit Extension */
+	/*strcat(ExitFileName, NewExt);*/   /* Adding Exit Extension */
+	for (i= FileSize - strlen(NewExt); i < FileSize; i++)
+	{
+		ExitFileName[i] = NewExt[i-(FileSize - strlen(NewExt))];
+	}
+
 	ExitFileName[FileSize] = '\0';
 	
 	return ExitFileName;
@@ -149,7 +156,7 @@ struct edge *EdgeRead(FILE *fp, struct edge *aux) {
 	return aux;
 }
 
-int EdgeCheck(struct edge *aux) {
+int EdgeCheck(struct edge *aux, int size) {
 	
 	if ((aux->vi <= 0) || (aux->vj <= 0) || (aux->vi > size) || (aux->vj > size) || (aux->cost <= 0)) return -1;
 	else return 0;

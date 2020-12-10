@@ -13,7 +13,7 @@ FILE *RFileOpen (char *);
 FILE *WFileOpen(char *);
 struct PBArg *ArgRead(FILE*);
 struct edge *EdgeRead(FILE *,struct edge *);
-int EdgeCheck(int , struct edge *);
+int EdgeCheck(struct edge *, int);
 void LPrint(FILE *,struct PBArg *,int,double,int);
 void EdgePrint(FILE *,struct edge **, int, int);
 void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup);

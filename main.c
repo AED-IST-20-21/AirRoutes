@@ -22,12 +22,15 @@ int main(int argc, char *argv[]) {
 	if (argc != 2) return 0;                         /* Exit program if number of arguments is different than desired */
 
 /********************************************* Initialization *********************************************************/
-	
+
+	EntryFileName = (char*) malloc((strlen(argv[1]) + 1) * sizeof(char));
+
 	strcpy(EntryFileName,argv[1]);                                                         /* Store Entry file´s name */
 	OutputFileName = ExitFileName(EntryFileName);                                          /* Create exit file´s name */
 	EntryFile = RFileOpen(EntryFileName);                                                          /* Open Input File */
 	OutputFile = WFileOpen(OutputFileName);                                                       /* Open Output File */
 	free(OutputFileName);                                 /* Once the output file is open, it´s name can be discarded */
+	free(EntryFileName);
 	
 /********************************************* Problem Solving ********************************************************/
 	

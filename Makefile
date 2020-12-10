@@ -16,7 +16,7 @@ OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o VectorGraph.o Kruskal.o Graph
 EXE = backbone
 
 #Test file
-TEST = 15_020C.routes
+TEST = 15_020.routes
 
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h
@@ -46,7 +46,7 @@ clean:
 VALG = valgrind --leak-check=full --show-leak-kinds=all -s
 
 
-FILES = $(shell ls ../test/*.routes0)
+FILES = $(shell ls ../test/*.routes)
 
 ZIP = $(zip AirRoutes main.c FileOp.c ListGraph.c Zero.c FileOp.h ListGraph.h Zero.h Makefile)
 #
@@ -62,8 +62,27 @@ debug: $(EXE)
 #
 temp: $(TMPOBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(TMPOBJECTS)
+#
+INPUT = $(../input/*.routes)
+OUTPUT = $(../output/)
+CHECK  = $(../check/*.bbones)
 
+run: $(EXE)
+	DIR = $(pwd)
+	for F in $(INPUT); do $(DIR)/backbone $${F} ; done ;\
+	mv ./*.bbones $(OUTPUT) ;\
+	for C in ${INPUT}; do diff $(OUTPUT)$${C} $(CHECK)$${C}; done;
 
+run1:
+	for F in $(INPUT); do ./backbone $${F} ; done;
+
+run2:
+	mv ./*.bbones $(OUTPUT) ;
+
+run3:	
+	for C in ${INPUT}; do diff $(OUTPUT)$${C} $(CHECK)$${C}; done;
+
+#
 t:
 	for F in ${FILES}; do  ./backbone $${F} ; done;
 

@@ -27,6 +27,6 @@ int flagcheck(int pos, struct PBArg *Arg);
 void EdgeSwitch(struct edge **data,int posA,int posB);
 void VGFree(struct graph *g);
 int EdgeSearch(struct graph *g, int start, int end);
-int vectorcpy(int *new,int *source);
+int vectorcpy(int *,int *, int);
 struct graph *graphcpy(struct graph *source);
 #endif //AIRROUTES_VECTORGRAPH_H

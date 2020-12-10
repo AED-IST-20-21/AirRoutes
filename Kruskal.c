@@ -228,18 +228,18 @@ void Reverse(struct edge** mst, int start, int end)
 	return;
 }
 
-int CWQU(struct graph *g, double *cost, int *id,int *sz, int Stop) {
+int CWQU(struct edge** data, int V, double *cost, int *id,int *sz, int Stop) {
 	
 	int i, cnt = 0;
 	
-	UFinit(g->Arg->v, id, sz);
+	UFinit(V, id, sz);
 	
 	for (i = 0; i < Stop; i++) {
-		if (g->data[i]->cost > 0) {
-			if (!UFfind(g->data[i]->vi, g->data[i]->vj, id))
+		if (data[i]->cost > 0) {
+			if (!UFfind(data[i]->vi, data[i]->vj, id))
 			{	
-				UFunion(g->data[i]->vi, g->data[i]->vj, id, sz);
-				*cost += g->data[i]->cost;
+				UFunion(data[i]->vi, data[i]->vj, id, sz);
+				*cost += data[i]->cost;
 				cnt++;
 			}
 		}

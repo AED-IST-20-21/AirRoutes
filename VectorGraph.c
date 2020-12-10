@@ -176,10 +176,12 @@ int EdgeSearch(struct graph *g, int start, int end) {
 	return -1;
 }
 
-int vectorcpy(int *new,int *source){
-	
+int vectorcpy(int *new, int *source, int size){
+
+	/* size = sizeof(source)/sizeof(int); */
+
 	int i;
-	for (i=0; i < sizeof(source) / sizeof(int); i++) new[i]=source[i];
+	for (i=0; i < size; i++) new[i]=source[i];
 	return i;
 }
 

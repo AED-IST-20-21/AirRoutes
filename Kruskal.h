@@ -25,7 +25,7 @@ int Kruskal(struct graph *, double* );
 
 void Reverse(struct edge**, int, int);  /* Auxiliary function */
 
-int CWQU(struct graph *, double* cost, int *id,int *sz, int);
+int CWQU(struct edge**, int, double* cost, int *id,int *sz, int);
 /*
 int NmbrUnion(struct edge** data, int V, int E);
 */

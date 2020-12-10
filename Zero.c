@@ -49,7 +49,7 @@ int AZero(FILE *entryfp, struct PBArg *Arg) {
 	do {
 		
 		if ((aux = EdgeRead(entryfp, aux)) == NULL) Arg->err = 1;
-		if ((EdgeCheck(Arg->v, aux)) < 0) Arg->err = 1;
+		if ((EdgeCheck(aux, Arg->v)) < 0) Arg->err = 1;
 		
 		if ((aux->vi == Arg->vi) || (aux->vj == Arg->vi))
 			g++;
@@ -75,7 +75,7 @@ int BZero(FILE *entryfp, struct PBArg *Arg, double *cost) {
 	while (k < Arg->e) {
 		
 		if ((aux = EdgeRead(entryfp, aux)) == NULL) Arg->err = 1;
-		if ((EdgeCheck(Arg->v, aux)) < 0) Arg->err = 1;
+		if ((EdgeCheck(aux, Arg->v)) < 0) Arg->err = 1;
 		
 		if ((((aux->vi == Arg->vi) && (aux->vj == Arg->vj)) || ((aux->vj == Arg->vi) && (aux->vi == Arg->vj))) &&
 		    (Flag == 0)) {

@@ -72,7 +72,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
 	double Sum = 0, NewSum=0;
-	int *id = NULL, *sz = NULL, ncpos, StopMe, NewStop;
+	int *id = NULL, *sz = NULL, ncpos=0, StopMe=0, NewStop=0;
 	
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
 	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
@@ -111,10 +111,10 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g, *newg;
 	struct edge* temp;
-	double Sum, NewSum;
-	int StopMe, NewStop;
+	double Sum=0, NewSum=0;
+	int StopMe=0, NewStop=0, ncpos=0, i;
 	int *id = NULL, *sz = NULL;
-	int ncpos, i;
+	
 	bool flag;
 	
 	g = VGRead(entryfp, Arg);
@@ -195,7 +195,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
 	double Sum = 0, NewSum=0;
-	int *id = NULL, *sz = NULL, *del, delcnt, StopMe, i;
+	int *id = NULL, *sz = NULL, *del=NULL, delcnt=0, StopMe=0, i;
 	
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
 	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
@@ -221,15 +221,14 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		}
 	}
 	
-	
 	if (Arg->err == 0) {
-		fprintf(outputfp, "%d %d %s %d %d %lf %d\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum,
-				StopMe);
+		fprintf(outputfp, "%d %d %s %d %.2lf %d\n", Arg->v, Arg->e, Arg->var, StopMe,Sum,delcnt);
 		EdgePrint(outputfp, g->data, 0, StopMe);
+		
 		for (i=0; i < delcnt; i++)
 		{
-			fprintf(outputfp, "%d %d %lf\n", g->data[i]->vi,
-					g->data[i]->vj, g->data[i]->cost);
+			fprintf(outputfp, "%d %d %lf\n", g->data[del[i]]->vi,
+					g->data[del[i]]->vj, g->data[del[i]]->cost);
 		}
 	
 	} else fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);

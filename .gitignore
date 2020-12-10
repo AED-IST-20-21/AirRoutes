@@ -64,7 +64,7 @@ Mkfile.old
 dkms.conf
 
 # Tests
-
+*.zip
 *.routes
 *.routes0
 *.bbbone

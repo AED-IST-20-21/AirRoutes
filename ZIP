@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "Script to make zip"
+
+zip AirRoutes.zip *.c *h Makefile
+
+echo "DONE!"

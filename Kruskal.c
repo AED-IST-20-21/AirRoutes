@@ -192,7 +192,7 @@ int Kruskal(struct graph *g,  double* cost)
 			cnt++;
 		} else {
 			mst[j] = g->data[i];
-			printf("|bin[%d] = %d-%d|\n", j, mst[j]->vi, mst[j]->vj);
+			/*printf("|bin[%d] = %d-%d|\n", j, mst[j]->vi, mst[j]->vj);*/
 			j--;
 		}
 	}

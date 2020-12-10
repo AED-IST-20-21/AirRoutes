@@ -63,24 +63,33 @@ debug: $(EXE)
 temp: $(TMPOBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(TMPOBJECTS)
 #
-INPUT = $(../input/*.routes)
-OUTPUT = $(../output/)
+INPUT = $(shell ls ../input/*.routes)
+OUTPUT = $(shell ./output/)
 CHECK  = $(../check/*.bbones)
+DIR = $(shell pwd)
+PERMIT  = $(chmod +x backbone)
 
 run: $(EXE)
-	DIR = $(pwd)
 	for F in $(INPUT); do $(DIR)/backbone $${F} ; done ;\
-	mv ./*.bbones $(OUTPUT) ;\
+	mv ./*.bbones ../output ;\
 	for C in ${INPUT}; do diff $(OUTPUT)$${C} $(CHECK)$${C}; done;
+run0:
+	echo "$(DIR)"
 
 run1:
-	for F in $(INPUT); do ./backbone $${F} ; done;
+	for F in $(INPUT); do $(DIR)/backbone $${F} ; done;
 
 run2:
-	mv ./*.bbones $(OUTPUT) ;
+	mv ./*.bbones $(OUTPUT);
 
 run3:	
 	for C in ${INPUT}; do diff $(OUTPUT)$${C} $(CHECK)$${C}; done;
+
+run4:
+	$(PERMIT)
+
+run5:
+	cd ./output;
 
 #
 t:

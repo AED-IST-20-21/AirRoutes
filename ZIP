@@ -2,6 +2,8 @@
 
 echo "Script to make zip"
 
+rm AirRoutes.zip
+
 zip AirRoutes.zip *.c *h Makefile
 
 echo "DONE!"

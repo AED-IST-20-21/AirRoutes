@@ -190,6 +190,7 @@ struct graph *graphcpy(struct graph *source){
 	int i;
 	new=GraphInit();
 	new->Arg=source->Arg;
+	new->data=CreateEdgeV(source->Arg->e);
 	for (i=0; i < source->Arg->e; i++) new->data[i]=source->data[i];
 	return new;
 }

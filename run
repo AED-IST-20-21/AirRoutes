@@ -1,0 +1,55 @@
+#!/bin/bash
+
+make clean
+make
+printf "\n\n\n____________________________________________________________________________\n\n\n"
+cp backbone test
+
+cd test
+echo "Test Folder :"
+pwd
+printf "\n"
+rm output.log
+
+for z in *.zip
+do
+  unzip ${z} > /dev/null
+done
+
+rm *.check
+
+  for f in *.bbones
+  do
+      mv -- "$f" "${f%.bbones}.checkME"
+  done
+
+
+for f in *.routes
+do
+	./backbone ${f}
+done
+
+printf "\n\n\n____________________________________________________________________________\n\n" >> output.log
+for f in *.bbones
+do
+  printf ${f}"\n" >> output.log
+	  diff ${f} ${f%.bbones}.checkME >> output.log
+	
+  printf "\n\n\n____________________________________________________________________________\n\n" >> output.log
+  
+done
+
+rm backbone
+
+rm *.bbones
+
+for f in *.checkME
+do
+  mv -- "$f" "${f%.checkME}.bbones"
+done
+
+cd ..
+
+printf "DONE! Thank you for Choosing Vidais Airlines today\n\n"
+vim test/output.log
+

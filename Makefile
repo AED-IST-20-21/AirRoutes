@@ -7,7 +7,7 @@
 #  	Compiler, Compiler Flags
 CC = gcc 
 DB = gdb
-CFLAGS = -O3 -Wall -std=c99
+CFLAGS = -g -Wall -std=c99
 
 #vpath = /mnt/c/Users/UX430UA/Desktop/Tests_AED
 
@@ -16,7 +16,7 @@ OBJECTS = main.o FileOp.o ListGraph.o Zero.o One.o VectorGraph.o Kruskal.o Graph
 EXE = backbone
 
 #Test file
-TEST = 15_020.routes
+TEST = 800_ensemble.routes
 
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h

@@ -72,7 +72,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
 	double Sum = 0, NewSum=0;
-	int *id = NULL, *sz = NULL, ncpos=0, StopMe=0, NewStop=0;
+	int *id = NULL, *sz = NULL, ncpos=0, StopMe=0, NewStop=0,flag=0;
 	
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
 	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
@@ -85,22 +85,26 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		NewStop = CWQU(g->data, Arg->v, &NewSum, id, sz, StopMe);
 		
 		if (StopMe - NewStop > 1) {   /* Check if there is one edge replacing the deleted, or if more are necessary */
-			(Arg->err = 1);
+			flag=-1;
 		} else {
+			flag=1;
 			ncpos = binsearch(g->data, id, sz, NewStop, g->Arg->e);   /* Get the position of that edge */
 		}
-	}
+		SearchDelete(g,0,Arg->e,EdgeDelete);
+	} else flag =0;
 	
 	if (Arg->err == 0) {   /* If there were no errors, output the backbone. Else print error message */
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
-		fprintf(outputfp,"%d %d %s %d %d %.2lf %d\n",Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, Sum, StopMe);
+		fprintf(outputfp,"%d %d %s %d %d %d %.2lf %d\n",Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj,StopMe, Sum, flag);
 		EdgePrint(outputfp, g->data, 0, StopMe);
-		if ((ncpos < Arg->e) && (ncpos >= StopMe)) {
-			fprintf(outputfp,"%d %d %lf", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
+		if (flag==1) {
+			fprintf(outputfp,"%d %d %.2lf\n", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
 		}
 		
-	} else fprintf(outputfp,"%d %d %s %d %d -1", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	} else fprintf(outputfp,"%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	
+	fprintf(outputfp,"\n");
 	
 	VGFree(g); /* Before exiting, free the graph and auxiliary vectors */
 	free(id);
@@ -109,13 +113,12 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 
 void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
-	struct graph *g, *newg;
+	struct graph *g, *newg=NULL;
 	struct edge* temp;
 	double Sum=0, NewSum=0;
 	int StopMe=0, NewStop=0, ncpos=0, i;
 	int *id = NULL, *sz = NULL;
-	
-	bool flag;
+	bool flag=0;
 	
 	g = VGRead(entryfp, Arg);
 	
@@ -189,6 +192,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
 	
 	VGFree(g);
+	VGFree(newg);
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {

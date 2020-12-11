@@ -8,6 +8,7 @@
 out
 gen
 *.xml
+.ideia/inspectionProfiles/Project_Default.xml
 
 ### C template
 # Prerequisites

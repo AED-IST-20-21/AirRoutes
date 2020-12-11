@@ -44,8 +44,7 @@ int main(int argc, char *argv[]) {
 			
 			LControl(EntryFile, OutputFile, Arg);
 			
-		} else if (Arg->var[1] ==
-		           '1') {                           /* If problem from mode 1, resolve with edge vector */
+		} else if (Arg->var[1] =='1') {                           /* If problem from mode 1, resolve with edge vector */
 			
 			VControl(EntryFile, OutputFile, Arg);
 			
@@ -56,10 +55,10 @@ int main(int argc, char *argv[]) {
 	
 /*********************************************** Exiting **************************************************************/
 
-		fclose(OutputFile);                                                        /* Close both files before exiting */
-		fclose(EntryFile);
+	fclose(OutputFile);                                                        /* Close both files before exiting */
+	fclose(EntryFile);
 		
-		return 0;                                                                                /* Exit Successfully */
+	return 0;                                                                                /* Exit Successfully */
 }
 
 

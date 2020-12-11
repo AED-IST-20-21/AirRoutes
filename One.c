@@ -40,7 +40,7 @@ void VControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
  * @param outputfp File to output backbone to
  * @param Arg Problem Arguments
  **********************************************************************************************************************/
-void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
+void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /*IS WORKING*/
 	
 	struct graph *g;
 	double sum = 0;   /* Total cost of the backbone */
@@ -59,6 +59,8 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);    /* print error message */
 	
+	fprintf(outputfp,"\n");
+	
 	VGFree(g);   /* Free the allocated memory for the graph */
 }
 
@@ -72,7 +74,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
 	double Sum = 0, NewSum=0;
-	int *id = NULL, *sz = NULL, ncpos=0, StopMe=0, NewStop=0,flag=0;
+	int *id = NULL, *sz = NULL, ncpos=0, StopMe=0, NewStop=0,flag=-5;
 	
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
 	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
@@ -87,11 +89,15 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		if (StopMe - NewStop > 1) {   /* Check if there is one edge replacing the deleted, or if more are necessary */
 			flag=-1;
 		} else {
-			flag=1;
-			ncpos = binsearch(g->data, id, sz, NewStop, g->Arg->e);   /* Get the position of that edge */
+			ncpos = binsearch(g->data, id, sz, StopMe, g->Arg->e);
+			if (ncpos>=0){/* Get the position of that edge */
+				flag=1;
+			} else flag=-1;
 		}
-		SearchDelete(g,0,Arg->e,EdgeDelete);
-	} else flag =0;
+		SearchDelete(g, 0, StopMe, EdgeDelete);
+		
+	} else if (SearchDelete(g,StopMe,Arg->e,EdgeDelete)!=0) flag=0;
+	else flag =-1;
 	
 	if (Arg->err == 0) {   /* If there were no errors, output the backbone. Else print error message */
 		
@@ -99,12 +105,12 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		fprintf(outputfp,"%d %d %s %d %d %d %.2lf %d\n",Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj,StopMe, Sum, flag);
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		if (flag==1) {
-			fprintf(outputfp,"%d %d %.2lf\n", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
-		}
+			fprintf(outputfp, "%d %d %.2lf\n", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
+		} else fprintf(outputfp,"\n");
 		
-	} else fprintf(outputfp,"%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
-	
-	fprintf(outputfp,"\n");
+	} else {
+		fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	}
 	
 	VGFree(g); /* Before exiting, free the graph and auxiliary vectors */
 	free(id);
@@ -191,8 +197,13 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
 	
+	
+	
 	VGFree(g);
-	VGFree(newg);
+	free(newg->data);
+	free(newg);
+	free(id);
+	free(sz);
 }
 
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
@@ -239,6 +250,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	free(id);
 	free(sz);
+	free(del);
 	VGFree(g);
 	
 
@@ -278,6 +290,12 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	}
 		
 	/*EOnePrint(outputfp, g, Sum, backup);*/
+	free(id);
+	free(sz);
+	VGFree(g);
+	free(g->data);
+	free(g);
+	
 	return;
 }
 

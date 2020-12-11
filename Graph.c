@@ -122,6 +122,9 @@ int ArgCheck(struct PBArg *aux) {
 		} else if (strcmp(aux->var, "D1") == 0) {
 			return 14;
 			
+		} else if (strcmp(aux->var, "E1") == 0) {
+			return 15;
+			
 		} else return -1;
 		
 	} else {

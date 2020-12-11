@@ -1,0 +1,60 @@
+#!/bin/bash
+
+make clean
+make
+printf "\n\n\n____________________________________________________________________________\n\n\n"
+cp backbone test
+rm valgrind.log
+cd test
+
+rm *.routes
+rm *.checkME
+rm *.bbones
+echo "Test Folder :"
+pwd
+printf "\n"
+
+
+if [ -n "$1" ]; then
+  for z in "$@"
+  do
+    unzip ${z} > /dev/null
+  done
+else
+  for z in *.zip
+  do
+    unzip ${z} > /dev/null
+  done
+fi
+
+rm *.check
+
+for f in *.bbones
+do
+      mv -- "$f" "${f%.bbones}.checkME"
+done
+
+printf "\n\n\n____________________________________________________________________________\n\n\n" >> valgrind.log
+for f in *.routes
+do
+	printf "\t\t\t" >> valgrind.log
+
+	printf "${f}" >> valgrind.log
+
+	printf "\n\n" >> valgrind.log
+
+  valgrind --leak-check=full --log-fd=9 9>>valgrind.log -s ./backbone ${f}
+	 printf "\n\n\n____________________________________________________________________________\n\n\n" >> valgrind.log
+done
+
+
+rm backbone
+rm *.routes
+rm *.checkME
+rm *.bbones
+mv valgrind.log ..
+cd ..
+
+printf "DONE! Thank you for Choosing Vidais Airlines today\n\n"
+vim valgrind.log
+

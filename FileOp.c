@@ -118,7 +118,7 @@ struct PBArg *ArgRead(FILE *EntryFile) {
 			}
 			break;
 			
-		case 11:
+		case 11: case 15:
 			break;
 		default:
 			aux->err = 1;
@@ -181,10 +181,11 @@ void LPrint(FILE *outputfp, struct PBArg *Arg, int h, double cost, int mode) {
 void EdgePrint(FILE *outputfp,struct edge **data, int start, int end) {
 	int i;
 	for (i = start; i < end; i++) {
-		if (data[i]->cost>0){
+		
 		fprintf(outputfp,"%d %d %.2lf\n",data[i]->vi,data[i]->vj,data[i]->cost);
-		}
+		
 	}
+	
 	return;
 }
 

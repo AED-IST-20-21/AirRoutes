@@ -11,10 +11,17 @@ pwd
 printf "\n"
 rm output.log
 
-for z in *.zip
-do
-  unzip ${z} > /dev/null
-done
+if [ -n "$1" ]; then
+  for z in "$@"
+  do
+    unzip ${z} > /dev/null
+  done
+else
+  for z in *.zip
+  do
+    unzip ${z} > /dev/null
+  done
+fi
 
 rm *.check
 
@@ -41,15 +48,16 @@ done
 
 rm backbone
 
-rm *.bbones
+rm *.routes
 
 for f in *.checkME
 do
   mv -- "$f" "${f%.checkME}.bbones"
 done
-
+rm *.bbones
+mv output.log ..
 cd ..
 
 printf "DONE! Thank you for Choosing Vidais Airlines today\n\n"
-vim test/output.log
+vim output.log
 

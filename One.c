@@ -187,13 +187,19 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		fprintf(outputfp, "%d %d %s %d %lf %d %lf\n", 
 				Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
 
+		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
+		qsort(newg->data, NewStop, sizeof(struct edge *), lessVertice);
+
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		EdgePrint(outputfp, newg->data, 0, NewStop);
 		
 	} else if ((Arg->err == 0) && (flag == 1)) {
 		
 		fprintf(outputfp, "%d %d %s %d %lf -1\n", Arg->v, Arg->e, Arg->var, StopMe, Sum);
-		EdgePrint(outputfp, g->data, 0, g->Arg->v);
+		
+		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
+		
+		EdgePrint(outputfp, g->data, 0, StopMe);
 		
 	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
 	
@@ -215,32 +221,54 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
 	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
 	
-	if ((delcnt=SearchDelete(g, 0, StopMe, VerticeDelete) != 0)) {   /* If the deleted edge belongs to the backbone */
+	if ( (delcnt = SearchDelete(g, 0, StopMe, VerticeDelete)) >= 1) {   /* If the deleted edge belongs to the backbone */
+
+		if (delcnt==1) delcnt++;
 		/* Apply an incomplete version of Kruskal´s to get an edge that replaces the deleted one */
 		if ((id = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
 		if ((sz = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
-		if ((del = (int *) malloc( delcnt * sizeof(int))) == NULL) ErrExit(3);
+		if ((del = (int *) malloc( (delcnt) * sizeof(int))) == NULL) ErrExit(3);
 		/* In this version, the algorithm is divided so it can output different information */
 		CWQU(g->data, Arg->v, &NewSum, id, sz, StopMe);
+#if 0
+		if (StopMe - NewStop == 1) /*Conectividade reposta?*/
+		{
+			delcnt = -1; /*Vertice não pertence ao grafo*/
+		}
+#endif
 		del[0]=StopMe;
+		
+		SearchDelete(g, StopMe, g->Arg->e, VerticeDelete);
 
-		for (i=0; i < delcnt-1; i++){
+		for (i=0; i < delcnt; i++){
 			/*del[i] =CWQU(g->data, Arg->v, &NewSum, id, sz,del[i]);*/
-			del[i+1] = binsearch(g->data, id, sz, del[i], g->Arg->e);   /* Get the position of that edge */
-			if (del[i+1] != -1)
+			del[i+1] = N_binsearch(g->data, id, sz, del[i], g->Arg->e);   /* Get the position of that edge */
+			if (del[i+1] == -1)
 			{
-				Arg->err = 1;
+				delcnt = 0; /*Conectividade não foi reposta*/
 				break;
 			}
-			g->data[del[i]]->cost=-g->data[del[i]]->cost;
+			/*g->data[del[i]]->cost=-g->data[del[i]]->cost;*/ /*indiferente?*/
 		}
+		
+	} else {
+		delcnt = -1; /*vertice não pertence ao grafo*/
 	}
+
+
+	if (Arg->err == 0) 
+	{
+		/*Volta a colocar custos positivos*/
+		SearchDelete(g, 0, StopMe, VerticeDelete);
+		
+		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 	
-	if (Arg->err == 0) {
-		fprintf(outputfp, "%d %d %s %d %.2lf %d\n", Arg->v, Arg->e, Arg->var, StopMe,Sum,delcnt);
+		fprintf(outputfp, "%d %d %s %d %d %.2lf %d\n", 
+				Arg->v, Arg->e, Arg->var, Arg->vi, StopMe, Sum, delcnt);
+
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		
-		for (i=0; i < delcnt; i++)
+		for (i=1; i <= delcnt; i++) /*del[0] = StopMe*/
 		{
 			fprintf(outputfp, "%d %d %lf\n", g->data[del[i]]->vi,
 					g->data[del[i]]->vj, g->data[del[i]]->cost);

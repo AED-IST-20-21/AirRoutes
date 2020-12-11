@@ -48,7 +48,7 @@ VALG = valgrind --leak-check=full --show-leak-kinds=all -s
 
 FILES = $(shell ls ../test/*.routes)
 
-ZIP = $(zip AirRoutes main.c FileOp.c ListGraph.c Zero.c FileOp.h ListGraph.h Zero.h Makefile)
+ZIP = $(shell ./ZIP)
 #
 zip: $(EXE)
 	$(ZIP)

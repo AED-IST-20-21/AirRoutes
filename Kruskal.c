@@ -262,3 +262,19 @@ int binsearch(struct edge** data, int *id,int *sz, int start, int end)
 	return -1;
 }
 
+int N_binsearch(struct edge** data, int *id,int *sz, int start, int end)
+{
+	
+	int i;
+	
+	for (i = start; i < end; i++) {
+		if (data[i]->cost > 0){
+			if (!UFfind(((struct edge **)data)[i]->vi, ((struct edge **)data)[i]->vj, id)){
+				UFunion(((struct edge **)data)[i]->vi, ((struct edge **)data)[i]->vj, id, sz);
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+

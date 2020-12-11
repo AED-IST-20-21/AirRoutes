@@ -31,4 +31,6 @@ int NmbrUnion(struct edge** data, int V, int E);
 */
 int binsearch(struct edge** ,int*, int*,  int, int);
 
+int N_binsearch(struct edge** data, int *id,int *sz, int start, int end);
+
 #endif

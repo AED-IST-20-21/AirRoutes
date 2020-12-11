@@ -127,7 +127,7 @@ int EdgeDelete(struct edge *aux, int vi, int vj) {
 
 int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
-	if ((aux->vi = vi) || (aux->vj == vi)) return 1;
+	if ((aux->vi == vi) || (aux->vj == vi)) return 1;
 	else return 0;
 	
 }

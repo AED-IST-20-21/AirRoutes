@@ -2,8 +2,16 @@
 
 echo "Script to make zip"
 
-rm AirRoutes.zip
+if [ -f AirRoutes.zip ]; then
 
-zip AirRoutes.zip *.c *h Makefile
+	rm AirRoutes.zip
+fi
+
+if ! command -v zip &> /dev/null 
+then
+	echo "install zip comand"
+else
+	zip AirRoutes.zip *.c *h Makefile
+fi
 
 echo "DONE!"

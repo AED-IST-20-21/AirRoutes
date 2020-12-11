@@ -144,13 +144,13 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 			}
 		}
 
-		temp = g->data[ncpos];
-		g->data[ncpos] = g->data[g->Arg->e - 1];
-		g->data[g->Arg->e - 1] = temp;
+		temp = newg->data[ncpos];
+		newg->data[ncpos] = newg->data[g->Arg->e - 1];
+		newg->data[g->Arg->e - 1] = temp;
 
-		g->Arg->e--;
+		newg->Arg->e--;
 		NewStop = Kruskal(newg, &NewSum);
-		g->Arg->e++;
+		newg->Arg->e++;
 
 	} else {
 		/* Imprimir com 0 */
@@ -184,27 +184,33 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 #endif
 	if ((Arg->err == 0) && (flag == 0)) {
 		
-		fprintf(outputfp, "%d %d %s %d %lf %d %lf\n", 
-				Arg->v, Arg->e, Arg->var, StopMe, Sum, NewStop, NewSum);
-
+		fprintf(outputfp, "%d %d %s %d %d %d %.2lf %d %.2lf\n", 
+				Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, StopMe, Sum, NewStop, NewSum);
+	
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 		qsort(newg->data, NewStop, sizeof(struct edge *), lessVertice);
+
+		SearchDelete(g, 0, StopMe, EdgeDelete);
+		SearchDelete(newg, 0, NewStop, EdgeDelete);
 
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		EdgePrint(outputfp, newg->data, 0, NewStop);
 		
 	} else if ((Arg->err == 0) && (flag == 1)) {
 		
-		fprintf(outputfp, "%d %d %s %d %lf -1\n", Arg->v, Arg->e, Arg->var, StopMe, Sum);
+		fprintf(outputfp, "%d %d %s %d %d %d %.2lf -1\n",
+			   	Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, StopMe, Sum);	
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 		
+		SearchDelete(g, 0, StopMe, EdgeDelete);
+
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		
-	} else fprintf(outputfp, "%d %d %s -1\n", Arg->v, Arg->e, Arg->var);
+	} else fprintf(outputfp, "%d %d %s %d -1\n", 
+			Arg->v, Arg->e, Arg->var, Arg->vi);
 	
-	
-	
+		
 	VGFree(g);
 	free(newg->data);
 	free(newg);
@@ -217,17 +223,21 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *g;
 	double Sum = 0, NewSum=0;
 	int *id = NULL, *sz = NULL, *del=NULL, delcnt=0, StopMe=0, i;
+	int cnt = 0;
 	
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
 	StopMe = Kruskal(g, &Sum);   /* Apply Kruskal´s Algorithm to find the original backbone */
 	
 	if ( (delcnt = SearchDelete(g, 0, StopMe, VerticeDelete)) >= 1) {   /* If the deleted edge belongs to the backbone */
-
+/*		
+		size = delcnt;
 		if (delcnt==1) delcnt++;
+*/
+
 		/* Apply an incomplete version of Kruskal´s to get an edge that replaces the deleted one */
 		if ((id = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
 		if ((sz = (int *) malloc( Arg->v * sizeof(int))) == NULL) ErrExit(3);
-		if ((del = (int *) malloc( (delcnt) * sizeof(int))) == NULL) ErrExit(3);
+		if ((del = (int *) malloc( (delcnt + 1) * sizeof(int))) == NULL) ErrExit(3);
 		/* In this version, the algorithm is divided so it can output different information */
 		CWQU(g->data, Arg->v, &NewSum, id, sz, StopMe);
 #if 0
@@ -243,16 +253,21 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		for (i=0; i < delcnt; i++){
 			/*del[i] =CWQU(g->data, Arg->v, &NewSum, id, sz,del[i]);*/
 			del[i+1] = N_binsearch(g->data, id, sz, del[i], g->Arg->e);   /* Get the position of that edge */
+
 			if (del[i+1] == -1)
 			{
-				delcnt = 0; /*Conectividade não foi reposta*/
+				/*delcnt = 0;*/ /*Conectividade não foi reposta*/
 				break;
+			} else {
+				/*g->data[ del[i+1] ]->cost=-g->data[ del[i+1] ]->cost;*/
+				cnt++;
 			}
-			/*g->data[del[i]]->cost=-g->data[del[i]]->cost;*/ /*indiferente?*/
+
 		}
 		
 	} else {
 		delcnt = -1; /*vertice não pertence ao grafo*/
+		cnt = -1;
 	}
 
 
@@ -264,13 +279,23 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 	
 		fprintf(outputfp, "%d %d %s %d %d %.2lf %d\n", 
-				Arg->v, Arg->e, Arg->var, Arg->vi, StopMe, Sum, delcnt);
+				Arg->v, Arg->e, Arg->var, Arg->vi, StopMe, Sum, cnt);
 
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		
-		for (i=1; i <= delcnt; i++) /*del[0] = StopMe*/
+		for (i = 1; i < delcnt; i++) /*del[0] = StopMe*/
 		{
-			fprintf(outputfp, "%d %d %lf\n", g->data[del[i]]->vi,
+			if (del[i]==-1)
+			{
+				break;
+			}
+
+			if(g->data[ del[i] ]->cost < 0)
+			{
+				g->data[ del[i] ]->cost = -g->data[i]->cost;
+			}
+
+			fprintf(outputfp, "%d %d %.2lf\n", g->data[del[i]]->vi,
 					g->data[del[i]]->vj, g->data[del[i]]->cost);
 		}
 	
@@ -287,21 +312,23 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *g;
 	struct edge** backup;
-	double KSum, NewSum, *Sum;
+	double NewSum, Sum;
 	int i,*id,*sz;
 	int StopMe;
 	
-	g=VGRead(entryfp,Arg);
-	StopMe = Kruskal(g, &KSum);
+	g = VGRead(entryfp,Arg);
+	StopMe = Kruskal(g, &Sum);
 
 	backup = CreateEdgeV(Arg->v);
-	if ((Sum = (double*) malloc(Arg->v * sizeof(double)))==NULL) ErrExit(3);
 	/*
 	if ((backup = malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 	*/
 	if ((id=malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 	if ((sz=malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
-	
+
+	fprintf(outputfp, "%d %d %s %d %.2lf\n", 
+			Arg->v, Arg->e, Arg->var, StopMe, Sum);
+
 	for(i = 0; i < StopMe; i++)
 	{
 		NewSum = 0;
@@ -311,10 +338,19 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 
 		/*Find Replacement Edge*/
 		backup[i] = ProblemSolver(g, &NewSum, StopMe);
-		Sum[i] = NewSum;
 
 		/*EdgeRestore*/
 		g->data[i]->cost = -g->data[i]->cost;
+
+		fprintf(outputfp, "%d %d %.2lf ",
+			   	g->data[i]->vi, g->data[i]->vj, g->data[i]->cost);
+		if (backup[i] == NULL)
+		{
+			fprintf(outputfp, "-1\n");
+		} else {
+			fprintf(outputfp, "%d %d %.2lf\n",
+				   	backup[i]->vi, backup[i]->vj, backup[i]->cost);
+		}
 	}
 		
 	/*EOnePrint(outputfp, g, Sum, backup);*/

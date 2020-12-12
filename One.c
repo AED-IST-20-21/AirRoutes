@@ -198,6 +198,8 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
+	struct edge* temp;
+	/*void *a, *b;*/
 	double Sum = 0, NewSum=0;
 	int *id = NULL, *sz = NULL, *del=NULL, delcnt=0, StopMe=0, i;
 	int cnt = 0;
@@ -247,6 +249,26 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		cnt = -1;
 	}
 
+	/* Organizar por vértice as arestas q repõem a conectividade */
+	for (i=1; i < cnt; i++)
+	{
+		/*
+		a = g->data[ del[i] ];
+		b = g->data[ del[i+1] ];*/
+		if (g->data[ del[i] ]->vi > g->data[ del[i+1] ]->vi)
+		{
+			temp = g->data[ del[i] ];
+			g->data[ del[i] ] = g->data[ del[i+1] ];
+			g->data[ del[i+1] ] = temp;
+		} else if (g->data[ del[i] ]->vi == g->data[ del[i+1] ]->vi){
+			if (g->data[ del[i] ]->vj < g->data[ del[i+1] ]->vj)
+			{	
+				temp = g->data[ del[i] ];
+				g->data[ del[i] ] = g->data[ del[i+1] ];
+				g->data[ del[i+1] ] = temp;
+			}
+		}
+	}
 
 	if (Arg->err == 0) 
 	{
@@ -277,6 +299,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		}
 	
 	} else fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
+	
 	fprintf(outputfp,"\n");
 	free(id);
 	free(sz);

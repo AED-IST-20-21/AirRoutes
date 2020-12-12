@@ -50,7 +50,7 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /*IS WORKING*/
 	StopMe = Kruskal(g, &sum);   /* Apply kruskal´s Algorithm to get the backbone of the graph */
 	
 	
-	fprintf(outputfp,"\n");
+	/*fprintf(outputfp,"\n");*/
 	if ((sum > 0) && (Arg->err == 0)) { /* Print backbone if no errors were detected during execution */
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice); /* Sort the backbone in vertice order */
@@ -124,7 +124,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	double Sum=0, NewSum=0;
 	int StopMe=0, NewStop=0, ncpos=0, i;
 	int *id = NULL, *sz = NULL;
-	bool flag=0;
+	bool flag=1;
 	
 	g = VGRead(entryfp, Arg);
 	
@@ -151,15 +151,17 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		newg->Arg->e--;
 		NewStop = Kruskal(newg, &NewSum);
 		newg->Arg->e++;
-
-	}
-
-	if (StopMe - NewStop != 0)
-	{
+		
 		flag = 1;
+
+	} else if ((flag = SearchDelete(g, StopMe, g->Arg->e, EdgeDelete))!=0)
+	{	/* Aresta não está nem na mst nem no bin */
+		flag = 0;
+	} else {
+		flag = 0;
 	}
 
-	if ((Arg->err == 0) && (flag == 0)) {
+	if ((Arg->err == 0) && (flag == 1)) {
 		
 		fprintf(outputfp, "%d %d %s %d %d %d %.2lf %d %.2lf\n", 
 				Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, StopMe, Sum, NewStop, NewSum);
@@ -173,8 +175,8 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		EdgePrint(outputfp, newg->data, 0, NewStop);
 		
-	} else if ((Arg->err == 0) && (flag == 1)) {
-		
+	} else if ((Arg->err == 0) && (flag == 0)) {
+	
 		fprintf(outputfp, "%d %d %s %d %d %d %.2lf -1\n",
 			   	Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj, StopMe, Sum);	
 		
@@ -312,22 +314,32 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *g;
 	struct edge** backup;
-	double NewSum, Sum;
+	double NewSum = 0, Sum = 0;
 	int i,*id,*sz;
 	int StopMe;
 	
 	g = VGRead(entryfp,Arg);
 	StopMe = Kruskal(g, &Sum);
 
-	backup = CreateEdgeV(Arg->v);
+	backup = CreateEdgeV(StopMe);
 	/*
 	if ((backup = malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 	*/
 	if ((id=malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 	if ((sz=malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 
+	
 	fprintf(outputfp, "%d %d %s %d %.2lf\n", 
 			Arg->v, Arg->e, Arg->var, StopMe, Sum);
+
+/*	
+	fprintf(outputfp, "%d ", Arg->v);
+	fprintf(outputfp, "%d ", Arg->e);
+	fprintf(outputfp, "%s ", Arg->var);
+	fprintf(outputfp, "%d ", StopMe);
+	fprintf(outputfp, "%.2lf\n", Sum);
+*/	
+	qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 
 	for(i = 0; i < StopMe; i++)
 	{
@@ -355,11 +367,16 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 	/*EOnePrint(outputfp, g, Sum, backup);*/
 	fprintf(outputfp,"\n");
+	
+	for (i=0; i < StopMe; i++)
+	{
+		free(backup[i]);
+	}
+	free(backup);
+
 	free(id);
 	free(sz);
 	VGFree(g);
-	free(g->data);
-	free(g);
 	
 	return;
 }
@@ -390,9 +407,14 @@ struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
 		return NULL;
 	}
 
-	backup = g->data[ncpos];
+	if ((backup = (struct edge*) malloc(sizeof(struct edge)))==NULL) ErrExit(3);
+
+	backup->vi = g->data[ncpos]->vi;
+	backup->vj = g->data[ncpos]->vj;
+	backup->cost = g->data[ncpos]->cost;
 	
 	free(id);
 	free(sz);
 	return backup;
 }
+

@@ -50,7 +50,7 @@ void AOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) { /*IS WORKING*/
 	StopMe = Kruskal(g, &sum);   /* Apply kruskal´s Algorithm to get the backbone of the graph */
 	
 	
-	
+	fprintf(outputfp,"\n");
 	if ((sum > 0) && (Arg->err == 0)) { /* Print backbone if no errors were detected during execution */
 		
 		qsort(g->data, StopMe, sizeof(struct edge *), lessVertice); /* Sort the backbone in vertice order */
@@ -106,12 +106,12 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		EdgePrint(outputfp, g->data, 0, StopMe);
 		if (flag==1) {
 			fprintf(outputfp, "%d %d %.2lf\n", g->data[ncpos]->vi, g->data[ncpos]->vj, g->data[ncpos]->cost);
-		} else fprintf(outputfp,"\n");
+		}
 		
 	} else {
 		fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	}
-	
+	fprintf(outputfp,"\n");
 	VGFree(g); /* Before exiting, free the graph and auxiliary vectors */
 	free(id);
 	free(sz);
@@ -152,8 +152,6 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		NewStop = Kruskal(newg, &NewSum);
 		newg->Arg->e++;
 
-	} else {
-		/* Imprimir com 0 */
 	}
 
 	if (StopMe - NewStop != 0)
@@ -161,27 +159,6 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		flag = 1;
 	}
 
-#if 0	
-	if (NewStop < Arg->v) {
-		
-		if ((newid = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
-		if ((newsz = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
-		
-		vectorcpy(newid, id);
-		vectorcpy(newsz, sz);
-		
-		
-		StopMe = CWQU(g->data, Arg->v, &Sum, id, sz, Arg->e);
-		
-		newg->data[NewStop]->cost = -newg->data[NewStop]->cost;
-		EdgeBreak(g->data, Arg->e, newid);
-		
-		NewStop = CWQU(newg, &NewSum, newid, newsz, Arg->e);
-		
-		newg->data[NewStop]->cost = -newg->data[NewStop]->cost;
-		
-	} else flag = 1;
-#endif
 	if ((Arg->err == 0) && (flag == 0)) {
 		
 		fprintf(outputfp, "%d %d %s %d %d %d %.2lf %d %.2lf\n", 
@@ -210,7 +187,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	} else fprintf(outputfp, "%d %d %s %d -1\n", 
 			Arg->v, Arg->e, Arg->var, Arg->vi);
 	
-		
+	fprintf(outputfp,"\n");
 	VGFree(g);
 	free(newg->data);
 	free(newg);
@@ -300,7 +277,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		}
 	
 	} else fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
-	
+	fprintf(outputfp,"\n");
 	free(id);
 	free(sz);
 	free(del);
@@ -354,6 +331,7 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	}
 		
 	/*EOnePrint(outputfp, g, Sum, backup);*/
+	fprintf(outputfp,"\n");
 	free(id);
 	free(sz);
 	VGFree(g);

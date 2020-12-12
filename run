@@ -1,41 +1,15 @@
 #!/bin/bash
 
-clean_file () {
-	if [ -f $1 ]; then
-		rm $1
-	fi
-}
-
-verify_directory () {
-	if [ -d $1 ]; then
-		echo "$1"
-	else
-		mkdir $1
-	fi
-}
-
 make clean
 make
 printf "\n\n\n____________________________________________________________________________\n\n\n"
-
-verify_directory test
-
 cp backbone test
 
 cd test
 echo "Test Folder :"
 pwd
 printf "\n"
-
-if [ -f output.log ]; then
-	rm output.log
-fi
-
-if ! command -v unzip &> /dev/null
-then
-	echo "Please install unzip comand. Pretty please..."
-	exit
-fi
+rm output.log
 
 if [ -n "$1" ]; then
   for z in "$@"
@@ -49,7 +23,6 @@ else
   done
 fi
 
-clean_file *.check
 rm *.check
 
   for f in *.bbones

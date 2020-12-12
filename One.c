@@ -154,7 +154,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		
 		flag = 1;
 
-	} else if ((flag = SearchDelete(g, StopMe, g->Arg->e, EdgeDelete))!=0)
+	} else if (SearchDelete(g, StopMe, g->Arg->e, EdgeDelete)!=0)
 	{	/* Aresta não está nem na mst nem no bin */
 		flag = 0;
 	} else {
@@ -322,23 +322,12 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	StopMe = Kruskal(g, &Sum);
 
 	backup = CreateEdgeV(StopMe);
-	/*
-	if ((backup = malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
-	*/
 	if ((id=malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 	if ((sz=malloc(Arg->v * sizeof(int)))==NULL) ErrExit(3);
 
 	
-	fprintf(outputfp, "%d %d %s %d %.2lf\n", 
-			Arg->v, Arg->e, Arg->var, StopMe, Sum);
-
-/*	
-	fprintf(outputfp, "%d ", Arg->v);
-	fprintf(outputfp, "%d ", Arg->e);
-	fprintf(outputfp, "%s ", Arg->var);
-	fprintf(outputfp, "%d ", StopMe);
-	fprintf(outputfp, "%.2lf\n", Sum);
-*/	
+	fprintf(outputfp, "%d %d %s %d %.2lf\n",Arg->v, Arg->e, Arg->var, StopMe, Sum);
+	
 	qsort(g->data, StopMe, sizeof(struct edge *), lessVertice);
 
 	for(i = 0; i < StopMe; i++)
@@ -364,16 +353,9 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 				   	backup[i]->vi, backup[i]->vj, backup[i]->cost);
 		}
 	}
-		
-	/*EOnePrint(outputfp, g, Sum, backup);*/
 	fprintf(outputfp,"\n");
 	
-	for (i=0; i < StopMe; i++)
-	{
-		free(backup[i]);
-	}
-	free(backup);
-
+	FreeEdgeV(backup,StopMe);
 	free(id);
 	free(sz);
 	VGFree(g);
@@ -381,40 +363,5 @@ void EOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	return;
 }
 
-struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
-{
-	struct edge* backup;
-	int NewStop, ncpos, *id, *sz;
 
-	if ((id=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
-	if ((sz=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
-
-	NewStop = CWQU(g->data, g->Arg->v, Sum, id, sz, StopMe);
-
-	if (StopMe - NewStop > 1)
-	{
-		free(id);
-		free(sz);
-		return NULL;
-	}
-	
-	ncpos = binsearch(g->data, id, sz, StopMe, g->Arg->e);
-
-	if (ncpos ==-1)
-	{
-		free(id);
-		free(sz);
-		return NULL;
-	}
-
-	if ((backup = (struct edge*) malloc(sizeof(struct edge)))==NULL) ErrExit(3);
-
-	backup->vi = g->data[ncpos]->vi;
-	backup->vj = g->data[ncpos]->vj;
-	backup->cost = g->data[ncpos]->cost;
-	
-	free(id);
-	free(sz);
-	return backup;
-}
 

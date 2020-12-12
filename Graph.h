@@ -63,9 +63,4 @@ struct graph* GraphInit();
 /*struct list* AddList(struct list*);
 struct list* CreateListV();*/ /*?*/
 
-
-
-
-void FreeEdgeV(void *, int); /* (struct edge*) */
-
 #endif //AIRROUTES_GRAPH_H

@@ -140,17 +140,5 @@ void GFree(struct graph *g, void (*FreeData)(void*, int))
 	return;
 }
 
-void FreeEdgeV(void * EdgeVector, int size)
-{
-	int i;
-	
-	for (i = 0; i < size; i++)
-	{	
-		free( ((struct edge**) EdgeVector)[i] );
-	}
-	
-	free((struct edge**) EdgeVector);
-	return;
 
-}
 

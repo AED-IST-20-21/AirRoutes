@@ -1,21 +1,15 @@
-//
-// Created by anton on 11/30/2020.
-//
-
-#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <float.h>
 #include <stdlib.h>
 
 #include "FileOp.h"
 #include "VectorGraph.h"
+#include "Kruskal.h"
 
 struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	struct graph *G;
 	int i;
-	/*struct edge *temp;*/
 	
 	G = GraphInit();                                                                            /*Initialize the graph*/
 	
@@ -38,20 +32,10 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 			Arg->err = 1;
 			return NULL;
 		}
-
-		/*
-		G->data[i]->vi = temp->vi;
-		G->data[i]->vj = temp->vj;
-		G->data[i]->cost = temp->cost;
-		*/
 	}
-	
-	/*free(temp);*/
 	return G;
 }
 
-
-/*Edge Vector*/
 struct edge **CreateEdgeV(int size) {
 	
 	struct edge **aux;
@@ -60,49 +44,6 @@ struct edge **CreateEdgeV(int size) {
 	
 	return aux;
 }
-
-void emptybin(struct edge **bin, struct edge **mst, int offset, int end) {
-	
-	int j;
-	
-	for (j = 0; j < end; j++) 
-	{
-		mst[j+offset-1] = bin[j];
-	}
-	
-	free(bin);
-	return;
-}
-
-void EdgeBreak(struct edge **EdgeV, int size,int *id) {
-	int i, Family;
-	
-	Family = EdgeV[0]->vi; /*Arbitrário*/
-	for (i = 0; i < size; i++) {
-		if (EdgeV[i]->cost == -1) {
-			id[i] = -1;
-			Family = EdgeV[i + 1]->vi;
-		} else {
-			id[i] = Family;
-		}
-	}
-}
-
-int SearchOverflow(struct graph *g, double sum, int start, int end, int (*Delete)(struct edge *, int, int)) 
-{
-	int i, cnt = 0;
-	
-	for (i = start; i < end; i++) {
-		
-		if ((*Delete)(g->data[i], g->Arg->vi, g->Arg->vj)) {
-			
-			g->data[i]->cost = g->data[i]->cost + sum;
-			cnt++;
-		}
-	}
-	return cnt;
-}
-
 
 int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge *, int, int)) {
 	int i, cnt = 0;
@@ -132,57 +73,23 @@ int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
 }
 
-int flagcheck(int pos, struct PBArg *Arg) {
-	
-	if (pos < 0) return -1;
-	else if ((0 < pos) && (pos < Arg->v)) return 0;
-	else return 1;
-	
-}
-
-void EdgeSwitch(struct edge **data, int posA, int posB) {
-	struct edge *temp;
-	
-	if ((temp = malloc(sizeof(struct edge))) == NULL) ErrExit(3);
-	
-	temp = data[posA];
-	data[posA] = data[posB];
-	data[posB] = temp;
-	
-	free(temp);
-	return;
-}
-
 void VGFree(struct graph *g){
-
-	int i;
-	for (i=0; i<g->Arg->e; i++)
-	{
-		free(g->data[i]);
-	}
-	free(g->data);
+	
+	FreeEdgeV(g->data,g->Arg->e);
 	free(g);
 	
 }
-
-int EdgeSearch(struct graph *g, int start, int end) {
-	
+void FreeEdgeV(struct edge **data, int size)
+{
 	int i;
 	
-	for (i = start; i < end; i++) {
-		
-		if (EdgeDelete(g->data[i], g->Arg->vi, g->Arg->vj)) return i;
+	for (i=0; i<size; i++)
+	{
+		free(data[i]);
 	}
-	return -1;
-}
-
-int vectorcpy(int *new, int *source, int size){
-
-	/* size = sizeof(source)/sizeof(int); */
-
-	int i;
-	for (i=0; i < size; i++) new[i]=source[i];
-	return i;
+	free(data);
+	return;
+	
 }
 
 struct graph *graphcpy(struct graph *source){
@@ -193,4 +100,41 @@ struct graph *graphcpy(struct graph *source){
 	new->data=CreateEdgeV(source->Arg->e);
 	for (i=0; i < source->Arg->e; i++) new->data[i]=source->data[i];
 	return new;
+}
+
+struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
+{
+	struct edge* backup;
+	int NewStop, ncpos, *id, *sz;
+	
+	if ((id=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
+	if ((sz=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
+	
+	NewStop = CWQU(g->data, g->Arg->v, Sum, id, sz, StopMe);
+	
+	if (StopMe - NewStop > 1)
+	{
+		free(id);
+		free(sz);
+		return NULL;
+	}
+	
+	ncpos = binsearch(g->data, id, sz, StopMe, g->Arg->e);
+	
+	if (ncpos ==-1)
+	{
+		free(id);
+		free(sz);
+		return NULL;
+	}
+	
+	if ((backup = (struct edge*) malloc(sizeof(struct edge)))==NULL) ErrExit(3);
+	
+	backup->vi = g->data[ncpos]->vi;
+	backup->vj = g->data[ncpos]->vj;
+	backup->cost = g->data[ncpos]->cost;
+	
+	free(id);
+	free(sz);
+	return backup;
 }

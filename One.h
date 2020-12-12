@@ -23,7 +23,7 @@ void BOne(FILE *, FILE *, struct PBArg *);
 void COne(FILE *, FILE *, struct PBArg *);
 void DOne(FILE *, FILE *, struct PBArg *);
 void EOne(FILE *, FILE *, struct PBArg *);
-struct edge* ProblemSolver(struct graph*, double*, int);
+
 
 #endif //AIRROUTES_ONE_H
 

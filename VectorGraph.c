@@ -32,6 +32,7 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 			Arg->err = 1;
 			return NULL;
 		}
+		Format(G->data[i]);
 	}
 	return G;
 }
@@ -138,3 +139,17 @@ struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
 	free(sz);
 	return backup;
 }
+
+void Format(struct edge* data)
+{
+	int temp;
+
+	if (data->vi > data->vj )
+	{
+		temp = data->vi;
+		data->vi = data->vj;
+		data->vj = temp;
+	}
+	return;
+}
+

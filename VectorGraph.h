@@ -24,4 +24,6 @@ void VGFree(struct graph *g);
 struct graph *graphcpy(struct graph *source);
 void FreeEdgeV(struct edge **data, int size);
 struct edge* ProblemSolver(struct graph*, double*, int);
+void Format(struct edge* );
+
 #endif //AIRROUTES_VECTORGRAPH_H

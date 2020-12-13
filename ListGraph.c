@@ -6,9 +6,9 @@
  *Function to free a graph represented by an adjacency list array
  * @param g Graph to be freed
  **********************************************************************************************************************/
-void LGFree(struct graph0 *g){
+void LGFree(struct graph0 *g) {
 	
-	FreeListV(g->data,g->Arg->v); /* Free the Adjacency list array */
+	FreeListV(g->data, g->Arg->v); /* Free the Adjacency list array */
 	free(g);   /* Free Graph pointers */
 }
 
@@ -16,10 +16,10 @@ void LGFree(struct graph0 *g){
  * Function to allocate memory for a graph represented by an adjacency list array
  * @return the new graph
  **********************************************************************************************************************/
-struct graph0* Graph0Init(){
+struct graph0 *Graph0Init() {
 	struct graph0 *G;
 	
-	if ((G = (struct graph0 *) malloc(sizeof(struct graph0)))==NULL) ErrExit(3);
+	if ((G = (struct graph0 *) malloc(sizeof(struct graph0))) == NULL) ErrExit(3);
 	
 	return G;
 }
@@ -50,7 +50,7 @@ struct graph0 *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	
 	for (i = 0; i < Arg->e; i++) {  /* Read through all the edges on the graph */
 		
-		if (EdgeRead(entryfp,temp)==NULL) {
+		if (EdgeRead(entryfp, temp) == NULL) {
 			LGFree(G);   /* If there are errors whilst reading, free the graph and return nothing */
 			return NULL;
 		}
@@ -146,61 +146,64 @@ struct list **CreateListV(int V) {
 	return LV;   /* Return the array */
 }
 
+/***********************************************************************************************************************
+ * Function that returns the length of a list
+ * @param L List to examine
+ * @return Number of elements
+ **********************************************************************************************************************/
 int LenghtList(struct list *L) {
 	
-	struct list *aux;
-	int c = 0;
+	struct list *aux = L; /* Auxiliary list to not lose Head pointer */
+	int c = 0;   /* Count */
 	
-	aux = L;
-	
-	while (aux != NULL) {
+	while (aux != NULL) {   /* Go through all the elements in the list */
 		
 		c++;
 		aux = aux->next;
-		
 	}
-	
 	return c;
-	
 }
 
+/***********************************************************************************************************************
+ * Function to initialize all "lamps" required for the search by ClickFind
+ * @param lvi
+ * @param lenght
+ * @return
+ **********************************************************************************************************************/
 int *LampsInit(struct list *lvi, int lenght) {
 	
-	int *lamps, i;
-	struct list *laux;
+	int *lamps, i;   /* lamps array to initialize and auxiliary variable for the cycle */
+	struct list *laux = lvi;   /* Auxiliary pointer to the list, to keep track of the head */
 	
-	if ((lamps = (int *) calloc(lenght, sizeof(int))) == NULL)
-		ErrExit(3);
+	if ((lamps = (int *) calloc(lenght, sizeof(int))) == NULL) ErrExit(3);   /* Allocate memory for the array */
 	
-	laux = lvi;
-	
-	for (i = 0; i < lenght; i++) {
+	for (i = 0; i < lenght; i++) {   /* Run every element of the list */
 		
 		lamps[i] = laux->v;
-		
 		laux = laux->next;
 	}
 	return lamps;
 }
 
+/***********************************************************************************************************************
+ * Function to find clicks (cycles of 3 vertices)
+ * @param adj Adjacency list to search
+ * @param lamps Array containing information if the vertice was previously visited
+ * @param size Size of the lamps array
+ * @param j TODO
+ * @return Click Count
+ **********************************************************************************************************************/
 int ClickFind(struct list *adj, int *lamps, int size, int j) {
 	
-	int c = 0, i;
-	struct list *aux;
-	
-	aux = adj;
-	
+	int c = 0, i;   /* Auxiliary variable for the cycle and Click counter */
+	struct list *aux = adj;   /* Auxiliary variable to keep track of the list head */
+
 	while (aux != NULL) {
 		for (i = j; i < size; i++) {
-			if (aux->v == lamps[i]) {
-				
-				c++;
-				
-			}
+			if (aux->v == lamps[i]) c++;
 		}
 		aux = aux->next;
 	}
 	
 	return c;
-	
 }

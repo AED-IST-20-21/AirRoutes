@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 void LControl(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
-	int G = 0, AC = 0;
+	int G = 0, AC;
 	double cost = 0;
 	
 	switch (AC = ArgCheck(Arg)) {

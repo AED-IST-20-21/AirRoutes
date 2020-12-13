@@ -25,8 +25,8 @@ struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 			VGFree(G);
 			Arg->err = 1;
 			return NULL;
-		} else if ((G->data[i]->vi < 0) || (G->data[i]->vj < 0) 
-				|| (G->data[i]->vi > Arg->v) || (G->data[i]->vj > Arg->v)) 
+		} else if ((G->data[i]->vi < 0) || (G->data[i]->vj < 0)
+		|| (G->data[i]->vi > Arg->v) || (G->data[i]->vj > Arg->v))
 		{
 			VGFree(G);
 			Arg->err = 1;

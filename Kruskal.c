@@ -6,7 +6,7 @@
  * Initialization of the 2 arrays required for CWQU
  * @param V Size of the arrays
  * @param id root array
- * @param sz size array TODO
+ * @param sz size array
  **********************************************************************************************************************/
 void UFinit(int V, int *id, int *sz) {
 	
@@ -175,7 +175,7 @@ void Reverse(struct edge **data, int start, int end) {
 }
 
 /***********************************************************************************************************************
- * A broken down version of Kruskal´s Algorithm, which can stop and continue CWQU as required
+ * A broken down version of Kruskal´s Algorithm, which can stop CWQU as required
  * @param data Cost Sorted Edge array
  * @param V N
  * @param cost Cost of the minimum support tree
@@ -188,7 +188,7 @@ int CWQU(struct edge **data, int V, double *cost, int *id, int *sz, int Stop) {
 	
 	int i, cnt = 0;
 	
-	UFinit(V, id, sz);/*TODO*/
+	UFinit(V, id, sz);
 	
 	for (i = 0; i < Stop; i++) {
 		if (data[i]->cost > 0) {   /* Doesn´t use edges that have been marked by SearchDelete */

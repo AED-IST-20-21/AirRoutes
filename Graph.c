@@ -130,12 +130,4 @@ int ArgCheck(struct PBArg *aux) {
 }
 
 
-void GFree(struct graph *g, void (*FreeData)(void*, int))
-{
-	FreeData(g->data, g->Arg->v);
-	free(g);
-	return;
-}
-
-
 

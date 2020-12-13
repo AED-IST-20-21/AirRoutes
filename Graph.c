@@ -1,15 +1,10 @@
-//
-// Created by anton on 11/30/2020.
-//
 
 #include "Graph.h"
 
-/*************************
- * Function to exit when an error occurs
- * @param int err indicating what error occurred
- * @return void
- ************************/
-
+/***********************************************************************************************************************
+ * Function to handle unplanned Errors
+ * @param err Error type
+ **********************************************************************************************************************/
 void ErrExit(int err) {
 	
 	switch (err) {
@@ -59,20 +54,10 @@ void ErrExit(int err) {
 	return;
 }
 
-struct graph *GraphInit() {
-	struct graph *G;
-	
-	if ((G = (struct graph *) malloc(sizeof(struct graph))) == NULL)
-		ErrExit(3);
-	
-	return G;
-}
-
-/**********************
+/***********************************************************************************************************************
  * Memory allocation and Initialization of PBArg
  * @return clean PBArg
- *********************/
-
+ **********************************************************************************************************************/
 struct PBArg *PBinit() {
 	
 	struct PBArg *aux;
@@ -90,14 +75,27 @@ struct PBArg *PBinit() {
 	return aux;
 }
 
-/********************************
+/***********************************************************************************************************************
+ * Function to allocate memory for a graph
+ * @return new graph
+ **********************************************************************************************************************/
+struct graph *GraphInit() {
+	struct graph *G;
+	
+	if ((G = (struct graph *) malloc(sizeof(struct graph))) == NULL)
+		ErrExit(3);
+	
+	return G;
+}
+
+/***********************************************************************************************************************
  * Function to check if the problem arguments are valid
  * @param aux Struct containing the problem arguments
  * @return mode if OK -1 else
- */
+ **********************************************************************************************************************/
 int ArgCheck(struct PBArg *aux) {
+	
 	if ((aux->v > 0) && (aux->e > 0)) {
-		
 		if (strcmp(aux->var, "A0") == 0) {
 			return 1;
 			
@@ -126,7 +124,6 @@ int ArgCheck(struct PBArg *aux) {
 			return 15;
 			
 		} else return -1;
-		
 	} else {
 		return -1;
 	}

@@ -14,7 +14,7 @@
  **********************************************************************************************************************/
 char *ExitFileName(char *FileName) {
 	char *ExitFileName = NULL;   /* Name of the Output file */
-	int FileSize = 0, i;   /* Auxiliary Variable to remove the extension from the entry name */
+	int FileSize, i;   /* Auxiliary Variable to remove the extension from the entry name */
 	
 	if (FileCheck(FileName) != 0) exit(1);   /* Checking if the Entry file Name if valid */
 	
@@ -106,9 +106,9 @@ struct edge *EdgeRead(FILE *fp, struct edge *aux) {
 	
 	 int temp;    /* Temporary Variable needed for the sorting operation */
 	
-	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) return NULL; /* Checking valid Read */
+	if ((fscanf(fp, "%d %d %lf", &aux->vi, &aux->vj, &aux->cost) != 3)) return NULL;   /* Checking valid Read */
 	
-	if (aux->vj < aux->vi) { /* Checking if the 2nd vertice is smaller than the first */
+	if (aux->vj < aux->vi) {   /* Checking if the 2nd vertice is smaller than the first */
 		
 		temp = aux->vj;
 		aux->vj = aux->vi;
@@ -116,7 +116,7 @@ struct edge *EdgeRead(FILE *fp, struct edge *aux) {
 		
 	}
 	
-	return aux; /* Return the edge */
+	return aux;   /* Return the edge */
 }
 
 /***********************************************************************************************************************
@@ -154,24 +154,19 @@ void LPrint(FILE *outputfp, struct PBArg *Arg, int h, double cost, int mode) {
 	return;
 	
 }
-/***********************************************************************************************************************
- *
- * @param outputfp
- * @param data
- * @param start
- * @param end
- */
-void EdgePrint(FILE *outputfp,struct edge **data, int start, int end) {
-	int i;
-	for (i = start; i < end; i++) {
-		
-		fprintf(outputfp,"%d %d %.2lf\n",data[i]->vi,data[i]->vj,data[i]->cost);
-		
-	}
-	
-	return;
-}
 
+/***********************************************************************************************************************
+ * Function to print all edges from start to finish.
+ * @param outputfp File to write to
+ * @param data Edge array to print from
+ * @param start Start position
+ * @param finish End position
+ **********************************************************************************************************************/
+void EdgePrint(FILE *outputfp,struct edge **data, int start, int finish) {
+	
+	for (int i = start; i < finish; i++) fprintf(outputfp,"%d %d %.2lf\n",data[i]->vi,data[i]->vj,data[i]->cost);
+}
+//TODO
 void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup) {
 	
 	int i;

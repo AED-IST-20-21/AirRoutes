@@ -2,23 +2,20 @@
 
 #include "ListGraph.h"
 
-
-/**
- * Function to read entire graph0 from file
- * @param entryfp File from which to read
- * @param v Number
- * @param Arg
- * @return
- */
-
+/***********************************************************************************************************************
+ *Function to free a graph represented by an adjacency list array
+ * @param g Graph to be freed
+ **********************************************************************************************************************/
 void LGFree(struct graph0 *g){
 	
-	FreeListV(g->data,g->Arg->v);
-	free(g);
-	
-	return;
+	FreeListV(g->data,g->Arg->v); /* Free the Adjacency list array */
+	free(g);   /* Free Graph pointers */
 }
 
+/***********************************************************************************************************************
+ * Function to allocate memory for a graph represented by an adjacency list array
+ * @return the new graph
+ **********************************************************************************************************************/
 struct graph0* Graph0Init(){
 	struct graph0 *G;
 	
@@ -27,86 +24,84 @@ struct graph0* Graph0Init(){
 	return G;
 }
 
+/***********************************************************************************************************************
+ * Function to read a graph and store it as an adjacency list array
+ * @param entryfp File to read from
+ * @param Arg Problem Arguments, which have already been read
+ * @return the new complete graph
+ **********************************************************************************************************************/
 struct graph0 *LGRead(FILE *entryfp, struct PBArg *Arg) {
 	
-	struct graph0 *G;
-	struct edge *temp = NULL;
+	struct graph0 *G;   /* New Graph */
+	struct edge *temp = NULL;   /* Temp edge to overcome fscanf trouble */
+	int i;   /* Auxiliary variable for cycle */
 	
-	int i;
+	G = Graph0Init();   /* Initialize the graph */
 	
-	G = Graph0Init();
+	G->Arg = Arg;   /* Attaching the problem arguments to the graph */
 	
-	G->Arg = Arg;
+	G->data = CreateListV(Arg->v);   /* Allocate memory for the adjacency list array */
 	
-	G->data = CreateListV(Arg->v);
+	if ((temp = (struct edge *) malloc(sizeof(struct edge))) == NULL)ErrExit(3);   /* Allocate temporary edge */
 	
-	if ((temp = (struct edge *) malloc(sizeof(struct edge))) == NULL)
-		ErrExit(3);
-	
-	temp->vi = 0;
+	temp->vi = 0;   /* Initialization of the temporary edge */
 	temp->vj = 0;
 	temp->cost = 0;
 	
-	for (i = 0; i < Arg->e; i++) {
+	for (i = 0; i < Arg->e; i++) {  /* Read through all the edges on the graph */
 		
-		if (fscanf(entryfp, "%d %d %lf", &temp->vi, &temp->vj, &temp->cost) != 3) {
-			LGFree(G);
+		if (EdgeRead(entryfp,temp)==NULL) {
+			LGFree(G);   /* If there are errors whilst reading, free the graph and return nothing */
 			return NULL;
 		}
-		
+		/* Adding edge to the 1st vertice´s adjacency list  */
 		((struct list **) G->data)[temp->vi - 1] = AddList(((struct list **) G->data)[temp->vi - 1]);
 		PutList(((struct list **) G->data)[temp->vi - 1], temp->vj, temp->cost);
-		
+		/* Adding edge to the 2nd vertice´s adjacency list */
 		((struct list **) G->data)[temp->vj - 1] = AddList(((struct list **) G->data)[temp->vj - 1]);
 		PutList(((struct list **) G->data)[temp->vj - 1], temp->vi, temp->cost);
 		
 	}
-	free(temp);
-	return G;
+	free(temp);   /* Free the temporary edge */
+	return G;   /* return the new graph with the correct information */
 }
 
-/**
- * Function to free a dinamically allocated vector of adjancency lists
- * @param LV Vector of adjancecncy lists
+/***********************************************************************************************************************
+ * Function to free a dynamically allocated array of adjacency lists
+ * @param LV Vector of adjacency lists
  * @param V Number of vertices
- */
-
+ **********************************************************************************************************************/
 void FreeListV(struct list **LV, int V) {
 	
 	int i;
 	
-	for (i = 0; i < V; i++)
-	{	
-		FreeList(LV[i]);	
-	}
+	for (i = 0; i < V; i++) FreeList(LV[i]);   /* Free all the lists */
+	free(LV);   /* Free the array of pointers */
 	
-	free(LV);
-	return;
 }
 
-
-
-/**
+/***********************************************************************************************************************
  * Function to free a dinamically allocated adjancency list
  * @param L List to be freed
- */
-
+ **********************************************************************************************************************/
 void FreeList(struct list *L) {
-	struct list *aux, *Prev;
-	aux = L;
-	while (aux != NULL) {
-		Prev = aux;
+	
+	struct list *aux, *prev;   /* Auxiliary variables to run the list */
+	aux = L;   /* Keep the entry parameter pointing to 1st element */
+	
+	while (aux != NULL) {   /* Keep the pointer to the next and free the current element */
+		prev = aux;
 		aux = aux->next;
-		free(Prev);
+		free(prev);
 	}
-	free(aux);
+	free(aux);  /* Free the last pointer */
 	return;
 }
 
-/**
+/***********************************************************************************************************************
  * Adds a new element to the tail of the list
  * @param L List
- */
+ **********************************************************************************************************************/
 struct list *AddList(struct list *next) {
 	
 	struct list *new;
@@ -123,28 +118,32 @@ struct list *AddList(struct list *next) {
 	return new;
 }
 
+/***********************************************************************************************************************
+ * Adds an element to an adjacency list
+ * @param L List to add
+ * @param V Element to add
+ * @param cost Cost of the edge
+ **********************************************************************************************************************/
 void PutList(struct list *L, int V, double cost) {
 	
 	L->v = V;
 	L->cost = cost;
-	
-	return;
 }
 
-/**
+/***********************************************************************************************************************
  * Allocates memory for a vector of adjacency lists
- * @param V
- * @return
- */
+ * @param V Number of vertices in the array
+ * @return the array of adjacency lists
+ **********************************************************************************************************************/
 struct list **CreateListV(int V) {
 	int i;
 	
-	struct list **LV = (struct list **) malloc(V * sizeof(struct list *));
+	struct list **LV = (struct list **) malloc(V * sizeof(struct list *));   /* Memory Allocation */
 	
-	for (i = 0; i < V; i++) {
+	for (i = 0; i < V; i++) {   /* Pointers´ Initialization */
 		LV[i] = NULL;
 	}
-	return LV;
+	return LV;   /* Return the array */
 }
 
 int LenghtList(struct list *L) {

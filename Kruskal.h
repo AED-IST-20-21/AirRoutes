@@ -3,34 +3,15 @@
 
 #include "Graph.h"
 
-/*CWQU*/
-void UFinit(int, int *, int *);
-
-int UFfind(int, int, int *);
-
-void UFunion(int, int, int *, int *);
-
-int lessVertice(const void *, const void *);
-
-int lessCost(const void *, const void *);
-
-/*struct edge BinInit(int);*/
-/*
-int Bin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double* cost);
-
-int NoBin(int E, int V, int *id, int *sz, struct edge **mst, struct edge **bin, double* cost);
-*/
-/*Kruskal*/
-int Kruskal(struct graph *, double* );
-
-void Reverse(struct edge**, int, int);  /* Auxiliary function */
-
-int CWQU(struct edge**, int, double* cost, int *id,int *sz, int);
-/*
-int NmbrUnion(struct edge** data, int V, int E);
-*/
-int binsearch(struct edge** ,int*, int*,  int, int);
-
-int N_binsearch(struct edge** data, int *id,int *sz, int start, int end);
+void UFinit(int, int *, int *);   /* Initialize arrays for CWQU */
+int UFfind(int, int, int *);   /* Check for finds in CWQU */
+void UFunion(int, int, int *, int *);   /* Add an union to CWQU */
+int lessVertice(const void *, const void *);   /* qsort criteria for organizing from smaller to larger vertice */
+int lessCost(const void *, const void *);   /* qsort criteria for organizing from smaller to larger cost */
+int Kruskal(struct graph *, double* );   /* Full Kruskal´s Algorithm for minimum support tree */
+void Reverse(struct edge**, int, int);  /* Reverse the edges that don´t go on the minimum support tree */
+int CWQU(struct edge**, int, double* , int *,int *, int);   /* Altered Kruskal that can be stopped at any pos */
+int binsearch(struct edge** ,int*, int*,  int, int);   /* Connectivity gap filling */
+int N_binsearch(struct edge** , int *,int *, int , int );   /*Connectivity gap filling, ignoring unusable edges */
 
 #endif

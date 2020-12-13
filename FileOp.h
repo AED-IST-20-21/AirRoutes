@@ -3,20 +3,18 @@
 
 #include <stdio.h>
 
-#include "Graph.h"                                                      /* Required because of the struct definitions */
+#include "Graph.h"   /* Required for struct definitions */
 
 /**********************************************************************************************************************/
 
-char* ExitFileName(char* );                /* Function to create the exit file´s name from the name of the entry file */
-int FileCheck(char* );                                  /*  Function to check if an entry file´s name if valid or not */
-FILE *RFileOpen (char *);
-FILE *WFileOpen(char *);
-struct PBArg *ArgRead(FILE*);
-struct edge *EdgeRead(FILE *,struct edge *);
-int EdgeCheck(struct edge *, int);
-void LPrint(FILE *,struct PBArg *,int,double,int);
-void EdgePrint(FILE *,struct edge **, int, int);
-void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup);
+char* ExitFileName(char* );   /* Create Exit file name */
+int FileCheck(char* );   /* Checks if Entry file has the right extension */
+struct PBArg *ArgRead(FILE*);   /* Read Arguments from entry file */
+struct edge *EdgeRead(FILE *,struct edge *);   /* Read Edge from entry file */
+int EdgeCheck(struct edge *, int);   /* Checks if an edge is valid */
+void LPrint(FILE *,struct PBArg *,int,double,int);   /* Prints output in mode 0 */
+void EdgePrint(FILE *,struct edge **, int, int);   /* Print all edges in given interval */
+void EOnePrint(FILE *outputfp, struct graph *g,double sum, int *backup);   /*  */
 
 /**********************************************************************************************************************/
 

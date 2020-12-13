@@ -23,17 +23,17 @@ void UFinit(int V, int *id, int *sz) {
  * @param p 1st vertice of the found edge
  * @param q 2nd vertice of the found edge
  * @param id root array containing current state of CWQU
- * @return return TODO
+ * @return return 1 if p and q are already conected
  **********************************************************************************************************************/
 int UFfind(int p, int q, int *id) {
 	int i, j;
 	
-	for (i = p - 1; i != id[i]; i = id[i]);
-	for (j = q - 1; j != id[j]; j = id[j]);
+	for (i = p - 1; i != id[i]; i = id[i]);  /*Find root p*/
+	for (j = q - 1; j != id[j]; j = id[j]);  /*Find root q*/
 	if (i == j) {
-		return 1;
+		return 1;  /*same root (conected)*/
 	} else {
-		return 0;
+		return 0;  /*different roots (not connected)*/
 	}
 }
 
@@ -50,7 +50,7 @@ void UFunion(int p, int q, int *id, int *sz) {
 	for (i = p - 1; i != id[i]; i = id[i]); /*Find root p*/
 	for (j = q - 1; j != id[j]; j = id[j]); /*Find root q*/
 	
-	if (sz[i] < sz[j]) {
+	if (sz[i] < sz[j]) {  /*changes root for least "heavy" (i or j)*/
 		id[i] = j;
 		sz[j] += sz[i];
 		t = j;
@@ -62,11 +62,11 @@ void UFunion(int p, int q, int *id, int *sz) {
 	for (i = p - 1; i != id[i]; i = x) {
 		x = id[i];
 		id[i] = t;
-	} /*Change root p*/
+	} /*Change root "sons" of p*/
 	for (j = q - 1; j != id[j]; j = x) {
 		x = id[j];
 		id[j] = t;
-	} /*Change root q*/
+	} /*Change root "sons" of q*/
 	
 }
 
@@ -191,7 +191,7 @@ int CWQU(struct edge **data, int V, double *cost, int *id, int *sz, int Stop) {
 	UFinit(V, id, sz);/*TODO*/
 	
 	for (i = 0; i < Stop; i++) {
-		if (data[i]->cost > 0) {   /* Doesn´t use edges that have been marked by SearchDelete */
+		if (data[i]->cost > 0) {   /* Doesn't use edges that have been marked by SearchDelete */
 			if (!UFfind(data[i]->vi, data[i]->vj, id)) {   /* Checking for finds */
 				UFunion(data[i]->vi, data[i]->vj, id, sz);   /* If none found, then add the edge to the mst */
 				*cost += data[i]->cost;   /* add the cost of the newly added edge to the sum */

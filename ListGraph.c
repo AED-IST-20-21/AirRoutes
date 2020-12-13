@@ -190,7 +190,7 @@ int *LampsInit(struct list *lvi, int lenght) {
  * @param adj Adjacency list to search
  * @param lamps Array containing information if the vertice was previously visited
  * @param size Size of the lamps array
- * @param j TODO
+ * @param j start point
  * @return Click Count
  **********************************************************************************************************************/
 int ClickFind(struct list *adj, int *lamps, int size, int j) {
@@ -199,11 +199,12 @@ int ClickFind(struct list *adj, int *lamps, int size, int j) {
 	struct list *aux = adj;   /* Auxiliary variable to keep track of the list head */
 
 	while (aux != NULL) {
-		for (i = j; i < size; i++) {
-			if (aux->v == lamps[i]) c++;
+		for (i = j; i < size; i++) {  /* Run from j to size */
+			if (aux->v == lamps[i]) c++;  /* count number of click's */
 		}
-		aux = aux->next;
+		aux = aux->next;  /* Increment list */
 	}
 	
-	return c;
+	return c;  /* Number of click's */
 }
+

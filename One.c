@@ -3,7 +3,7 @@
 #include "Kruskal.h"
 
 /***********************************************************************************************************************
- * Control of mode 1, which handles all modes that require the use of edge vector as graph representation
+ * Control of mode 1, which handles all modes that require the use of edge array as graph representation
  * @param entryfp Input File
  * @param outputfp Output File
  * @param Arg Problem Arguments
@@ -112,7 +112,7 @@ void BOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	}
 	fprintf(outputfp,"\n");
-	VGFree(g); /* Before exiting, free the graph and auxiliary vectors */
+	VGFree(g); /* Before exiting, free the graph and auxiliary arrays */
 	free(id);
 	free(sz);
 }

@@ -1,7 +1,3 @@
-//
-// Created by anton on 11/30/2020.
-//
-
 #ifndef AIRROUTES_GRAPH_H
 #define AIRROUTES_GRAPH_H
 
@@ -10,57 +6,41 @@
 #include <string.h>
 #include <float.h>
 #include <stdlib.h>
-/*
-#include "FileOp.h"
-#include "VectorGraph.h"
-#include "ListGraph.h"
-*/
+/* #define DEBUG This flag should only be defined when debugging the program */
 
-#define DEBUG
-
-struct graph {
-	struct PBArg* Arg;
-	struct edge **data;
+struct graph {   /* Struct to store a graph represented by an edge array */
+	struct PBArg* Arg;   /* Problem Arguments */
+	struct edge **data;   /* Edge array */
 };
-struct graph0 {
-	struct PBArg* Arg;
-	struct list** data;
+struct graph0 {   /* Struct to store a graph represented by an array of Adjacency lists */
+	struct PBArg* Arg;   /* Problem Arguments */
+	struct list** data;   /* Adjacency list */
 };
 
-struct PBArg {
-	int v;
-	int e;
-	int vi;
-	int vj;
-	char var[3];
-	bool err;
+struct PBArg {   /* Struct that stores the arguments for 1 problem */
+	int v;   /* Number of vertices */
+	int e;   /* Number of edges */
+	int vi;   /* 1st extra vertice */
+	int vj;   /* 2nd extra vertice */
+	char var[3];   /* string to store mode */
+	bool err;   /* Boolean flag to warn about expected errors */
 };
 
-struct list{
-	int v;
-	double cost;
-	struct list *next;
+struct list{   /* Struct to store an adjacency list */
+	int v;   /* Vertice to to whom this list belongs */
+	double cost;   /* Cost for the edge coming from the vertice to the first adjacent vertice */
+	struct list *next;   /* Next element of the list */
 };
 
-struct edge{
-	int vi;
-	int vj;
-	double cost;
+struct edge{   /* Struct to store an edge */
+	int vi;   /* 1st Vertice */
+	int vj;   /* 2nd Vertice */
+	double cost;   /* Cost of the edge */
 };
 
-/*Exit Errors*/
-void ErrExit(int);
+void ErrExit(int);   /* Handles unexpected errors */
+int ArgCheck (struct PBArg *);   /* Checks if Argument is valid and returns an integer representing the mode */
+struct PBArg *PBinit();   /* Initialization of PBArg structure */
+struct graph* GraphInit();   /* Initialization of graph structure */
 
-/*PBArg*/
-int ArgCheck (struct PBArg *);
-struct PBArg *PBinit();
-
-/*Graph*/
-struct graph* GraphInit();
-/*void GFree(struct graph *, void (*FreeData)(void*, int));*/
-
-/*List Vector*/
-/*struct list* AddList(struct list*);
-struct list* CreateListV();*/ /*?*/
-
-#endif //AIRROUTES_GRAPH_H
+#endif

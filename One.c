@@ -200,7 +200,7 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	
 	struct graph *g;
-	struct edge* temp;
+	struct edge** backup;
 	/*void *a, *b;*/
 	double Sum = 0, NewSum=0;
 	int *id = NULL, *sz = NULL, *del=NULL, delcnt=0, StopMe=0, i;
@@ -221,12 +221,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		if ((del = (int *) malloc( (delcnt + 1) * sizeof(int))) == NULL) ErrExit(3);
 		/* In this version, the algorithm is divided so it can output different information */
 		CWQU(g->data, Arg->v, &NewSum, id, sz, StopMe);
-#if 0
-		if (StopMe - NewStop == 1) /*Conectividade reposta?*/
-		{
-			delcnt = -1; /*Vertice não pertence ao grafo*/
-		}
-#endif
+		
 		del[0]=StopMe;
 		
 		SearchDelete(g, StopMe, g->Arg->e, VerticeDelete);
@@ -252,24 +247,18 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	}
 
 	/* Organizar por vértice as arestas q repõem a conectividade */
-	for (i=1; i < cnt; i++)
+
+	if (cnt>=1)
 	{
-		/*
-		a = g->data[ del[i] ];
-		b = g->data[ del[i+1] ];*/
-		if (g->data[ del[i] ]->vi > g->data[ del[i+1] ]->vi)
+		backup = CreateEdgeV(cnt);	
+
+		for (i=1; i <= cnt; i++)
 		{
-			temp = g->data[ del[i] ];
-			g->data[ del[i] ] = g->data[ del[i+1] ];
-			g->data[ del[i+1] ] = temp;
-		} else if (g->data[ del[i] ]->vi == g->data[ del[i+1] ]->vi){
-			if (g->data[ del[i] ]->vj < g->data[ del[i+1] ]->vj)
-			{	
-				temp = g->data[ del[i] ];
-				g->data[ del[i] ] = g->data[ del[i+1] ];
-				g->data[ del[i+1] ] = temp;
-			}
+			backup[i-1] = g->data[ del[i] ];
 		}
+		qsort(backup, cnt, sizeof(struct edge *), lessVertice);
+	} else {
+		backup = NULL;
 	}
 
 	if (Arg->err == 0) 
@@ -283,22 +272,8 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 				Arg->v, Arg->e, Arg->var, Arg->vi, StopMe, Sum, cnt);
 
 		EdgePrint(outputfp, g->data, 0, StopMe);
-		
-		for (i = 1; i < delcnt; i++) /*del[0] = StopMe*/
-		{
-			if (del[i]==-1)
-			{
-				break;
-			}
-
-			if(g->data[ del[i] ]->cost < 0)
-			{
-				g->data[ del[i] ]->cost = -g->data[i]->cost;
-			}
-
-			fprintf(outputfp, "%d %d %.2lf\n", g->data[del[i]]->vi,
-					g->data[del[i]]->vj, g->data[del[i]]->cost);
-		}
+			
+		EdgePrint(outputfp, backup, 0, cnt);
 	
 	} else fprintf(outputfp, "%d %d %s %d %d -1\n", Arg->v, Arg->e, Arg->var, Arg->vi, Arg->vj);
 	

@@ -6,37 +6,43 @@
 #include "VectorGraph.h"
 #include "Kruskal.h"
 
+/***********************************************************************************************************************
+ * Function to read a graph from the entry file and store it as an edge array
+ * @param entryfp File to read from
+ * @param Arg Problem Arguments
+ * @return Graph with
+ **********************************************************************************************************************/
 struct graph *VGRead(FILE *entryfp, struct PBArg *Arg) {
 	
-	struct graph *G;
-	int i;
+	struct graph *G = GraphInit();   /* Initialization of the graph */
+	int i;   /* Auxiliary Variable for the cycle */
 	
-	G = GraphInit();                                                                            /*Initialize the graph*/
+	G->Arg = Arg;   /* Connecting the Arguments to the graph */
+	G->data = CreateEdgeV(Arg->e);   /* Allocate edge array */
 	
-	G->Arg = Arg;
-	G->data = CreateEdgeV(Arg->e);
-	
-	for (i = 0; i < Arg->e; i++) {                                                      /*Reading the graph from file*/
-		
+	for (i = 0; i < Arg->e; i++) {
+		/* Allocate memory for the new edge */
 		if ((G->data[i] = (struct edge*) malloc(sizeof(struct edge)))==NULL) ErrExit(3);
-
-		if (fscanf(entryfp, "%d %d %lf", &G->data[i]->vi, &G->data[i]->vj, &G->data[i]->cost) !=3) 
-		{                  /*Checking for errors during reading*/
-			VGFree(G);
+		/*Checking for errors during reading*/
+		if (fscanf(entryfp, "%d %d %lf", &G->data[i]->vi, &G->data[i]->vj, &G->data[i]->cost) != 3){
+			VGFree(G);   /* Planned Exception */
 			Arg->err = 1;
 			return NULL;
-		} else if ((G->data[i]->vi < 0) || (G->data[i]->vj < 0)
-		|| (G->data[i]->vi > Arg->v) || (G->data[i]->vj > Arg->v))
-		{
-			VGFree(G);
+		} else if (EdgeCheck(G->data[i],Arg->v)<0){
+			VGFree(G);   /* Planned Exception */
 			Arg->err = 1;
 			return NULL;
 		}
-		Format(G->data[i]);
+		Format(G->data[i]);   /* Switch vertices if in the wrong order */
 	}
 	return G;
 }
 
+/***********************************************************************************************************************
+ * Function to create an Edge Array
+ * @param size Size of the edge array
+ * @return Clean Edge Array
+ **********************************************************************************************************************/
 struct edge **CreateEdgeV(int size) {
 	
 	struct edge **aux;
@@ -46,10 +52,18 @@ struct edge **CreateEdgeV(int size) {
 	return aux;
 }
 
+/***********************************************************************************************************************
+ * Function to search and mark edges as unusable
+ * @param g Graph
+ * @param start position to start checking
+ * @param end position to end checking
+ * @param Delete Function Parameter to check for edges to be marked
+ * @return Number of edges that were marked
+ **********************************************************************************************************************/
 int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge *, int, int)) {
-	int i, cnt = 0;
+	int i, cnt = 0;   /* Auxiliary Variables */
 	
-	for (i = start; i < end; i++) {
+	for (i = start; i < end; i++) {   /* Go trough all edges in designated interval */
 		
 		if ((*Delete)(g->data[i], g->Arg->vi, g->Arg->vj)) {
 			
@@ -57,9 +71,16 @@ int SearchDelete(struct graph *g, int start, int end, int (*Delete)(struct edge 
 			cnt++;
 		}
 	}
-	return cnt;
+	return cnt;   /* return number of marked edges */
 }
 
+/***********************************************************************************************************************
+ * Function to check when an edge should be deleted
+ * @param aux Edge to be checked
+ * @param vi 1st Vertice
+ * @param vj 2nd Vertice
+ * @return 0 if 1st, 1 if 2nd
+ **********************************************************************************************************************/
 int EdgeDelete(struct edge *aux, int vi, int vj) {
 	
 	if (((aux->vi == vi) && (aux->vj == vj)) || ((aux->vj == vi) && (aux->vi == vj))) return 1;
@@ -67,6 +88,13 @@ int EdgeDelete(struct edge *aux, int vi, int vj) {
 	
 }
 
+/***********************************************************************************************************************
+ * Function to check when a vertice should be deleted
+ * @param aux Edge to be checked
+ * @param vi 1st Vertice
+ * @param vj 2nd Vertice
+ * @return 1 if OK to delete
+ **********************************************************************************************************************/
 int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
 	if ((aux->vi == vi) || (aux->vj == vi)) return 1;
@@ -74,12 +102,22 @@ int VerticeDelete(struct edge *aux, int vi, int vj) {
 	
 }
 
+/***********************************************************************************************************************
+ * Function to free an edge array represented graph
+ * @param g Graph to be freed
+ **********************************************************************************************************************/
 void VGFree(struct graph *g){
 	
 	FreeEdgeV(g->data,g->Arg->e);
 	free(g);
 	
 }
+
+/***********************************************************************************************************************
+ * Function to free an edge array
+ * @param data Edge array to be freed
+ * @param size Size of said edge array
+ **********************************************************************************************************************/
 void FreeEdgeV(struct edge **data, int size)
 {
 	int i;
@@ -93,6 +131,11 @@ void FreeEdgeV(struct edge **data, int size)
 	
 }
 
+/***********************************************************************************************************************
+ * Function to Create a copy of an existing graph. Uses only pointers, doesn´t allocate more edges
+ * @param source Graph to be copied
+ * @return Copy of said graph
+ **********************************************************************************************************************/
 struct graph *graphcpy(struct graph *source){
 	struct graph *new;
 	int i;
@@ -103,6 +146,13 @@ struct graph *graphcpy(struct graph *source){
 	return new;
 }
 
+/***********************************************************************************************************************
+ * Function to solve CWQU of E1 mode TODO
+ * @param g Graph to solve
+ * @param Sum Original Sum
+ * @param StopMe Original Kruskal´s last edge position
+ * @return edge array containing all backup edges
+ **********************************************************************************************************************/
 struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
 {
 	struct edge* backup;
@@ -140,16 +190,19 @@ struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
 	return backup;
 }
 
+/***********************************************************************************************************************
+ * Function to sort vertices when reading them
+ * @param data Edge containing unsorted vertices
+ **********************************************************************************************************************/
 void Format(struct edge* data)
 {
 	int temp;
 
-	if (data->vi > data->vj )
+	if (data->vi > data->vj )   /*  if the 1st vertice is larger than the 2nd switch */
 	{
 		temp = data->vi;
 		data->vi = data->vj;
 		data->vj = temp;
 	}
-	return;
 }
 

@@ -21,6 +21,7 @@ TEST = 15_020E.routes
 #Temporary Object Files
 TMPOBJECTS = main.c FileOp.c FileOp.h
 
+#Executable backbone
 backbone: $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
@@ -47,8 +48,8 @@ VALG = valgrind --leak-check=full --show-leak-kinds=all -s
 
 
 FILES = $(shell ls ../test/*.routes)
-
-ZIP = $(shell ./ZIP)
+ZIP = $(shell zip AirRoutes.zip *.c *.h Makefile)
+RUN = $(shell ./run)
 #
 zip: $(EXE)
 	$(ZIP)

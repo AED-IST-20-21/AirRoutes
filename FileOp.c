@@ -1,10 +1,12 @@
+/* Project AirRoutes - AED IST 20/21 - GR032 - António Vidais (96162) & Tiago Leite (96232) */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "FileOp.h"
 
-#define OldExt ".routes"                                                            /* Extensions can be changed here */
+#define OldExt ".routes"  /* Extensions can be changed here */
 #define NewExt ".bbones"
 
 /***********************************************************************************************************************

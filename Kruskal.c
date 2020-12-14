@@ -1,6 +1,8 @@
+/* Project AirRoutes - AED IST 20/21 - GR032 - António Vidais (96162) & Tiago Leite (96232) */
+
 #include <stdlib.h>
 #include "Kruskal.h"
-#include "Graph.h"
+
 
 /***********************************************************************************************************************
  * Initialization of the 2 arrays required for CWQU

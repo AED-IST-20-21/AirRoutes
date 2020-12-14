@@ -1,3 +1,5 @@
+/* Project AirRoutes - AED IST 20/21 - GR032 - António Vidais (96162) & Tiago Leite (96232) */
+
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
 
@@ -18,9 +20,9 @@ void FreeList(struct list* );   /* Free an adjacency list */
 struct list* AddList(struct list* );   /* Allocate and add one more element to the list */
 void PutList(struct list* ,int ,double );   /* Put one new element in the list */
 struct list** CreateListV(int );   /* Create and allocate a new array of adjacency list */
-int LenghtList(struct list *);
-int ClickFind(struct list *,int *,int ,int );
-int *LampsInit(struct list *,int );
+int LenghtList(struct list *);   /* Get the length of a list */
+int ClickFind(struct list *,int *,int ,int );   /* Find cycles of 3 vertices */
+int *LampsInit(struct list *,int );   /* Initialize an array to TODO */
 
 #endif
 

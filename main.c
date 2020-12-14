@@ -1,11 +1,11 @@
+/* Project AirRoutes - AED IST 20/21 - GR032 - António Vidais (96162) & Tiago Leite (96232) */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "Zero.h"
 #include "One.h"
-#include "Graph.h"
-#include "FileOp.h"
 
 /***********************************************************************************************************************
  * Main Function of the Program Backbones

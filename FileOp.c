@@ -123,8 +123,8 @@ struct edge *EdgeRead(FILE *fp, struct edge *aux) {
 
 /***********************************************************************************************************************
  * Function to Check if an Edge if valid.
- * @param aux Edge to be checked
- * @param size Number os Vertices in the Graph
+ * @param aux : Edge to be checked
+ * @param size : Number os Vertices in the Graph
  * @return -1 if not OK, 0 if OK
  **********************************************************************************************************************/
 int EdgeCheck(struct edge *aux, int size) {
@@ -138,7 +138,7 @@ int EdgeCheck(struct edge *aux, int size) {
  * @param outputfp File to write to
  * @param Arg Problem Arguments
  * @param h
- * @param cost Total cost of TODO
+ * @param cost Cost of the edge to print, when necessary
  * @param mode
  **********************************************************************************************************************/
 void LPrint(FILE *outputfp, struct PBArg *Arg, int h, double cost, int mode) {

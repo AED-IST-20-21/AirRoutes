@@ -130,23 +130,17 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *g, *newg = NULL;   /* Graphs to store the original backbone & the backbone without the deleted edge */
 	struct edge *temp;   /* Auxiliary edge for switches */
 	double Sum = 0, NewSum = 0;   /* Total costs of the original backbone and the new backbone without the edge */
-	int StopMe = 0, NewStop = 0, ncpos = 0, i;   /* Auxiliary Variables */
-	int *id = NULL, *sz = NULL;   /* Auxiliary Variables for CWQU */
-	bool flag = 1;   /* Boolean Auxiliary Flag */
+	int StopMe, NewStop = 0, ncpos = 0, i;   /* Auxiliary Variables */
+	bool flag;   /* Boolean Auxiliary Flag */
 	
 	g = VGRead(entryfp, Arg);   /* Read the graph from input file */
-	//TODO
-	if ((id = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
-	if ((sz = (int *) malloc(Arg->v * sizeof(int))) == NULL) ErrExit(3);
 	
 	StopMe = Kruskal(g, &Sum);   /* Original kruskal */
 	newg = graphcpy(g);   /* Make a copy of the sorted graph */
 	
 	if (SearchDelete(g, 0, StopMe, EdgeDelete) != 0) {   /* If the edge belongs to the backbone */
 		for (i = 0; i < StopMe; i++) {   /* Get the position of that edge */
-			if (g->data[i]->cost < 0) {
-				ncpos = i;
-			}
+			if (g->data[i]->cost < 0) ncpos = i;
 		}
 		
 		temp = newg->data[ncpos];   /* Change that edge to the last position */
@@ -158,11 +152,8 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		newg->Arg->e++;
 		
 		flag = 1;   /* Set the flag to True */
-		
-	} else if (SearchDelete(g, StopMe, g->Arg->e, EdgeDelete) != 0) {
-		flag = 0;   /* Deleted edge is on the graph but not on backbone*/
 	} else {
-		flag = 0;   //TODO
+		flag = 0;   /* Deleted edge is on the graph but not on backbone*/
 	}
 	
 	if ((Arg->err == 0) && (flag == 1)) {   /* Print when edge is deleted */
@@ -196,8 +187,6 @@ void COne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	VGFree(g);   /* Free all dynamically allocated memory */
 	free(newg->data);
 	free(newg);
-	free(id);
-	free(sz);
 }
 
 /***********************************************************************************************************************
@@ -211,7 +200,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 	struct graph *g;
 	struct edge** backup;
 	double Sum = 0, NewSum=0;
-	int *id = NULL, *sz = NULL, *del=NULL, delcnt=0, StopMe=0, i;
+	int *id = NULL, *sz = NULL, *del=NULL, delcnt, StopMe, i;
 	int cnt = 0;
 	
 	g = VGRead(entryfp, Arg);   /* Read the Graph from input file */
@@ -231,7 +220,7 @@ void DOne(FILE *entryfp, FILE *outputfp, struct PBArg *Arg) {
 		for (i=0; i < delcnt; i++){
 			
 			del[i+1] = N_binsearch(g->data, id, sz, del[i], g->Arg->e);   /* Get the position of that edge */
-			if (del[i + 1] != -1) cnt++;   /* If edge doesn´t belong TODO */
+			if (del[i + 1] != -1) cnt++;   /* If there isn´t anymore unions to be made */
 			else break;
 		}
 	} else cnt = -1; /* If the vertice doesn´t belong to the graph */

@@ -22,7 +22,7 @@ void PutList(struct list* ,int ,double );   /* Put one new element in the list *
 struct list** CreateListV(int );   /* Create and allocate a new array of adjacency list */
 int LenghtList(struct list *);   /* Get the length of a list */
 int ClickFind(struct list *,int *,int ,int );   /* Find cycles of 3 vertices */
-int *LampsInit(struct list *,int );   /* Initialize an array to TODO */
+int *LampsInit(struct list *,int );   /* Initialize an array to search */
 
 #endif
 

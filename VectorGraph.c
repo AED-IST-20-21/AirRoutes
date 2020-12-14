@@ -147,7 +147,7 @@ struct graph *graphcpy(struct graph *source){
 }
 
 /***********************************************************************************************************************
- * Function to solve CWQU of E1 mode TODO
+ * Function to solve CWQU of E1 mode, based on the B1 mode
  * @param g Graph to solve
  * @param Sum Original Sum
  * @param StopMe Original Kruskal´s last edge position
@@ -155,24 +155,24 @@ struct graph *graphcpy(struct graph *source){
  **********************************************************************************************************************/
 struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
 {
-	struct edge* backup;
-	int NewStop, ncpos, *id, *sz;
+	struct edge* backup;   /* Backup array of edges */
+	int NewStop, ncpos, *id, *sz;   /* Auxiliary Variables */
 	
-	if ((id=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
+	if ((id=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);   /* Auxiliary arrays for CWQU */
 	if ((sz=malloc(g->Arg->v * sizeof(int)))==NULL) ErrExit(3);
 	
-	NewStop = CWQU(g->data, g->Arg->v, Sum, id, sz, StopMe);
+	NewStop = CWQU(g->data, g->Arg->v, Sum, id, sz, StopMe);   /* CWQU to reset connectivity */
 	
-	if (StopMe - NewStop > 1)
+	if (StopMe - NewStop > 1)   /* Do we need more than 1 edge to reset connectivity? We can only have 1 */
 	{
 		free(id);
 		free(sz);
 		return NULL;
 	}
 	
-	ncpos = binsearch(g->data, id, sz, StopMe, g->Arg->e);
+	ncpos = binsearch(g->data, id, sz, StopMe, g->Arg->e);   /* Get the position of that edge */
 	
-	if (ncpos ==-1)
+	if (ncpos ==-1)   /* If we can´t find it, exit */
 	{
 		free(id);
 		free(sz);
@@ -181,7 +181,7 @@ struct edge* ProblemSolver(struct graph* g, double* Sum, int StopMe)
 	
 	if ((backup = (struct edge*) malloc(sizeof(struct edge)))==NULL) ErrExit(3);
 	
-	backup->vi = g->data[ncpos]->vi;
+	backup->vi = g->data[ncpos]->vi;   /* Copy the edge to the backup */
 	backup->vj = g->data[ncpos]->vj;
 	backup->cost = g->data[ncpos]->cost;
 	

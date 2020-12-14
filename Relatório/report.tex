@@ -14,7 +14,7 @@
 \usepackage{imakeidx}
 \usepackage{wrapfig}
 \usepackage{lipsum}
-
+\usepackage{placeins}
 \geometry{
 a4paper,
 total={170mm,257mm},
@@ -27,9 +27,9 @@ top=20mm,
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[LE,RO]{AED}
-\fancyhead[RE,LO]{AirRoutes}
-\fancyfoot[RE,CO]{António Vidais \and Tiago Leite}
+\fancyhead[LE,RO]{Algoritmos e Estruturas de Dados}
+\fancyhead[RE,LO]{Projeto AirRoutes}
+\fancyfoot[RE,LO]{António Vidais e Tiago Leite}
 \fancyfoot[LE,RO]{\thepage}
 \graphicspath{ {images/} }
 %--------------------------------------
@@ -97,15 +97,15 @@ top=20mm,
     Após verificar e inicializar os ficheiros necessários, procede-se à leitura dos Argumentos.
     Dependendo da leitura dos argumentos, é decidida a melhor forma de representação do grafo para o problema
     em questâo.
-    As formas de representação do grafo são definidas com maior detalhe na secção\ref{sec:formas.representar.grafo}.
-
+    As formas de representação do grafo são definidas com maior detalhe na secção\ref{subsec:formas.representar.grafo}.
+\vfill
     \begin{figure}[H]
         \centering
         \label{fig:main.flowchart}
-        \includegraphics[scale=0.45]{main.flowchart.png}
+        \includegraphics[scale=0.65]{main.flowchart.png}
         \caption{Fluxograma Representativo da execução da função main}
     \end{figure}
-
+\vfill
     \newpage
 
     \section{Estruturas e Tipos de Dados}\label{sec:estruturas.tipos.dados}
@@ -182,7 +182,6 @@ top=20mm,
     dos dados. Na utilização do Algoritmo de Krukal seria necessário 'traduzir' de novo os dados para a forma de vetor de arestas pelo que
     estariamos a 'gastar' tempo em conversões desnecessárias.
 
-    \newpage
     \section[Algoritmos]{Algoritmos}\label{sec:algoritmos}
     \subsection[mstfind]{Algoritmos para encontrar a Árvore Minima de Suporte}\label{subsec:mstfind}
     Para encontrar a árvore mínima de suporte de uma grafo, foram estudados dois algoritmos nas aulas teóricas de AED.
@@ -234,27 +233,149 @@ top=20mm,
     Realisticamente, esse custo de execução é negligenciável quando comparado com o tempo de execução de todo o programa.
 
     \subsection[gencomplexity]{Análise da Complexidade Geral do Programa}
-    A complexidade do Programa depende da variante selecionada.No entanto há operações que são realizadas em várias as variantes:
-    \begin{table}[h!]
+    A complexidade do Programa depende da variante selecionada.No entanto as operações que são as mesmas em todas as variantes:
+    \FloatBarrier
+    \begin{table}[H]
         \centering
         \begin{tabular}{|| c || c || c || c ||}
             \hline
             Operação & Complexidade\\ [0.5ex]
             \hline\hline
             Ler o Grafo & \(O(E)\) \\
-            \emph{Kruskal} &\(E*log(E)\) \\
-            Ordenação & \(E*log(E)\) \\
-            CWQU & \(E*log(E)\)\\
+            \emph{Kruskal} &\(O(E*log(E))\) \\
+            Ordenação & \(O(E*log(E))\) \\
+            CWQU & \(O(E*log(E))\)\\
             \hline\hline
-           Repor a Conectividade\\
-            Inicializar & \(O((E-X)*log(E-X))\)\\
-            \hline
         \end{tabular}
+        \quad
+        \begin{tabular}{|| c || c || c || c ||}
+            \hline
+            Repor Conectividade & Complexidade\\ [0.5ex]
+            \hline\hline
+            Inicializar & \(O(E)\)\\
+            Repor & \(O(E*log(E))\) \\
+            Total & \(O(E*log(E))\)\\
+            \hline\hline
+        \end{tabular}\\
     \end{table}
 
-    Podem ser selecionadas as seguintes variantes:
+    Podem ser selecionadas as seguintes variantes e a sua complexidade:
+    \begin{table}[H]
+        \centering
+            \begin{tabular}{|| c || c || c || c ||}
+                \hline
+                Variante & Complexidade\\ [0.5ex]
+                \hline\hline
+                A1 & \(O(E)+2*O(E*log(E))\) \\
+                B1 &\(O(E*log(E))\) \\
+                C1 & \(O(E*log(E))\) \\
+                D1 & \(O(E*log(E))\)\\
+                E1 & \(O((E-X)*E*log(E)) \approx O((E^2)*E*log(E))\)\\
+                \hline\hline
+            \end{tabular}
+        \vspace{0.1cm}\\
+        \begin{tabular}{|| c || c || c || c ||}
+            \hline
+            Máximo & \(O(E*log(E))\)\\
+            \hline
+        \end{tabular}
+        \end{table}
+    Esta complexidade é o resultado da realização das seguintes operações:
     \begin{itemize}
-        \item A1,
+        \item \underline{A1} : Ler o grafo,Algoritmo de \emph{Kruskal} e ordenar;
+        \item \underline{B1} e \underline{C1} : Ler o grafo, Algoritmo de \emph{Kruskal}, repor a conectividade e ordenar;
+        \item  \underline{D1} : Ler o grafo, Algoritmo de \emph{Kruskal}, repor a conectividade para as arestas perdidas e ordenar;
+        \item \underline{E1} : Ler o grafo, Algoritmo de \emph{Kruskal}, repor a conectividade para todas as arestas e ordenar;
     \end{itemize}
+
+    \section{Funções Principais}
+    Todas as variantes do programa backbone operam sobre um conjunto de funções comuns, pelo que são estas as funções mais utilizadas em todo o programa:
+    \subsection[Kruskal]{Algoritmo de \emph{kruskal}}
+    A função Kruskal implementa o Algoritmo de \emph{Kruskal} para encontrar a árvore mínima de suporte na sua totalidade. Discutir esta função é
+    na verdade discutir o algoritmo de \emph{Kruskal}. A função tem como parâmetros de entrada :
+    \begin{itemize}
+        \item g : Grafo ao qual aplicar o algoritmo;
+        \item cost : Custo total, passado por referência para poder ser alterado na scope desta função;
+    \end{itemize}
+    \begin{figure}[H]
+        \centenring
+        \includegraphics[scale=0.5]{Kruskal.png}
+        \caption {Representação do funcionamento da função Kruskal}
+        \label{fig:kruskal}
+    \end{figure}
+    A função começa por inicializar os vetores auxiliares à CWQU e ordenar o grafo segundo o critério definido na função lessCost.
+    De seguida corre todas as arestas, e verifica se existe conectividade entre os vértices da mesma.
+    Como o grafo está neste momento organizado por custo, a primeira aresta que encontrar que ligue 2 vértices é a mais barata.
+    Para se obter o tamanho da árvore de suporte, o programa conta o número de uniões realizadas, i. e. quantas arestas com vértices
+    ainda não conectados são encontrados.
+    Quando o programa encontra arestas que não pertençam à árvore mínima de suporte, ele guarda-as num vetor auxiliar, ao qual chamou-se `data`.
+    Como não se sabe à partida o tamanho quantas arestas pretencem à MST, as que pertencem são guardadas no ínicio do vetor `data` e as que não
+    pretencem são guardadas a partir do final.
+    Como o vetor `data` têm tamanho E, no final todas as suas posições estão preenchidas e não há nenhuma livre, como se mostra na figura \ref{fig:bin}. Quando este vetor estiver terminado
+    \begin{figure}[H]
+           \centering
+           \includegraphics[scale=0.7]{bin.png}
+           \caption{Representação do preenchimento do vetor auxiliar `data`}
+           \label{fig:bin}
+    \end{figure}
+
+    No nosso programa existe uma versão do algoritmo de \emph{Kruskal} chamada CWQU, cuja função é a mesma que a função Kruskal, mas a primeira
+    sai assim que encontra uma união. Esta função é utilizada para repor a conectividade.
+
+    \subsection[CWQU]{Weighted Quick Union com compressão de caminho}
+    Este capítulo fala sobre as funções que implementam o algoritmo de CWQU.
+    Estas não devem ser confundidas com a função CWQU, que implementa uma versão modificada do algoritmo de \emph{Kruskal}.
+    As funções que implementam a CWQU são :
+    \subsubsection[UFinit]{Incialização}
+    A função UFinit inicializa os vetores auxiliares à CWQU. Cada posição do vetor id deve ser inicializada com o valor da posição, e cada posição do vetor sz deve ser inicializada com o índice 1
+    Esta função recebe como parâmetros de entrada os 2 vetores que vai inicializar e o número de elementos que neles existem
+
+    \subsubsection[UFfind]{Encontrar uma ligação já existente}
+    A função UFfind determina se já existe conectividade entre 2 vértices. Isto é conseguido através da análise da raiz de cada conjunto.
+    Os Parâmetros de entrada desta função são os 2 vértices e o vetor id. A função retorna 1 se os vértices estiverem conectados, e 0 se não estiverem.
+
+    \subsubsection[UFunion]{Criar uma nova ligação}
+    A função UFunion cria uma nova ligação entre 2 vértices. No contexto de encontrar a árvore mínima de suporte, esta função só deve ser
+    chamada depois de verificado que não existem já ligações entre este 2 vértices. A nova ligação é conseguida através da alteração
+    da raíz do vértice cujo peso (sz) é mais pequeno, alterando também todos os vértices (filhos) que pretençam ao mesmo conjunto. Após isto, é realizada a compressão de caminho.
+
+    \subsection[SearchDelete]{Marcação de arestas como removidas}\label{subsec:SearchDelete}
+    A função SearchDelete é muito simples, mas o seu papel é fundamental na reposição da conectividade do grafo.
+    Esta função marca a(s) aresta(s) que não podem ser utilizadas na nova árvore, através do processo demonstrado na figura \ref{fig:SearchDelete}.
+    A marcação é feita passando o custo da aresta para o seu simétrico.
+    Como todas as arestas são verificadas quando são lidas do ficheiro de entrada, não há risco de uma aresta ser negativa à partida.
+    Com as arestas marcadas, o programa apenas precisa de repor a conectividade sem contar com arestas cujo custo seja negativo.
+    Esta função tem como parâmetros de entrada:
+    \begin{itemize}
+        \item g : Grafo onde marcar as arestas;
+        \item start & end : Inicio e Fim da pesquisa. Em algumas situações não há necessidade de procurar as arestas em todo o grafo;
+        \item (*Delete) : Apontador para função que define o critério através do qual uma aresta é eliminada ou não. Depende da Variante em que a função é chamada;
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \label{fig:SearchDelete}
+        \includegraphics[scale=0.5]{SearchDelete.png}
+        \caption { Fluxograma Representativo da execução da função SearchDelete }
+    \end{figure}
+    \subsection[binsearch]{Reposição da Conectividade}
+    A função binsearch corre o grafo em busca de uma aresta que reponha a conectividade do grafo.
+    Para ser corretamente implementada, deve-se começar por ter os vetores auxiliares de CWQU (id e sz) no estado a partir
+    do qual queremos procurar a nova aresta.
+    Esses vetores são passados como argumentos à função binsearch, que corre a CWQU até encontrar uma Union, i. e. encontrar
+    uma aresta que repõe a conectividade.
+    Esta função pode ter que ser chamada várias vezes, uma por cada aresta que tenha sido eliminada. No entanto, saber quantas
+    arestas foram eliminadas é muito simples, uma vez que é o return da função \nameref{subsec:SearchDelete}
+    Os parâmetros de entrada desta função são:
+    \begin{itemize}
+        \item data : Vetor de arestas que contem a representação do grafo;
+        \item id e sz : Vetores auxiliares para a CWQU;
+        \item start e end : Posições de inicio e fim da procura;
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{BinSearch.png}
+        \label{fig:BinSearch}
+        \caption{Representação do funcionamento da função binsearch}
+    \end{figure}
 
 \end{document}

@@ -32,6 +32,7 @@ top=20mm,
 \fancyfoot[RE,LO]{António Vidais e Tiago Leite}
 \fancyfoot[LE,RO]{\thepage}
 \graphicspath{ {images/} }
+\makeindex
 %--------------------------------------
 \title{AirRoutes - Algoritmos e Estruturas de Dados}
 \date{Dezembro de 2020}
@@ -62,9 +63,9 @@ top=20mm,
         \end{center}
     \end{titlepage}
 
-    \index{Indíce}
+        \tableofcontents
 
-    \section{Descrição do Problema} \label{sec:d.problema}
+    \section{Descrição do Problema} \label{sec:d.problema}\index
     Este projeto, criado no âmbito da Unidade Curricular de Algoritmos e Estruturas de Dados, aborda o problema de
     encontrar um conjunto mínimo de rotas que garantam a existência de um caminho entre cada par de aeroportos,
     sem qualquer redundância.
@@ -288,6 +289,7 @@ top=20mm,
         \item \underline{E1} : Ler o grafo, Algoritmo de \emph{Kruskal}, repor a conectividade para todas as arestas e ordenar;
     \end{itemize}
 
+    \newpage
     \section{Funções Principais}
     Todas as variantes do programa backbone operam sobre um conjunto de funções comuns, pelo que são estas as funções mais utilizadas em todo o programa:
     \subsection[Kruskal]{Algoritmo de \emph{kruskal}}
@@ -348,7 +350,7 @@ top=20mm,
     Esta função tem como parâmetros de entrada:
     \begin{itemize}
         \item g : Grafo onde marcar as arestas;
-        \item start & end : Inicio e Fim da pesquisa. Em algumas situações não há necessidade de procurar as arestas em todo o grafo;
+        \item start e end : Inicio e Fim da pesquisa. Em algumas situações não há necessidade de procurar as arestas em todo o grafo;
         \item (*Delete) : Apontador para função que define o critério através do qual uma aresta é eliminada ou não. Depende da Variante em que a função é chamada;
     \end{itemize}
     \begin{figure}[H]

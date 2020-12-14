@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2020.12.6)  14 DEC 2020 16:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2020.12.6)  14 DEC 2020 17:01
 entering extended mode
 **./report.tex
 (report.tex
@@ -393,25 +393,29 @@ less on input line 32.
 Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
 less on input line 33.
 
+\report@idxfile=\write3
+\openout3 = `report.idx'.
+
+Writing index file report.idx
 (report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 
 (C:\Users\anton\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
@@ -468,7 +472,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 40.
+Package hyperref Info: Link coloring OFF on input line 41.
 (C:\Users\anton\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -481,34 +485,38 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count284
 )
-LaTeX Info: Redefining \ref on input line 40.
-LaTeX Info: Redefining \pageref on input line 40.
-LaTeX Info: Redefining \nameref on input line 40.
+LaTeX Info: Redefining \ref on input line 41.
+LaTeX Info: Redefining \pageref on input line 41.
+LaTeX Info: Redefining \nameref on input line 41.
  (report.out) (report.out)
-\@outlinefile=\write3
-\openout3 = `report.out'.
+\@outlinefile=\write4
+\openout4 = `report.out'.
 
 <images//IST_logo.png, id=103, 499.8675pt x 193.4427pt>
 File: images//IST_logo.png Graphic file (type png)
 <use images//IST_logo.png>
-Package pdftex.def Info: images//IST_logo.png  used on input line 44.
+Package pdftex.def Info: images//IST_logo.png  used on input line 45.
 (pdftex.def)             Requested size: 193.47577pt x 74.87267pt.
 <images//15020D.png, id=105, 697.60625pt x 456.70625pt>
 File: images//15020D.png Graphic file (type png)
 <use images//15020D.png>
-Package pdftex.def Info: images//15020D.png  used on input line 57.
+Package pdftex.def Info: images//15020D.png  used on input line 58.
 (pdftex.def)             Requested size: 483.69684pt x 316.66774pt.
  [1
 
 {C:/Users/anton/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images//IST_l
 ogo.png> <./images//15020D.png>]
+No file report.toc.
+\tf@toc=\write5
+\openout5 = `report.toc'.
+
 <images//main.flowchart.png, id=120, 783.92876pt x 136.51pt>
 File: images//main.flowchart.png Graphic file (type png)
 <use images//main.flowchart.png>
-Package pdftex.def Info: images//main.flowchart.png  used on input line 105.
+Package pdftex.def Info: images//main.flowchart.png  used on input line 106.
 (pdftex.def)             Requested size: 509.54765pt x 88.73044pt.
 
-Overfull \hbox (25.85081pt too wide) in paragraph at lines 105--106
+Overfull \hbox (25.85081pt too wide) in paragraph at lines 106--107
  [][] 
  []
 
@@ -516,25 +524,25 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.109     \newpage
+l.110     \newpage
                    [1 <./images//main.flowchart.png>]
 
 LaTeX Warning: Reference `subsec:formas.represent.grafo' on page 2 undefined on
- input line 140.
+ input line 141.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 173.
+(Font)              <7> on input line 174.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 173.
+(Font)              <5> on input line 174.
 
-Overfull \hbox (19.9024pt too wide) in paragraph at lines 173--175
+Overfull \hbox (19.9024pt too wide) in paragraph at lines 174--176
 \T1/cmr/m/n/10 Para a re-so-lu-��o do Pro-blema an-te-ri-or-mente dis-cu-tido, 
 decidiu-se re-pre-sen-tar o grafo sob a forma de $[]$.
  []
 
-[2] [3]
-report.tex:301: Undefined control sequence.
-l.301         \centenring
+[2] [3] [4]
+report.tex:303: Undefined control sequence.
+l.303         \centenring
                          
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -542,49 +550,39 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-<images//Kruskal.png, id=151, 1006.76125pt x 304.13625pt>
+<images//Kruskal.png, id=158, 1006.76125pt x 304.13625pt>
 File: images//Kruskal.png Graphic file (type png)
 <use images//Kruskal.png>
-Package pdftex.def Info: images//Kruskal.png  used on input line 302.
+Package pdftex.def Info: images//Kruskal.png  used on input line 304.
 (pdftex.def)             Requested size: 503.3794pt x 152.06775pt.
 
-Overfull \hbox (19.68256pt too wide) in paragraph at lines 302--303
+Overfull \hbox (19.68256pt too wide) in paragraph at lines 304--305
 [][] 
  []
 
-[4]
 <images//bin.png, id=160, 723.70375pt x 252.945pt>
 File: images//bin.png Graphic file (type png)
 <use images//bin.png>
-Package pdftex.def Info: images//bin.png  used on input line 317.
+Package pdftex.def Info: images//bin.png  used on input line 319.
 (pdftex.def)             Requested size: 506.58917pt x 177.06029pt.
 
-Overfull \hbox (22.89233pt too wide) in paragraph at lines 317--318
+Overfull \hbox (22.89233pt too wide) in paragraph at lines 319--320
  [][] 
  []
 
 [5 <./images//Kruskal.png> <./images//bin.png>]
-report.tex:351: Misplaced alignment tab character &.
-l.351         \item start &
-                            end : Inicio e Fim da pesquisa. Em algumas situa...
-I can't figure out why you would want to use a tab mark
-here. If you just want an ampersand, the remedy is
-simple: Just type `I\&' now. But if some right brace
-up above has ended a previous alignment prematurely,
-you're probably due for more error messages, and you
-might try typing `S' now just to see what is salvageable.
-
-<images//SearchDelete.png, id=170, 922.44624pt x 390.45876pt>
+<images//SearchDelete.png, id=171, 922.44624pt x 390.45876pt>
 File: images//SearchDelete.png Graphic file (type png)
 <use images//SearchDelete.png>
-Package pdftex.def Info: images//SearchDelete.png  used on input line 357.
+Package pdftex.def Info: images//SearchDelete.png  used on input line 359.
 (pdftex.def)             Requested size: 461.22198pt x 195.2289pt.
-<images//BinSearch.png, id=172, 911.405pt x 259.97125pt>
+ [6 <./images//SearchDelete.png>]
+<images//BinSearch.png, id=180, 911.405pt x 259.97125pt>
 File: images//BinSearch.png Graphic file (type png)
 <use images//BinSearch.png>
-Package pdftex.def Info: images//BinSearch.png  used on input line 376.
+Package pdftex.def Info: images//BinSearch.png  used on input line 378.
 (pdftex.def)             Requested size: 455.70139pt x 129.9853pt.
-[6 <./images//SearchDelete.png>] [7 <./images//BinSearch.png>] (report.aux)
+ [7 <./images//BinSearch.png>] (report.aux)
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 7754629BD2FF37C094B8BF2CA8538BD1;1492.
 
@@ -593,13 +591,13 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 7658 strings out of 480224
- 121813 string characters out of 2880103
- 618366 words of memory out of 3000000
- 24022 multiletter control sequences out of 15000+200000
+ 7665 strings out of 480224
+ 121876 string characters out of 2880103
+ 616366 words of memory out of 3000000
+ 24026 multiletter control sequences out of 15000+200000
  542976 words of font info for 40 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
- 60i,11n,67p,233b,404s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 60i,10n,67p,233b,404s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\anton\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi
 1200.pk> <C:\Users\anton\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
 0\ecbx1000.pk> <C:\Users\anton\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
@@ -616,10 +614,10 @@ ers/anton/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb
 ><C:/Users/anton/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
 msy10.pfb>
 Output written on "C:/Users\anton\OneDrive - Universidade de Lisboa\TECNICO 2\1
-ºSemestre\AED\Projeto\AirRoutes\Relatório\report.pdf" (8 pages, 318121 bytes)
+ºSemestre\AED\Projeto\AirRoutes\Relatório\report.pdf" (8 pages, 318768 bytes)
 .
 PDF statistics:
- 486 PDF objects out of 1000 (max. 8388607)
- 38 named destinations out of 1000 (max. 500000)
+ 488 PDF objects out of 1000 (max. 8388607)
+ 39 named destinations out of 1000 (max. 500000)
  236 words of extra memory for PDF output out of 10000 (max. 10000000)
 

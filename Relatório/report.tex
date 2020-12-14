@@ -15,6 +15,7 @@
 \usepackage{wrapfig}
 \usepackage{lipsum}
 \usepackage{placeins}
+\usepackage[collumns=1]{idxlayout}
 \geometry{
 a4paper,
 total={170mm,257mm},
@@ -63,19 +64,20 @@ top=20mm,
         \end{center}
     \end{titlepage}
 
-        \tableofcontents
+    \tableofcontents
+    \newpage
 
-    \section{Descrição do Problema} \label{sec:d.problema}\index
+    \section{Descrição do Problema} \label{sec:d.problema} \index{Descrição do Problema}
     Este projeto, criado no âmbito da Unidade Curricular de Algoritmos e Estruturas de Dados, aborda o problema de
     encontrar um conjunto mínimo de rotas que garantam a existência de um caminho entre cada par de aeroportos,
     sem qualquer redundância.
     O Programa que este projeto visa produzir deve não só produzir uma rede mínima de rotas, mas sim a rede que garante
     todos os destinos já existentes, com o menor custo.
     Uma ferramenta como esta pode ser necessária, em termos práticos, quando uma companhia aérea quer ou precisa de otimizar de custos.
-    Numa situação desta natureza, poderá ser necessário reduzir o seu conjunto de rotas à rede que
+    Numa situação desta natureza, poderá ser necessário reduzir o seu conjunto de rotas a uma rede que
     garante que todos os aeroportos nela podem ser utilizados, com o menor custo.
 
-    O Projeto que este relatório descreve foi desenvolvido na linguagem C, com recurso a Makefile e  e, para o seu correto funcionamento deve
+    O Projeto que este relatório descreve foi desenvolvido na linguagem C, com recurso a Makefile e, para o seu correto funcionamento deve
     receber as informações de todas as rotas existentes através de um ficheiro de texto.
     Este deve conter uma ou mais redes de aeroportos, cada uma devidamente identificada com um cabeçalho contendo o
     número de aeroportos, o número total de rotas existentes e a variante que se pertende obter.
@@ -83,7 +85,7 @@ top=20mm,
     para cada rede fornecida, também identificados pelo cabeçalho fornecido, com a adição de algumas informações úteis,
     como o número de rotas mantidas e o custo total da rede
 
-    \section{Abordagem do Problema}\label{sec:abordagem.problema}
+    \section{Abordagem do Problema} \label{sec:abordagem.problema} \index{Abordagem do Problema}
     O Estudo de grafos assenta em alguns conceitos chaves, como o número de vértices (V), o número de arestas que ligam
     esses vértices (E), se as arestas são ponderadas (Custo) ou direcionadas, e a sua densidade (esparso ou denso).
     Para resolver este problema, foi necessário criar uma estrutura capaz de guardar uma representação do grafo formado
@@ -93,12 +95,12 @@ top=20mm,
     Uma má escolha poderia levar a tempos de execução muito maiores que os pretendidos e maior utilização de memória,
     devido ao aumento da complexidade.
 
-    \section{Arquitetura do Projeto}\label{arquitetura.projeto}
+    \section{Arquitetura do Projeto}\label{arquitetura.projeto} \index{Arquitetura do Projeto}
     A estrutura geral do programa é apresentada na Figura \ref{fig:main.flowchart}.
     Após verificar e inicializar os ficheiros necessários, procede-se à leitura dos Argumentos.
     Dependendo da leitura dos argumentos, é decidida a melhor forma de representação do grafo para o problema
     em questâo.
-    As formas de representação do grafo são definidas com maior detalhe na secção\ref{subsec:formas.representar.grafo}.
+    As formas de representação do grafo são definidas com maior detalhe na secção \ref{subsec:formas.representar.grafo}.
 \vfill
     \begin{figure}[H]
         \centering
@@ -109,9 +111,9 @@ top=20mm,
 \vfill
     \newpage
 
-    \section{Estruturas e Tipos de Dados}\label{sec:estruturas.tipos.dados}
+    \section{Estruturas e Tipos de Dados}\label{sec:estruturas.tipos.dados} \index{Estruturas e Tipos de Dados}
 
-    \subsection[PBArg]{Argumentos do Problema}\label{subsec:argumentos.problema}
+    \subsection[PBArg]{Argumentos do Problema}\label{subsec:argumentos.problema} \index{Estruturas e Tipos de Dados!Argumentos do Problema}
     A estrutura do tipo PBArg é usada para guardar os argumentos do problema. È declarada no ficheiro \emph{Graph.h}.
     Esta Estrutura é composta por:
     \begin{itemize}
@@ -123,7 +125,7 @@ top=20mm,
         \item err : Boolean que é ativada quando ocorrem erros durante a execução;
     \end{itemize}
 
-    \subsection[edge]{Aresta}\label{subsec:aresta}
+    \subsection[edge]{Aresta}\label{subsec:aresta} \index{Estruturas e Tipos de Dados!Aresta}
     A estrutura do tipo Aresta é usada para guardar uma aresta, quer durante a sua leitura em ambos os modos, quer na
     sua manipulação no modo 1, onde está inserida na estrutura graph, para formar o vetor de arestas. Apesar de
     relativamente simples, esta estrutura é a base sobre a qual a maioria das funções deste programa operam. Por esse
@@ -135,10 +137,10 @@ top=20mm,
         \item cost : double que guarda o custo da aresta
     \end{itemize}
 
-    \subsection[list]{Lista de Adjacências}\label{subsec:l.adj}
+    \subsection[list]{Lista de Adjacências}\label{subsec:l.adj} \index{Estruturas e Tipos de Dados!Lista de Adjacências}
     A estrutura do tipo Lista de Adjacências é utilizada pelas funções do modo 0.
     Esta é a base para a representação do grafo sob a forma de vetor de listas de adjacências.
-    As razões pelas quais esta representação do grafo foi escolhida para o modo 0 será discutida n\ref{subsec:formas.represent.grafo}.
+    As razões pelas quais esta representação do grafo foi escolhida para o modo 0 será discutida na secção \ref{subsec:formas.representar.grafo}.
     Esta Estrutura é composta por:
     \begin{itemize}
         \item v : Integer que guarda o vértice base da lista, a partir do qual se encontram os adjacentes;
@@ -146,11 +148,11 @@ top=20mm,
         \item next : Apontador para list que guarda o próximo elemento da lista;
     \end{itemize}
 
-    \subsection[graph0]{Grafo sob a forma de Lista de Adjacência}\label{subsec:grafo.l.adj}
+    \subsection[graph0]{Grafo sob a forma de Lista de Adjacência}\label{subsec:grafo.l.adj} \index{Estruturas e Tipos de Dados!Grafo sob a forma de lista de Adjcacência}
     A estrutura do tipo graph0 é a estrutura mãe para a representação do grafo na forma de listas de adjacências.
     Decidiu-se anexar à representação propriamente dita um apontador para \nameref{subsec:argumentos.problema} para
     facilitar grande parte dos parâmetros de entrada das funções.
-    Assim, os \ref{subsec:argumentos.problema} são enviados em conjunto com a representação do grafo.
+    Assim, os \nameref{subsec:argumentos.problema} são enviados em conjunto com a representação do grafo.
     Esta Estrutura é composta por:
     \begin{itemize}
         \item Arg : Estrutura do tipo \nameref{subsec:argumentos.problema} que guarda os argumentos referentes ao grafo
@@ -159,7 +161,7 @@ top=20mm,
         vértices do grafo;
     \end{itemize}
 
-    \subsection[graph]{Grafo sob a forma de Vetor de Arestas}\label{subsec:grafo.v.are}
+    \subsection[graph]{Grafo sob a forma de Vetor de Arestas}\label{subsec:grafo.v.are} \index{Estruturas e Tipos de Dados!Grafo sob a forma de Vetor de Arestas}
     A estrutura do tipo graph é a estrutura mãe da representação do grafo na forma de vetor de arestas.
     Como a estrutura \nameref{subsec:grafo.l.adj}, a estrutura \nameref{subsec:grafo.v.are} inclui um apontador para uma estrutura
     do tipo \nameref{subsec:argumentos.problema} para facilitar os parâmetros de entrada de grande parte das funções que operam
@@ -170,7 +172,7 @@ top=20mm,
         \item data : Vetor de estruturas do tipo \nameref{subsec:aresta} que guarda todas as arestas lidas do ficheiro de entrada para o grafo em estudo;
     \end{itemize}
 
-    \subsection[represent]{Formas de Representar o Grafo}\label{subsec:formas.representar.grafo}
+    \subsection[Formas de Representar o Grafo]{Formas de Representar o Grafo}\label{subsec:formas.representar.grafo} \index{Estruturas e Tipos de Dados!Formas de Representar o grafo}
     Para a resolução do Problema anteriormente discutido, decidiu-se representar o grafo sob a forma de \underline{Vetor de Arestas}.
     Nesta decisão, foram tidos em conta os seguintes fatores:
     \begin{itemize}
@@ -183,8 +185,9 @@ top=20mm,
     dos dados. Na utilização do Algoritmo de Krukal seria necessário 'traduzir' de novo os dados para a forma de vetor de arestas pelo que
     estariamos a 'gastar' tempo em conversões desnecessárias.
 
-    \section[Algoritmos]{Algoritmos}\label{sec:algoritmos}
-    \subsection[mstfind]{Algoritmos para encontrar a Árvore Minima de Suporte}\label{subsec:mstfind}
+    \section[Algoritmos]{Algoritmos}\label{sec:algoritmos} \index{Algoritmos}
+
+    \subsection[Determinação de Árvore Mínima de Suporte]{Algoritmos para encontrar a Árvore Minima de Suporte}\label{subsec:mstfind} \index{Algoritmos!Algoritmos para encontrar a árvore mínima de suporte}
     Para encontrar a árvore mínima de suporte de uma grafo, foram estudados dois algoritmos nas aulas teóricas de AED.
     \begin{itemize}
         \item Algoritmo de \emph{Prim};
@@ -198,29 +201,29 @@ top=20mm,
     O Algoritmo de \emph{Kruskal} assenta numa representação do grafo sob a forma de Vetor de Arestas. A sua otimização depende
     da implementação do algoritmo de Connectividade (Compress Weighted Quick Union) e do algoritmo de ordenação (Quick Sort).
 
-    \subsubsection[subgraphpb]{Problema dos Sub-Grafos não conectados}\label{subsubsec:subgraphpb}
+    \subsubsection[Problema dos Sub-Grafos não conectados]{Problema dos Sub-Grafos não conectados}\label{subsubsec:subgraphpb}
     Com o algoritmo de \emph{Prim}, o programa cria uma árvore e vai adicionando os vértices cuja aresta tem menor custo ( Na implementação com
     fila prioritária, os vértices cuja aresta for mais prioritária ). Isto cria o problema de, quando se analisam grafos constituidos por
     vários sub-grafos não conectados, o programa não conseguir desenvolver o backbone com apenas uma leitura de todas as arestas. Torna-se
-    necessário correr o algoritmo para todos os vértices que não pertençam a uma árvore mínima de suporte. O aumento da complexidade nesta
-    situação é discutido na secção \ref{subsubsec:complexity}.
+    necessário correr o algoritmo para todos os vértices que não pertençam a uma árvore mínima de suporte.
+    O aumento da complexidade nesta situação é discutido na secção \ref{subsubsec:complexity}.
 
     Por outro lado, com o algoritmo de \emph{Kruskal}, o programa cria várias árvores que se vão ligando com a análise das arestas do grafo. Ao criar
     várias árvores mínimas de suporte em simultâneo, resolvemos este problema porque todas as arestas são consideradas para a criação de uma ou
     mais árvores.
     
-    \subsubsection[complexity]{Análise da Complexidade dos Algoritmos para encontrar a MST}\label{subsubsec:complexity}
+    \subsubsection[Análise da Complexidade dos Algoritmos de procura da MST]{Análise da Complexidade dos Algoritmos para encontrar a MST}\label{subsubsec:complexity}
     O limiar téorico para a complexidade deste problema é definido pelo Algoritmo de \emph{Kruskal}, cuja complexidade é O(\(E*log E\)).
     Devido ao problema discutido na secção \ref{subsubsec:subgraphpb}, o Algoritmo de \emph{Prim} tem complexidade díficil de determinar, e díficil
     também de aproximar do limiar teórico da complexidade establecido pelo algoritmo de \emph{Kruskal}.
-    Por isso, complexidade do algoritmo de \emph{Prim} é, no melhor caso, O(\(E*log V\)).
+    Por isso, complexidade do algoritmo de \emph{Prim} é, no melhor caso, O(\(V*E*log V\)).
 
-    \subsubsection[proscons]{Prós e Contras}
+    \subsubsection[Prós e Contras dos algoritmos de procura da MST]{Prós e Contras}
     Partindo da teoria, o Algoritmo de \emph{Kruskal} é o caminho a seguir quando se quer analisar grafos esparsos (como os grafos do Projeto AirRoutes) devido
     às implementações mais eficientes, tanto em tempo como em memória. A representação em vetor de arestas não só reduz o tempo dispendido na leitura
     e escrita como simplifica o código fonte. Este é ainda mais simplificado com a não implementação da fila prioritária do Algoritmo de \emph{Prim}.
 
-    \subsection[Connectivity]{Algoritmos para o Problema da Conectividade}
+    \subsection[Algoritmos para o Problema da Conectividade]{Algoritmos para o Problema da Conectividade} \index{Algoritmos!Algoritmos para o problema da conectividade}
     O Problema da Conectividade, necessário à implementação do algoritmo de \emph{Kruskal}, foi largamente discutido nas aulas teóricas de AED\@. Nesta discussão
     foram abordados quatro algoritmos que podem ser implementados:
     \begin{itemize}
@@ -233,7 +236,7 @@ top=20mm,
     O custo de execução deste algoritmo está apenas a um fator constante do custo (inevitável) de leitura de dados.
     Realisticamente, esse custo de execução é negligenciável quando comparado com o tempo de execução de todo o programa.
 
-    \subsection[gencomplexity]{Análise da Complexidade Geral do Programa}
+    \subsection[Análise da Complexidade Geral]{Análise da Complexidade Geral do Programa} \index{Algoritmos!Análise da Complexidade do Programa}
     A complexidade do Programa depende da variante selecionada.No entanto as operações que são as mesmas em todas as variantes:
     \FloatBarrier
     \begin{table}[H]
@@ -271,13 +274,13 @@ top=20mm,
                 B1 &\(O(E*log(E))\) \\
                 C1 & \(O(E*log(E))\) \\
                 D1 & \(O(E*log(E))\)\\
-                E1 & \(O((E-X)*E*log(E)) \approx O((E^2)*E*log(E))\)\\
+                E1 & \(O((E-X)*E*log(E)) \approx O((E^2)*log(E))\)\\
                 \hline\hline
             \end{tabular}
         \vspace{0.1cm}\\
         \begin{tabular}{|| c || c || c || c ||}
             \hline
-            Máximo & \(O(E*log(E))\)\\
+            Máximo & \(O((E^2)*log(E))\)\\
             \hline
         \end{tabular}
         \end{table}
@@ -290,9 +293,10 @@ top=20mm,
     \end{itemize}
 
     \newpage
-    \section{Funções Principais}
+
+    \section[Funções Importantes]{Funções Importantes} \index{Funções Principais}
     Todas as variantes do programa backbone operam sobre um conjunto de funções comuns, pelo que são estas as funções mais utilizadas em todo o programa:
-    \subsection[Kruskal]{Algoritmo de \emph{kruskal}}
+    \subsection[Kruskal]{Algoritmo de \emph{kruskal}} \index{Funções Principais!\emph{Kruskal}}
     A função Kruskal implementa o Algoritmo de \emph{Kruskal} para encontrar a árvore mínima de suporte na sua totalidade. Discutir esta função é
     na verdade discutir o algoritmo de \emph{Kruskal}. A função tem como parâmetros de entrada :
     \begin{itemize}
@@ -324,7 +328,7 @@ top=20mm,
     No nosso programa existe uma versão do algoritmo de \emph{Kruskal} chamada CWQU, cuja função é a mesma que a função Kruskal, mas a primeira
     sai assim que encontra uma união. Esta função é utilizada para repor a conectividade.
 
-    \subsection[CWQU]{Weighted Quick Union com compressão de caminho}
+    \subsection[CWQU]{Weighted Quick Union com compressão de caminho} \index{Funções Principais!CWQU}
     Este capítulo fala sobre as funções que implementam o algoritmo de CWQU.
     Estas não devem ser confundidas com a função CWQU, que implementa uma versão modificada do algoritmo de \emph{Kruskal}.
     As funções que implementam a CWQU são :
@@ -341,7 +345,7 @@ top=20mm,
     chamada depois de verificado que não existem já ligações entre este 2 vértices. A nova ligação é conseguida através da alteração
     da raíz do vértice cujo peso (sz) é mais pequeno, alterando também todos os vértices (filhos) que pretençam ao mesmo conjunto. Após isto, é realizada a compressão de caminho.
 
-    \subsection[SearchDelete]{Marcação de arestas como removidas}\label{subsec:SearchDelete}
+    \subsection[SearchDelete]{Marcação de arestas como removidas}\label{subsec:SearchDelete} \index{Funções Principais!SearchDelete}
     A função SearchDelete é muito simples, mas o seu papel é fundamental na reposição da conectividade do grafo.
     Esta função marca a(s) aresta(s) que não podem ser utilizadas na nova árvore, através do processo demonstrado na figura \ref{fig:SearchDelete}.
     A marcação é feita passando o custo da aresta para o seu simétrico.
@@ -359,7 +363,8 @@ top=20mm,
         \includegraphics[scale=0.5]{SearchDelete.png}
         \caption { Fluxograma Representativo da execução da função SearchDelete }
     \end{figure}
-    \subsection[binsearch]{Reposição da Conectividade}
+
+    \subsection[binsearch]{Reposição da Conectividade}\index{Funções Principais!binsearch}
     A função binsearch corre o grafo em busca de uma aresta que reponha a conectividade do grafo.
     Para ser corretamente implementada, deve-se começar por ter os vetores auxiliares de CWQU (id e sz) no estado a partir
     do qual queremos procurar a nova aresta.
@@ -379,5 +384,30 @@ top=20mm,
         \label{fig:BinSearch}
         \caption{Representação do funcionamento da função binsearch}
     \end{figure}
+
+    \section[Conhecimentos Secundários]{Conhecimentos Indiretamente Adquiridos}
+    Durante a realização deste projeto, os alunos foram dotados de novas ferramentas que premitem contruir Algoritmos complexos
+    utilizando a linguagem de programação relativamente simples C. Algumas dessas ferramentas foram aplicadas no Projeto AirRoutes
+    e estão descritas neste relatório.
+    Contudo, há outras ferramentas que auxiliam a produção e testagem do código, e reduzem largamente as horas necessárias para
+    encontrar erros e exceções não previstas.
+    Por esse motivo, pensou-se que devíamos deixar uma nota sobre os conhecimentos adquiridos em ferramentas que, não sendo obrigatórias
+    tornaram a implementação deste projeto mais simples.
+    Estes são talvez os exemplos mais importantes dessas ferramentas secundárias:
+    \begin{itemize}
+        \item Sistema de Controlo de Versões Git
+        \item Programação em shell script
+        \item Programação em GDB script
+        \item Programação em Python
+        \item Edição de texto em latex
+    \end{itemize}
+    Sem estas ferramentas, não seria impossível a realização deste projeto, mas com certeza teria sido muito mais complicada.
+    \section[Conclusões]{Conclusões}
+    A Unidade Curricular de AED estuda Algoritmos para vários problemas chave do mundo da computação. Com esta UC e em especial
+    com este projeto, os alunos envolvidos aprendem não apenas técnicas avançadas de programação em C, mas também boas práticas
+    que melhoram significativamente a eficiência do código. Quando os alunos saem desta UC não são apenas programadores mas sim
+    bons e eficientes programadores. O Trabalho em equipa é fulcral num projeto desta dimensão, e uma comunicação constante e clara
+    entre colegas é estritamente necessária. Felizmente, no Grupo 32, todos estes objetivos foram cumpridos, pelo que dá-se por concluido
+    este projeto, com um sentimento de realização e de dever cumprido.
 
 \end{document}
